@@ -1,4 +1,4 @@
-knip-scijava
+KNIME Image Processing - SciJava Commands Plugin
 ============
 
-KNIP SciJava Extension for easy node creation.
+This plugin provided functionality and mechanism to easily create KNIME Nodes using SciJava Commands.
