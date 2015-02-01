@@ -13,6 +13,7 @@ import org.eclipse.osgi.service.resolver.BundleSpecification;
 /**
  * TODO: Avoid duplicates
  */
+@SuppressWarnings("restriction")
 public class ResourceAwareClassLoader extends ClassLoader {
 
 	final ArrayList<URL> urls = new ArrayList<URL>();
