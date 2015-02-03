@@ -11,10 +11,6 @@ import org.eclipse.osgi.internal.loader.BundleLoader;
 import org.eclipse.osgi.service.resolver.BundleSpecification;
 import org.osgi.framework.Bundle;
 
-/**
- * TODO: Avoid duplicates
- */
-@SuppressWarnings("restriction")
 class ResourceAwareClassLoader extends ClassLoader {
 
 	final ArrayList<URL> urls = new ArrayList<URL>();
@@ -28,18 +24,26 @@ class ResourceAwareClassLoader extends ClassLoader {
 
 			final Bundle bundle = org.eclipse.core.runtime.Platform
 					.getBundle(bundleSpec.getName());
-			final URL resource = bundle
-					.getResource("META-INF/json/org.scijava.plugin.Plugin");
-
-			if (resource == null) {
+			Enumeration<URL> resources;
+			try {
+				resources = bundle
+						.getResources("META-INF/json/org.scijava.plugin.Plugin");
+			} catch (IOException e) {
 				continue;
 			}
 
-			// we want to avoid transitive resolving of dependencies
-			final String host = resource.getHost();
-			if (bundle.getBundleId() == Long.valueOf(host.substring(0,
-					host.indexOf(".")))) {
-				urls.add(resource);
+			if (resources == null) {
+				continue;
+			}
+
+			while (resources.hasMoreElements()) {
+				final URL resource = resources.nextElement();
+				// we want to avoid transitive resolving of dependencies
+				final String host = resource.getHost();
+				if (bundle.getBundleId() == Long.valueOf(host.substring(0,
+						host.indexOf(".")))) {
+					urls.add(resource);
+				}
 			}
 		}
 	}
