@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTable;
+import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.RowIterator;
 import org.knime.knip.scijava.commands.InputDataRowService;
 import org.scijava.service.AbstractService;
@@ -26,6 +27,7 @@ import org.scijava.service.AbstractService;
 public class KnimeInputDataTableService extends AbstractService implements
 		InputDataRowService, Iterator<DataRow> {
 
+	private DataTableSpec m_tableSpec;
 	private RowIterator m_rowItor;
 	private DataRow m_curRow;
 
@@ -37,6 +39,8 @@ public class KnimeInputDataTableService extends AbstractService implements
 	 */
 	public void setInputDataTable(DataTable inData) {
 		setInputDataTableIterator(inData.iterator());
+		
+		m_tableSpec = inData.getDataTableSpec();
 	}
 
 	/**
@@ -99,6 +103,11 @@ public class KnimeInputDataTableService extends AbstractService implements
 	public void remove() {
 		throw new UnsupportedOperationException(
 				"KnimeInputDataTableService may not alter its DataTable.");
+	}
+
+	@Override
+	public DataTableSpec getInputDataTableSpec() {
+		return m_tableSpec;
 	}
 
 }

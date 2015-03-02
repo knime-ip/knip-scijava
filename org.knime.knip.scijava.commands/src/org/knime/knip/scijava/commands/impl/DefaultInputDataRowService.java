@@ -1,6 +1,7 @@
 package org.knime.knip.scijava.commands.impl;
 
 import org.knime.core.data.DataRow;
+import org.knime.core.data.DataTableSpec;
 import org.knime.knip.scijava.commands.InputDataRowService;
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
@@ -22,6 +23,7 @@ public class DefaultInputDataRowService extends AbstractService implements
 	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
 
 	private DataRow m_row = null;
+	private DataTableSpec m_spec = null;
 
 	/**
 	 * {@inheritDoc}
@@ -37,6 +39,15 @@ public class DefaultInputDataRowService extends AbstractService implements
 	 */
 	public void setDataRow(DataRow dataRow) {
 		m_row = dataRow;
+	}
+
+	@Override
+	public DataTableSpec getInputDataTableSpec() {
+		return m_spec;
+	}
+	
+	public void setDataTableSpec(DataTableSpec spec) {
+		m_spec = spec;
 	}
 	
 }

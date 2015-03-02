@@ -1,6 +1,7 @@
 package org.knime.knip.scijava.commands;
 
 import org.knime.core.data.DataRow;
+import org.knime.core.data.DataTableSpec;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.Service;
 
@@ -23,4 +24,8 @@ public interface InputDataRowService extends Service {
 	 */
 	DataRow getInputDataRow();
 
+	/**
+	 * @return the data table spec for the contained DataRow.
+	 */
+	DataTableSpec getInputDataTableSpec();
 }
