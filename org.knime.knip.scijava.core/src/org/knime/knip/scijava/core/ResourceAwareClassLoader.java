@@ -12,7 +12,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkUtil;
 
-class ResourceAwareClassLoader extends ClassLoader {
+public class ResourceAwareClassLoader extends ClassLoader {
 
 	final ArrayList<URL> urls = new ArrayList<URL>();
 
