@@ -15,15 +15,54 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkUtil;
 
+/**
+ * ResourceAwareClassLoader
+ * 
+ * Class loader which is aware of bundle resources.
+ * 
+ * @author Christian Dietz (University of Konstanz)
+ * @author Jonathan Hale (University of Konstanz)
+ *
+ */
 public class ResourceAwareClassLoader extends ClassLoader {
 
 	final ArrayList<URL> urls = new ArrayList<URL>();
 	final ArrayList<URL> fileUrls = new ArrayList<URL>();
 
-	public ResourceAwareClassLoader(final ClassLoader cl) {
-		super(cl);
+	/**
+	 * Constructor.
+	 * 
+	 * Parses current bundle resources of required bundles of
+	 * org.knime.knip.scijava.core and caches their urls.
+	 * 
+	 * @param parent
+	 *            The parent class loader
+	 * @deprecated use {@link #ResourceAwareClassLoader(ClassLoader, Class)}
+	 *             instead.
+	 */
+	public ResourceAwareClassLoader(final ClassLoader parent) {
+		this(parent, null);
+	}
 
-		final String requireBundle = (String) FrameworkUtil.getBundle(getClass())
+	/**
+	 * Constructor.
+	 * 
+	 * Parses current bundle resources of required bundles of
+	 * c's bundle and caches their urls.
+	 * 
+	 * @param parent
+	 *            The parent class loader
+	 * @param clazz
+	 *            Class whose bundles requirements will be parsed
+	 */
+	public ResourceAwareClassLoader(final ClassLoader parent, Class<?> clazz) {
+		super(parent);
+
+		if (clazz == null) {
+			clazz = getClass();
+		}
+
+		final String requireBundle = (String) FrameworkUtil.getBundle(clazz)
 				.getHeaders().get(Constants.REQUIRE_BUNDLE);
 		try {
 			final ManifestElement[] elements = ManifestElement.parseHeader(
@@ -35,7 +74,8 @@ public class ResourceAwareClassLoader extends ClassLoader {
 				try {
 					// get file url for this bundle
 					fileUrls.add(new URL("file://"
-							+ FileLocator.getBundleFile(bundle).getAbsolutePath()));
+							+ FileLocator.getBundleFile(bundle)
+									.getAbsolutePath()));
 				} catch (MalformedURLException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
@@ -79,15 +119,16 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	}
 
 	/**
-	 * @return urls to the eclipse resources on the classpath. Most commonly the urls are defined
-	 * using bundleresource protocol.
+	 * @return urls to the eclipse resources on the classpath. Most commonly the
+	 *         urls are defined using bundleresource protocol.
 	 */
 	public Collection<URL> getURLs() {
 		return urls;
 	}
 
 	/**
-	 * @return urls to the eclipse resources on the classpath defined using the file protocol.
+	 * @return urls to the eclipse resources on the classpath defined using the
+	 *         file protocol.
 	 */
 	public Collection<URL> getFileURLs() {
 		return fileUrls;
