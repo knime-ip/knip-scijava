@@ -1,0 +1,53 @@
+package org.knime.knip.scijava.commands.widget;
+
+import org.knime.core.node.InvalidSettingsException;
+import org.knime.core.node.defaultnodesettings.SettingsModel;
+import org.scijava.widget.WidgetModel;
+
+/**
+ * Since KNIME does not provide an interface for DialogComponents,
+ * this interface defines methods needed by DialogComponents for
+ * WidgetModels.
+ * Later the WidgetModel can be used by a DialogComponent subclass which 
+ * wrapps this WidgetModel, calling exactly these defined methods.
+ * 
+ * @author Jonathan Hale (University of Konstanz)
+ *
+ */
+public interface DialogInputWidgetModel extends WidgetModel {
+	
+	/**
+	 * Update the SettingsModel to reflect changes in the component.
+	 */
+	public void updateModel();
+	
+	/**
+	 * Get the underlying SettingsModel
+	 * @return
+	 */
+	public SettingsModel getSettingsModel();
+	
+	/**
+	 * Update to reflect changes in SettingsModel.
+	 */
+	public void updateToSettingsModel();
+	
+	/**
+     * Read the value from the {@link SettingsModel} and set/display it in the
+     * component. (Called after loading new values in the model to ensure they
+     * are transfered into the component.) Implementations should set the new
+     * value(s) in the components, should clear any possible error indications,
+     * and should also take over the enable state.
+     */
+	void updateComponent();
+
+	/**
+     * Will be called before the value of the component is saved into the
+     * NodeSettings object. Can be used to commit values, to update the model
+     * and must be used to validate the entered value. NOTE: it will be called
+     * even if the model is disabled.
+     *
+     * @throws InvalidSettingsException if the entered values are invalid
+     */
+	void validateSettingsBeforeSave() throws InvalidSettingsException;
+}
