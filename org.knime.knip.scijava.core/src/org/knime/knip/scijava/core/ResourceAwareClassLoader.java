@@ -1,11 +1,14 @@
 package org.knime.knip.scijava.core;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -15,6 +18,7 @@ import org.osgi.framework.FrameworkUtil;
 public class ResourceAwareClassLoader extends ClassLoader {
 
 	final ArrayList<URL> urls = new ArrayList<URL>();
+	final ArrayList<URL> fileUrls = new ArrayList<URL>();
 
 	public ResourceAwareClassLoader(final ClassLoader cl) {
 		super(cl);
@@ -28,6 +32,15 @@ public class ResourceAwareClassLoader extends ClassLoader {
 				final Bundle bundle = org.eclipse.core.runtime.Platform
 						.getBundle(manifestElement.getValue());
 
+				try {
+					// get file url for this bundle
+					fileUrls.add(new URL("file://"
+							+ FileLocator.getBundleFile(bundle).getAbsolutePath()));
+				} catch (MalformedURLException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				Enumeration<URL> resources;
 				try {
 					resources = bundle
@@ -63,5 +76,20 @@ public class ResourceAwareClassLoader extends ClassLoader {
 		}
 		urls.addAll(Collections.list(super.getResources(name)));
 		return Collections.enumeration(urls);
+	}
+
+	/**
+	 * @return urls to the eclipse resources on the classpath. Most commonly the urls are defined
+	 * using bundleresource protocol.
+	 */
+	public Collection<URL> getURLs() {
+		return urls;
+	}
+
+	/**
+	 * @return urls to the eclipse resources on the classpath defined using the file protocol.
+	 */
+	public Collection<URL> getFileURLs() {
+		return fileUrls;
 	}
 }
