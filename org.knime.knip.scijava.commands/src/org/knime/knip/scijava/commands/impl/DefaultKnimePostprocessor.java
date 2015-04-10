@@ -12,6 +12,7 @@ import org.knime.knip.scijava.commands.OutputDataRowService;
 import org.knime.knip.scijava.commands.adapter.OutputAdapter;
 import org.knime.knip.scijava.commands.adapter.OutputAdapterService;
 import org.scijava.Priority;
+import org.scijava.log.LogService;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 import org.scijava.module.process.AbstractPostprocessorPlugin;
@@ -42,6 +43,9 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 
 	@Parameter
 	private OutputDataRowService dataRowOut;
+	
+	@Parameter
+	private LogService log;
 
 	/**
 	 * Straight forward implementation of module output to DataRow: For every
@@ -63,6 +67,8 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 			if (outputAdapter != null) {
 				dataCells.add(outputAdapter.createCell(module.getOutput(i
 						.getName())));
+			} else {
+				log.warn("Could not find a OutputAdapter for \"" + i.getName() + "\".");
 			}
 		}
 
