@@ -2,7 +2,6 @@ package org.knime.knip.scijava.commands.widget;
 
 import java.util.List;
 
-import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.knip.scijava.commands.settings.NodeSettingsService;
 import org.scijava.Context;
@@ -28,11 +27,20 @@ public class DefaultKnimeWidgetModel extends DefaultWidgetModel implements Dialo
 		super(context, inputPanel, module, item, objectPool);
 		
 		m_settingsService.createSettingsModel(item);
+		updateToSettingsModel();
 	}
 	
 	@Override
 	public void updateModel() {
 		updateToSettingsModel();
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		super.setValue(value);
+		
+		// keep track of the values, update settings model
+		m_settingsService.setValue(getItem(), value);
 	}
 	
 	@Override
@@ -42,19 +50,7 @@ public class DefaultKnimeWidgetModel extends DefaultWidgetModel implements Dialo
 	
 	@Override
 	public void updateToSettingsModel() {
-		setValue(m_settingsService.getValue(getItem()));
+		super.setValue(m_settingsService.getValue(getItem()));
 	}
 	
-	@Override
-	public void updateComponent() {
-		setValue(m_settingsService.getValue(getItem()));
-		updateModel();
-	}
-
-	@Override
-	public void validateSettingsBeforeSave() throws InvalidSettingsException {
-		m_settingsService.setValue(getItem(), getValue());
-		return;
-	}
-
 }
