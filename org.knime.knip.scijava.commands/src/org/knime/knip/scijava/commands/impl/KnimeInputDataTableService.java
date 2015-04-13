@@ -14,8 +14,8 @@ import org.scijava.service.AbstractService;
  * InputDataRowService implementation as iterator over a DataTable.
  * 
  * This Service is not discoverable at runtime. Add it to the Context manually
- * and call either {@link #setInputDataTable(DataTable)} or {@link #setInputDataTableIterator(RowIterator)}
- * before use.
+ * and call either {@link #setInputDataTable(DataTable)} or
+ * {@link #setInputDataTableIterator(RowIterator)} before use.
  * 
  * Be aware that {@link#getDataRow()} returns null if {@link #next()} hasn't
  * been called yet and if {@link #next()} was called although {@link #hasNext()}
@@ -38,9 +38,13 @@ public class KnimeInputDataTableService extends AbstractService implements
 	 *            DataTable to iterate over.
 	 */
 	public void setInputDataTable(DataTable inData) {
-		setInputDataTableIterator(inData.iterator());
-		
-		m_tableSpec = inData.getDataTableSpec();
+		if (inData == null) {
+			setInputDataTableIterator(null);
+			m_tableSpec = null;
+		} else {
+			setInputDataTableIterator(inData.iterator());
+			m_tableSpec = inData.getDataTableSpec();
+		}
 	}
 
 	/**
@@ -51,7 +55,8 @@ public class KnimeInputDataTableService extends AbstractService implements
 	 * {@link #getInputDataRow()} will remain null until the next call of
 	 * {@link #next()}.
 	 * 
-	 * @param inItor RowIterator to get DataRows from.
+	 * @param inItor
+	 *            RowIterator to get DataRows from.
 	 */
 	public void setInputDataTableIterator(RowIterator inItor) {
 		m_rowItor = inItor;
