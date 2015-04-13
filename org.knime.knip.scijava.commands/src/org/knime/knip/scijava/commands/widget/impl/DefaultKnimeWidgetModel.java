@@ -1,9 +1,10 @@
-package org.knime.knip.scijava.commands.widget;
+package org.knime.knip.scijava.commands.widget.impl;
 
 import java.util.List;
 
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.knip.scijava.commands.settings.NodeSettingsService;
+import org.knime.knip.scijava.commands.widget.DialogInputWidgetModel;
 import org.scijava.Context;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;

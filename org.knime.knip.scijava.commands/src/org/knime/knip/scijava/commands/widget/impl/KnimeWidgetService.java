@@ -33,7 +33,6 @@ package org.knime.knip.scijava.commands.widget.impl;
 
 import java.util.List;
 
-import org.knime.knip.scijava.commands.widget.DefaultKnimeWidgetModel;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
