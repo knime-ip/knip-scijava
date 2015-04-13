@@ -62,13 +62,20 @@ public class DefaultNodeSettingsService extends AbstractService implements
 	
 	@Override
 	public SettingsModel createSettingsModel(ModuleItem<?> moduleItem) {
+		SettingsModel sm = m_settingsModels.get(moduleItem.getName());
+		
+		if (sm != null) {
+			// already exists, do not overwrite.
+			return sm;
+		}
+		
 		SettingsModelType t = m_typeService.getSettingsModelTypeFor(moduleItem.getType());
 		
 		if (t == null) {
 			return null;
 		}
 		
-		SettingsModel sm = t.create(moduleItem.getName(), moduleItem.getMinimumValue());
+		sm = t.create(moduleItem.getName(), moduleItem.getMinimumValue());
 		m_settingsModels.put(moduleItem.getName(), sm);
 		
 		return sm;
