@@ -1,5 +1,8 @@
 package org.knime.knip.scijava.commands.adapter;
 
+import java.util.Collection;
+
+import org.knime.core.data.DataType;
 import org.knime.core.data.DataValue;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.SingletonService;
@@ -27,11 +30,42 @@ public interface InputAdapterService extends
 	 *            {@link DataValue} to adapt from.
 	 * @param valueClass
 	 *            value type to adapt to.
+	 * 
+	 * @param <D>
+	 *            Type of the DataValue, usually automatically deduced from the
+	 *            parameters
+	 * @param <D>
+	 *            Type of the value, usually automatically deduced from the
+	 *            parameters
 	 * @return an InputAdapter which adapts dataValueClass instances to
 	 *         valueClass instances.
 	 * 
 	 */
-	InputAdapter getMatchingInputAdapter(
-			Class<? extends DataValue> dataValueClass, Class<?> valueClass);
+	<D extends DataValue, T> InputAdapter getMatchingInputAdapter(
+			Class<D> dataValueClass, Class<T> valueClass);
+
+	/**
+	 * Convenience method to get all {@link InputAdapter}s which adapt a certain
+	 * {@link DataType}.
+	 * 
+	 * @param type
+	 *            the {@link DataType}
+	 * @return a {@link Collection} of {@link InputAdapter} which adapt that
+	 *         DataType
+	 * 
+	 * @see #getMatchingInputAdapters(Class)
+	 */
+	Collection<InputAdapterPlugin> getMatchingInputAdapters(DataType type);
+
+	/**
+	 * Get all {@link InputAdapter}s which adapt a certain {@link DataValue}.
+	 * 
+	 * @param dataValueClass
+	 *            class of the DataValue which should be adapted
+	 * @return a {@link Collection} of {@link InputAdapter} which adapt that
+	 *         {@link DataValue}
+	 */
+	Collection<InputAdapterPlugin> getMatchingInputAdapters(
+			Class<? extends DataValue> dataValueClass);
 
 }
