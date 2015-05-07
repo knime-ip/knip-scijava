@@ -1,6 +1,7 @@
 package org.knime.knip.scijava.commands.adapter;
 
 import org.knime.core.data.DataCell;
+import org.scijava.convert.Converter;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.SingletonPlugin;
 
@@ -17,5 +18,5 @@ import org.scijava.plugin.SingletonPlugin;
  * @see InputAdapterService
  */
 public interface OutputAdapterPlugin<T, C extends DataCell> extends
-		SingletonPlugin, OutputAdapter<T, C> {
+		SingletonPlugin, Converter<T, C>, OutputAdapter<T, C> {
 }
