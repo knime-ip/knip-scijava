@@ -2,6 +2,7 @@ package org.knime.knip.scijava.commands.adapter.basic;
 
 import org.knime.core.data.DataType;
 import org.knime.core.data.def.IntCell;
+import org.knime.knip.scijava.commands.adapter.AbstractOutputAdapterPlugin;
 import org.knime.knip.scijava.commands.adapter.OutputAdapterPlugin;
 import org.scijava.plugin.Plugin;
 
@@ -12,7 +13,8 @@ import org.scijava.plugin.Plugin;
  * 
  */
 @Plugin(type = OutputAdapterPlugin.class)
-public class ShortOutputAdapter implements OutputAdapterPlugin<Short, IntCell> {
+public class ShortOutputAdapter extends
+		AbstractOutputAdapterPlugin<Short, IntCell> {
 
 	@Override
 	public IntCell createCell(Short o) {
@@ -27,6 +29,16 @@ public class ShortOutputAdapter implements OutputAdapterPlugin<Short, IntCell> {
 	@Override
 	public DataType getDataCellType() {
 		return IntCell.TYPE;
+	}
+
+	@Override
+	public Class<IntCell> getOutputType() {
+		return IntCell.class;
+	}
+
+	@Override
+	public Class<Short> getInputType() {
+		return Short.class;
 	}
 
 }

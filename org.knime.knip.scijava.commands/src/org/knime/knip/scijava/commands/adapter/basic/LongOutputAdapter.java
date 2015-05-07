@@ -2,6 +2,7 @@ package org.knime.knip.scijava.commands.adapter.basic;
 
 import org.knime.core.data.DataType;
 import org.knime.core.data.def.LongCell;
+import org.knime.knip.scijava.commands.adapter.AbstractOutputAdapterPlugin;
 import org.knime.knip.scijava.commands.adapter.OutputAdapterPlugin;
 import org.scijava.plugin.Plugin;
 
@@ -12,8 +13,8 @@ import org.scijava.plugin.Plugin;
  * 
  */
 @Plugin(type = OutputAdapterPlugin.class)
-public class LongOutputAdapter implements
-		OutputAdapterPlugin<Long, LongCell> {
+public class LongOutputAdapter extends
+		AbstractOutputAdapterPlugin<Long, LongCell> {
 
 	@Override
 	public LongCell createCell(Long o) {
@@ -28,6 +29,16 @@ public class LongOutputAdapter implements
 	@Override
 	public DataType getDataCellType() {
 		return LongCell.TYPE;
+	}
+
+	@Override
+	public Class<LongCell> getOutputType() {
+		return LongCell.class;
+	}
+
+	@Override
+	public Class<Long> getInputType() {
+		return Long.class;
 	}
 
 }
