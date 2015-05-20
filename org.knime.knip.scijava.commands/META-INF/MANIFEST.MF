@@ -17,7 +17,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.6.0",
  scijava-ui-awt;bundle-version="0.1.3",
  scijava-ui-swing;bundle-version="0.3.0",
  scripting-java;bundle-version="0.2.5",
- scripting-jython;bundle-version="0.1.4"
+ scripting-jython;bundle-version="0.1.4",
+ imagej-common;bundle-version="0.14.0",
+ org.knime.knip.base;bundle-version="1.3.0",
+ imglib2;bundle-version="2.2.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
