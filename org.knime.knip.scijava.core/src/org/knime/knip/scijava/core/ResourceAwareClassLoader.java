@@ -47,8 +47,8 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	/**
 	 * Constructor.
 	 * 
-	 * Parses current bundle resources of required bundles of
-	 * c's bundle and caches their urls.
+	 * Parses current bundle resources of required bundles of c's bundle and
+	 * caches their urls.
 	 * 
 	 * @param parent
 	 *            The parent class loader
@@ -115,6 +115,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 			return Collections.emptyEnumeration();
 		}
 		urls.addAll(Collections.list(super.getResources(name)));
+		urls.remove(urls.size() - 1);
 		return Collections.enumeration(urls);
 	}
 
