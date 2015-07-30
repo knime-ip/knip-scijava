@@ -115,7 +115,6 @@ public class ResourceAwareClassLoader extends ClassLoader {
 			return Collections.emptyEnumeration();
 		}
 		urls.addAll(Collections.list(super.getResources(name)));
-		urls.remove(urls.size() - 1);
 		return Collections.enumeration(urls);
 	}
 
