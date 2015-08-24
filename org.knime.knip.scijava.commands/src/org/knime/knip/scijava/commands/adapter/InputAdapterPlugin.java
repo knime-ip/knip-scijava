@@ -1,3 +1,4 @@
+
 package org.knime.knip.scijava.commands.adapter;
 
 import org.knime.core.data.DataValue;
@@ -17,5 +18,7 @@ import org.scijava.plugin.SingletonPlugin;
  * @see InputAdapterService
  */
 public interface InputAdapterPlugin<V extends DataValue, T> extends
-		SingletonPlugin, InputAdapter<V, T> {
+	SingletonPlugin, InputAdapter<V, T>
+{
+	// Marker interface
 }

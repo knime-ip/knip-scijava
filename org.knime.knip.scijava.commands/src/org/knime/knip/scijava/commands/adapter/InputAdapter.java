@@ -1,3 +1,4 @@
+
 package org.knime.knip.scijava.commands.adapter;
 
 import org.knime.core.data.DataValue;
@@ -5,23 +6,20 @@ import org.knime.core.data.DataValue;
 /**
  * An InputAdapter adapts {@link DataValue} to another type.
  * 
- * @param T
- *            type of the value to get from the DataValue.
- * @param V
- *            DataValue subclass which this adapter gets values from.
- * 
+ * @param <T> type of the value to get from the DataValue.
+ * @param <V> DataValue subclass which this adapter gets values from.
  * @author Jonathan Hale (University of Konstanz)
- * 
  */
 public interface InputAdapter<V extends DataValue, T> {
+
 	/**
 	 * Get the value of a DataValue.
 	 * 
-	 * @param v
-	 *            the DataValue to get the value from.
-	 * @return a value of v.
+	 * @param dataValue the DataValue to get the value from.
+	 * @return value of v or <code>null</code> if this input adapter cannot adapt
+	 *         the value.
 	 */
-	T getValue(V v);
+	T getValue(V dataValue);
 
 	/**
 	 * Returns class of the DataValue this adapter creates cells from.
