@@ -116,7 +116,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 						final String host = resource.getHost();
 						if (bundle.getBundleId() == Long.valueOf(host
 								.substring(0, host.indexOf(".")))) {
-							urls.get(res).add(resource);
+							safeAdd(urls.get(res), resource);
 						}
 					}
 				}
@@ -133,7 +133,28 @@ public class ResourceAwareClassLoader extends ClassLoader {
 			// nothing special to do here
 			return super.getResources(name);
 		}
-		urlList.addAll(Collections.list(super.getResources(name)));
+
+		for(final URL url : Collections.list(super.getResources(name))){
+			safeAdd(urlList, url);
+		}
+		
 		return Collections.enumeration(urlList);
 	}
+	
+	private void safeAdd(final Set<URL> urls, final URL urlToAdd) {
+		try {
+			final URL fileToAdd = FileLocator.toFileURL(urlToAdd);
+
+			for (final URL url : urls) {
+				if (fileToAdd.equals(FileLocator.toFileURL(url))) {
+					return;
+				}
+			}
+		} catch (IOException e) {
+			//
+		}
+
+		urls.add(urlToAdd);
+	}
+	
 }
