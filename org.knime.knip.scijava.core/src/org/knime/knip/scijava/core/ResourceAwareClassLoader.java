@@ -141,12 +141,21 @@ public class ResourceAwareClassLoader extends ClassLoader {
 		return Collections.enumeration(urlList);
 	}
 	
-	private void safeAdd(final Set<URL> urls, final URL urlToAdd) {
+	/*
+	 * Add url to urls while making sure, that the resulting file urls are
+	 * always unique.
+	 * @param urls Set to add the url to
+	 * @param urlToAdd Url to add to the set
+	 * @see FileLocator
+	 */
+	private static void safeAdd(final Set<URL> urls, final URL urlToAdd) {
+		// make sure the resulting file url is not in urls already
 		try {
 			final URL fileToAdd = FileLocator.toFileURL(urlToAdd);
 
 			for (final URL url : urls) {
 				if (fileToAdd.equals(FileLocator.toFileURL(url))) {
+					// we found a duplicate, do not add.
 					return;
 				}
 			}
@@ -154,6 +163,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 			//
 		}
 
+		// no duplicate found, we can safely add this url.
 		urls.add(urlToAdd);
 	}
 	
