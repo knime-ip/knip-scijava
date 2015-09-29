@@ -151,11 +151,10 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	private static void safeAdd(final Set<URL> urls, final URL urlToAdd) {
 		// make sure the resulting file url is not in urls already
 		try {
-			final URL fileToAdd = FileLocator.toFileURL(urlToAdd);
+			final URL fileToAdd = FileLocator.resolve(urlToAdd);
 
 			for (final URL url : urls) {
-				if (fileToAdd.equals(FileLocator.toFileURL(url))) {
-					// we found a duplicate, do not add.
+				if (fileToAdd.equals(FileLocator.resolve(url))) {
 					return;
 				}
 			}
