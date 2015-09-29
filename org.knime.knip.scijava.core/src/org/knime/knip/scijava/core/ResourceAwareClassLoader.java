@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 			"META-INF/services/javax.script.ScriptEngineFactory" };
 
 	private final Map<String, Set<URL>> urls = new HashMap<String, Set<URL>>();
-	private final ArrayList<URL> fileUrls = new ArrayList<URL>();
+	private final Set<URL> bundleUrls = new HashSet<URL>();
 
 	/**
 	 * Constructor.
@@ -89,7 +90,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 
 				try {
 					// get file url for this bundle
-					fileUrls.add(new URL("file://"
+					bundleUrls.add(new URL("file://"
 							+ FileLocator.getBundleFile(bundle)
 									.getAbsolutePath()));
 				} catch (MalformedURLException e1) {
@@ -141,6 +142,14 @@ public class ResourceAwareClassLoader extends ClassLoader {
 		return Collections.enumeration(urlList);
 	}
 	
+	/**
+	 * Get a set of file URLs to the bundles dependency bundles.
+	 * @return set of dependency bundle file urls
+	 */
+	public Set<URL> getBundleUrls() {
+		return bundleUrls;
+	}
+	
 	/*
 	 * Add url to urls while making sure, that the resulting file urls are
 	 * always unique.
@@ -151,10 +160,11 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	private static void safeAdd(final Set<URL> urls, final URL urlToAdd) {
 		// make sure the resulting file url is not in urls already
 		try {
-			final URL fileToAdd = FileLocator.resolve(urlToAdd);
+			final URL fileToAdd = FileLocator.toFileURL(urlToAdd);
 
 			for (final URL url : urls) {
-				if (fileToAdd.equals(FileLocator.resolve(url))) {
+				if (fileToAdd.equals(FileLocator.toFileURL(url))) {
+					// we found a duplicate, do not add.
 					return;
 				}
 			}
