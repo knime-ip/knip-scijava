@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.knime.knip.scijava.update"
-      label="KNIP Scijava Integration - Update Site"
-      version="0.7.0.qualifier"
+      label="KNIP SciJava Integration - Update-Site"
+      version="0.2.0.qualifier"
       provider-name="University of Konstanz">
 
    <includes
@@ -22,6 +22,7 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
    <plugin
          id="scijava-plugins-text-plain"
          download-size="0"
@@ -56,7 +57,6 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
 
    <plugin
          id="scripting-java"

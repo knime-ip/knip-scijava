@@ -1,8 +1,8 @@
 package org.knime.knip.scijava.commands.adapter.basic;
 
-import org.knime.core.data.DataType;
 import org.knime.core.data.def.DoubleCell;
-import org.knime.knip.scijava.commands.adapter.OutputAdapterPlugin;
+import org.knime.knip.scijava.commands.AbstractOutputAdapter;
+import org.knime.knip.scijava.commands.adapter.OutputAdapter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -11,9 +11,9 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-@Plugin(type = OutputAdapterPlugin.class)
-public class FloatOutputAdapter implements
-		OutputAdapterPlugin<Float, DoubleCell> {
+@Plugin(type = OutputAdapter.class)
+public class FloatOutputAdapter
+		extends AbstractOutputAdapter<Float, DoubleCell> {
 
 	@Override
 	public DoubleCell createCell(Float o) {
@@ -21,13 +21,13 @@ public class FloatOutputAdapter implements
 	}
 
 	@Override
-	public Class<Float> getSourceType() {
-		return Float.class;
+	public Class<DoubleCell> getOutputType() {
+		return DoubleCell.class;
 	}
 
 	@Override
-	public DataType getDataCellType() {
-		return DoubleCell.TYPE;
+	public Class<Float> getInputType() {
+		return Float.class;
 	}
 
 }

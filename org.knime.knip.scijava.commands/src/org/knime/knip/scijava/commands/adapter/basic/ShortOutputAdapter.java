@@ -1,18 +1,19 @@
 package org.knime.knip.scijava.commands.adapter.basic;
 
-import org.knime.core.data.DataType;
 import org.knime.core.data.def.IntCell;
-import org.knime.knip.scijava.commands.adapter.OutputAdapterPlugin;
+import org.knime.knip.scijava.commands.AbstractOutputAdapter;
+import org.knime.knip.scijava.commands.adapter.OutputAdapter;
 import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for Short to {@link IntCell}.
  * 
  * @author Jonathan Hale (University of Konstanz)
+ * @author Christian Dietz (University of Konstanz)
  * 
  */
-@Plugin(type = OutputAdapterPlugin.class)
-public class ShortOutputAdapter implements OutputAdapterPlugin<Short, IntCell> {
+@Plugin(type = OutputAdapter.class)
+public class ShortOutputAdapter extends AbstractOutputAdapter<Short, IntCell> {
 
 	@Override
 	public IntCell createCell(Short o) {
@@ -20,13 +21,13 @@ public class ShortOutputAdapter implements OutputAdapterPlugin<Short, IntCell> {
 	}
 
 	@Override
-	public Class<Short> getSourceType() {
-		return Short.class;
+	public Class<IntCell> getOutputType() {
+		return IntCell.class;
 	}
 
 	@Override
-	public DataType getDataCellType() {
-		return IntCell.TYPE;
+	public Class<Short> getInputType() {
+		return Short.class;
 	}
 
 }

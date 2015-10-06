@@ -1,7 +1,8 @@
 package org.knime.knip.scijava.commands.adapter.basic;
 
 import org.knime.core.data.BooleanValue;
-import org.knime.knip.scijava.commands.adapter.InputAdapterPlugin;
+import org.knime.knip.scijava.commands.AbstractInputAdapter;
+import org.knime.knip.scijava.commands.adapter.InputAdapter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -10,9 +11,9 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-@Plugin(type = InputAdapterPlugin.class)
-public class BooleanInputAdapter implements
-		InputAdapterPlugin<BooleanValue, Boolean> {
+@Plugin(type = InputAdapter.class)
+public class BooleanInputAdapter extends
+		AbstractInputAdapter<BooleanValue, Boolean> {
 
 	@Override
 	public Boolean getValue(BooleanValue v) {
@@ -20,13 +21,12 @@ public class BooleanInputAdapter implements
 	}
 
 	@Override
-	public Class<BooleanValue> getDataValueType() {
+	public Class<BooleanValue> getInputType() {
 		return BooleanValue.class;
 	}
 
 	@Override
-	public Class<Boolean> getType() {
+	public Class<Boolean> getOutputType() {
 		return Boolean.class;
 	}
-
 }

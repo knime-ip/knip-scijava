@@ -25,14 +25,6 @@ import org.scijava.service.Service;
  */
 public interface NodeSettingsService extends Service {
 
-	/**
-	 * Find existing SettingsModel for given ModuleItem.
-	 * 
-	 * @param moduleItem
-	 *            the ModuleItem to find the settings for.
-	 * @return SettingsModel with the given name.
-	 */
-	SettingsModel getSettingsModel(ModuleItem<?> moduleItem);
 
 	/**
 	 * Set the value of the SettingsModel for a ModuleItem.

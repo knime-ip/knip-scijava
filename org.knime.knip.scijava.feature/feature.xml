@@ -2,8 +2,8 @@
 <feature
       id="org.knime.knip.scijava.feature"
       label="KNIME Image Processing - SciJava Integration"
-      version="0.7.0.qualifier"
-      provider-name="University of Konstanz / KNIME">
+      version="0.2.0.qualifier"
+      provider-name="University of Konstanz">
 
    <description>
       KNIME Image Processing - SciJava Integration

@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.osgi.util.ManifestElement;
@@ -26,8 +30,16 @@ import org.osgi.framework.FrameworkUtil;
  */
 public class ResourceAwareClassLoader extends ClassLoader {
 
-	final ArrayList<URL> urls = new ArrayList<URL>();
-	final ArrayList<URL> fileUrls = new ArrayList<URL>();
+	/**
+	 * Resources which need to be treated in a special way.
+	 */
+	// TODO make an extension point to add resources as needed (later)
+	private final String[] RESOURCES = new String[] {
+			"META-INF/json/org.scijava.plugin.Plugin",
+			"META-INF/services/javax.script.ScriptEngineFactory" };
+
+	private final Map<String, Set<URL>> urls = new HashMap<String, Set<URL>>();
+	private final Set<URL> bundleUrls = new HashSet<URL>();
 
 	/**
 	 * Constructor.
@@ -47,8 +59,8 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	/**
 	 * Constructor.
 	 * 
-	 * Parses current bundle resources of required bundles of
-	 * c's bundle and caches their urls.
+	 * Parses current bundle resources of required bundles of c's bundle and
+	 * caches their urls.
 	 * 
 	 * @param parent
 	 *            The parent class loader
@@ -62,6 +74,11 @@ public class ResourceAwareClassLoader extends ClassLoader {
 			clazz = getClass();
 		}
 
+		// initialize urls map
+		for (final String res : RESOURCES) {
+			urls.put(res, new HashSet<URL>());
+		}
+
 		final String requireBundle = (String) FrameworkUtil.getBundle(clazz)
 				.getHeaders().get(Constants.REQUIRE_BUNDLE);
 		try {
@@ -73,7 +90,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 
 				try {
 					// get file url for this bundle
-					fileUrls.add(new URL("file://"
+					bundleUrls.add(new URL("file://"
 							+ FileLocator.getBundleFile(bundle)
 									.getAbsolutePath()));
 				} catch (MalformedURLException e1) {
@@ -81,28 +98,29 @@ public class ResourceAwareClassLoader extends ClassLoader {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				Enumeration<URL> resources;
-				try {
-					resources = bundle
-							.getResources("META-INF/json/org.scijava.plugin.Plugin");
-				} catch (IOException e) {
-					continue;
-				}
 
-				if (resources == null) {
-					continue;
-				}
+				for (final String res : RESOURCES) {
+					Enumeration<URL> resources;
+					try {
+						resources = bundle.getResources(res);
+					} catch (IOException e) {
+						continue;
+					}
 
-				while (resources.hasMoreElements()) {
-					final URL resource = resources.nextElement();
-					// we want to avoid transitive resolving of dependencies
-					final String host = resource.getHost();
-					if (bundle.getBundleId() == Long.valueOf(host.substring(0,
-							host.indexOf(".")))) {
-						urls.add(resource);
+					if (resources == null) {
+						continue;
+					}
+
+					while (resources.hasMoreElements()) {
+						final URL resource = resources.nextElement();
+						// we want to avoid transitive resolving of dependencies
+						final String host = resource.getHost();
+						if (bundle.getBundleId() == Long.valueOf(host
+								.substring(0, host.indexOf(".")))) {
+							safeAdd(urls.get(res), resource);
+						}
 					}
 				}
-
 			}
 		} catch (BundleException e) {
 			e.printStackTrace();
@@ -111,26 +129,51 @@ public class ResourceAwareClassLoader extends ClassLoader {
 
 	@Override
 	public Enumeration<URL> getResources(final String name) throws IOException {
-		if (!name.startsWith("META-INF/json")) {
-			return Collections.emptyEnumeration();
+		final Set<URL> urlList = urls.get(name);
+		if (urlList == null) {
+			// nothing special to do here
+			return super.getResources(name);
 		}
-		urls.addAll(Collections.list(super.getResources(name)));
-		return Collections.enumeration(urls);
-	}
 
-	/**
-	 * @return urls to the eclipse resources on the classpath. Most commonly the
-	 *         urls are defined using bundleresource protocol.
-	 */
-	public Collection<URL> getURLs() {
-		return urls;
+		for(final URL url : Collections.list(super.getResources(name))){
+			safeAdd(urlList, url);
+		}
+		
+		return Collections.enumeration(urlList);
 	}
+	
+	/**
+	 * Get a set of file URLs to the bundles dependency bundles.
+	 * @return set of dependency bundle file urls
+	 */
+	public Set<URL> getBundleUrls() {
+		return bundleUrls;
+	}
+	
+	/*
+	 * Add url to urls while making sure, that the resulting file urls are
+	 * always unique.
+	 * @param urls Set to add the url to
+	 * @param urlToAdd Url to add to the set
+	 * @see FileLocator
+	 */
+	private static void safeAdd(final Set<URL> urls, final URL urlToAdd) {
+		// make sure the resulting file url is not in urls already
+		try {
+			final URL fileToAdd = FileLocator.resolve(urlToAdd);
 
-	/**
-	 * @return urls to the eclipse resources on the classpath defined using the
-	 *         file protocol.
-	 */
-	public Collection<URL> getFileURLs() {
-		return fileUrls;
+			for (final URL url : urls) {
+				if (fileToAdd.equals(FileLocator.resolve(url))) {
+					// we found a duplicate, do not add.
+					return;
+				}
+			}
+		} catch (IOException e) {
+			// ignore
+		}
+
+		// no duplicate found, we can safely add this url.
+		urls.add(urlToAdd);
 	}
+	
 }

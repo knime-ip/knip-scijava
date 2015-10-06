@@ -21,7 +21,7 @@ import org.scijava.plugin.SingletonService;
  */
 @SuppressWarnings("rawtypes")
 public interface InputAdapterService extends
-		SingletonService<InputAdapterPlugin> {
+		SingletonService<InputAdapter> {
 
 	/**
 	 * Get an InputAdapter which adapts dataValueClass to valueClass.
@@ -55,7 +55,7 @@ public interface InputAdapterService extends
 	 * 
 	 * @see #getMatchingInputAdapters(Class)
 	 */
-	Collection<InputAdapterPlugin> getMatchingInputAdapters(DataType type);
+	Collection<InputAdapter> getMatchingInputAdapters(DataType type);
 
 	/**
 	 * Get all {@link InputAdapter}s which adapt a certain {@link DataValue}.
@@ -65,7 +65,7 @@ public interface InputAdapterService extends
 	 * @return a {@link Collection} of {@link InputAdapter} which adapt that
 	 *         {@link DataValue}
 	 */
-	Collection<InputAdapterPlugin> getMatchingInputAdapters(
+	Collection<InputAdapter> getMatchingInputAdapters(
 			Class<? extends DataValue> dataValueClass);
 
 }

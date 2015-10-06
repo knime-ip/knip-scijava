@@ -1,17 +1,19 @@
 package org.knime.knip.scijava.commands.adapter.basic;
 
 import org.knime.core.data.IntValue;
-import org.knime.knip.scijava.commands.adapter.InputAdapterPlugin;
+import org.knime.knip.scijava.commands.AbstractInputAdapter;
+import org.knime.knip.scijava.commands.adapter.InputAdapter;
 import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for {@link IntValue} to Short.
  * 
  * @author Jonathan Hale (University of Konstanz)
+ * @author Christian Dietz, University of Konstanz
  * 
  */
-@Plugin(type = InputAdapterPlugin.class)
-public class ShortInputAdapter implements InputAdapterPlugin<IntValue, Short> {
+@Plugin(type = InputAdapter.class)
+public class ShortInputAdapter extends AbstractInputAdapter<IntValue, Short> {
 
 	@Override
 	public Short getValue(IntValue v) {
@@ -19,12 +21,12 @@ public class ShortInputAdapter implements InputAdapterPlugin<IntValue, Short> {
 	}
 
 	@Override
-	public Class<IntValue> getDataValueType() {
+	public Class<IntValue> getInputType() {
 		return IntValue.class;
 	}
 
 	@Override
-	public Class<Short> getType() {
+	public Class<Short> getOutputType() {
 		return Short.class;
 	}
 
