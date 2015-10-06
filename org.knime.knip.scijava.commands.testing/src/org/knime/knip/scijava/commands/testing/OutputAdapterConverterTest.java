@@ -38,7 +38,7 @@ import org.scijava.service.Service;
  * 
  * @author Jonathan Hale (University of Konstanz)
  */
-public class ConverterTest {
+public class OutputAdapterConverterTest {
 
 	@Parameter
 	ConvertService convertService;
@@ -51,7 +51,7 @@ public class ConverterTest {
 	@BeforeClass
 	public static void setUpOnce() {
 		ResourceAwareClassLoader cl = new ResourceAwareClassLoader(
-				ConverterTest.class.getClassLoader(), ConverterTest.class);
+				OutputAdapterConverterTest.class.getClassLoader(), OutputAdapterConverterTest.class);
 
 		context = new Context(requiredServices, new PluginIndex(
 				new DefaultPluginFinder(cl)));
