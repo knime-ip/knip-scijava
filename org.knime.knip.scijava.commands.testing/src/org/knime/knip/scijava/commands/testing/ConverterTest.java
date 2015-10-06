@@ -15,7 +15,6 @@ import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
 import org.knime.knip.scijava.commands.adapter.OutputAdapter;
-import org.knime.knip.scijava.commands.adapter.OutputAdapterPlugin;
 import org.knime.knip.scijava.commands.adapter.basic.BooleanOutputAdapter;
 import org.knime.knip.scijava.commands.adapter.basic.ByteOutputAdapter;
 import org.knime.knip.scijava.commands.adapter.basic.CharOutputAdapter;
@@ -69,7 +68,7 @@ public class ConverterTest {
 	}
 
 	public <T> void testOutputAdapterConversion(T o,
-			Class<? extends OutputAdapterPlugin<?, ?>> oa,
+			Class<? extends OutputAdapter<?, ?>> oa,
 			Class<? extends DataCell> cellClass) {
 		assertNotNull("Plugin " + oa.getClass().getName()
 				+ " could not be found",

@@ -6,8 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Fragment-Host: org.knime.knip.scijava.commands;bundle-version="0.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Eclipse-BuddyPolicy: registered
-Require-Bundle: org.knime.testing;bundle-version="2.11.2",
- org.junit4;bundle-version="4.8.1",
- org.knime.core,
+Require-Bundle: org.knime.testing;bundle-version="3.0.0",
+ org.knime.core;bundle-version="3.0.0",
  slf4j-log4j12;bundle-version="1.7.10",
- org.knime.knip.scijava.core
+ org.knime.knip.scijava.core;bundle-version="0.2.0",
+ org.junit;bundle-version="4.12.0"
