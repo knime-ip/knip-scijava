@@ -17,6 +17,7 @@ import org.scijava.plugin.SingletonPlugin;
  * @see Plugin
  * @see InputAdapterService
  */
-public interface OutputAdapterPlugin<T, C extends DataCell> extends
-		SingletonPlugin, Converter<T, C>, OutputAdapter<T, C> {
+public interface OutputAdapterPlugin<T, C extends DataCell>
+		extends SingletonPlugin, Converter<T, C>, OutputAdapter<T, C> {
+	// Marker interface
 }

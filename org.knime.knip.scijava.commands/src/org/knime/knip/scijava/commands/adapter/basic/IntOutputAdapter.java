@@ -1,9 +1,8 @@
 package org.knime.knip.scijava.commands.adapter.basic;
 
-import org.knime.core.data.DataType;
 import org.knime.core.data.def.IntCell;
-import org.knime.knip.scijava.commands.adapter.AbstractOutputAdapterPlugin;
-import org.knime.knip.scijava.commands.adapter.OutputAdapterPlugin;
+import org.knime.knip.scijava.commands.AbstractOutputAdapter;
+import org.knime.knip.scijava.commands.adapter.OutputAdapter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -12,23 +11,12 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-@Plugin(type = OutputAdapterPlugin.class)
-public class IntOutputAdapter extends
-AbstractOutputAdapterPlugin<Integer, IntCell> {
+@Plugin(type = OutputAdapter.class)
+public class IntOutputAdapter extends AbstractOutputAdapter<Integer, IntCell> {
 
 	@Override
 	public IntCell createCell(Integer o) {
 		return new IntCell(o);
-	}
-
-	@Override
-	public Class<Integer> getSourceType() {
-		return Integer.class;
-	}
-
-	@Override
-	public DataType getDataCellType() {
-		return IntCell.TYPE;
 	}
 
 	@Override
