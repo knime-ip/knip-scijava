@@ -1,5 +1,6 @@
 package org.knime.knip.scijava.commands;
 
+import org.knime.core.data.DataRow;
 import org.scijava.module.process.PostprocessorPlugin;
 import org.scijava.plugin.Plugin;
 

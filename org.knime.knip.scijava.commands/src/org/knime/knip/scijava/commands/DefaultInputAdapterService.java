@@ -1,8 +1,5 @@
 package org.knime.knip.scijava.commands;
 
-import java.util.Collection;
-import java.util.Set;
-
 import org.knime.core.data.DataValue;
 import org.knime.knip.scijava.commands.adapter.InputAdapter;
 import org.scijava.plugin.AbstractSingletonService;

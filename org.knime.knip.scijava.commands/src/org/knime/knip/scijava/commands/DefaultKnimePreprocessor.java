@@ -1,6 +1,5 @@
 package org.knime.knip.scijava.commands;
 
-import org.knime.core.data.DataCell;
 import org.knime.core.data.DataValue;
 import org.knime.knip.scijava.commands.adapter.InputAdapter;
 import org.scijava.module.Module;

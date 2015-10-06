@@ -5,7 +5,6 @@ import org.scijava.convert.ConvertService;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugin.PluginService;
 
 /**
  * Default implementation of OutputAdapterService.
