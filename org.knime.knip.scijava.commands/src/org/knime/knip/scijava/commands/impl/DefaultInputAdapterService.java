@@ -8,7 +8,6 @@ import java.util.WeakHashMap;
 import org.knime.core.data.DataValue;
 import org.knime.knip.scijava.commands.adapter.AbstractInputAdapterService;
 import org.knime.knip.scijava.commands.adapter.InputAdapter;
-import org.knime.knip.scijava.commands.adapter.InputAdapterPlugin;
 import org.knime.knip.scijava.commands.adapter.InputAdapterService;
 import org.scijava.plugin.Plugin;
 
@@ -26,14 +25,14 @@ import org.scijava.plugin.Plugin;
 @Plugin(type = InputAdapterService.class)
 public class DefaultInputAdapterService extends AbstractInputAdapterService {
 
-	private WeakHashMap<Class<? extends DataValue>, Set<InputAdapterPlugin>> m_pluginsByDataValue = null;
+	private WeakHashMap<Class<? extends DataValue>, Set<InputAdapter>> m_pluginsByDataValue = null;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Class<InputAdapterPlugin> getPluginType() {
-		return InputAdapterPlugin.class;
+	public Class<InputAdapter> getPluginType() {
+		return InputAdapter.class;
 	}
 
 	/**
@@ -47,14 +46,14 @@ public class DefaultInputAdapterService extends AbstractInputAdapterService {
 		}
 
 		// go through all the plugins the the Set matching the dataValueClass
-		Collection<InputAdapterPlugin> plugins = getMatchingInputAdapters(dataValueClass);
+		Collection<InputAdapter> plugins = getMatchingInputAdapters(dataValueClass);
 
 		if (plugins == null) {
 			// no adapters for dataValueClass
 			return null;
 		}
 
-		for (InputAdapterPlugin p : plugins) {
+		for (InputAdapter p : plugins) {
 			if (valueClass.isAssignableFrom(p.getType())) {
 				// found a matching plugin
 				return p;
@@ -100,13 +99,13 @@ public class DefaultInputAdapterService extends AbstractInputAdapterService {
 	}
 
 	@Override
-	public Collection<InputAdapterPlugin> getMatchingInputAdapters(
+	public Collection<InputAdapter> getMatchingInputAdapters(
 			final Class<? extends DataValue> dataValueClass) {
 		if (m_pluginsByDataValue == null) {
 			processInstances();
 		}
 
-		Set<InputAdapterPlugin> set = m_pluginsByDataValue.get(dataValueClass);
+		Set<InputAdapter> set = m_pluginsByDataValue.get(dataValueClass);
 
 		if (set == null) {
 			// check superclasses of dataValueClass
@@ -131,15 +130,15 @@ public class DefaultInputAdapterService extends AbstractInputAdapterService {
 	 * for faster access later on)
 	 */
 	private void processInstances() {
-		m_pluginsByDataValue = new WeakHashMap<Class<? extends DataValue>, Set<InputAdapterPlugin>>();
+		m_pluginsByDataValue = new WeakHashMap<Class<? extends DataValue>, Set<InputAdapter>>();
 
-		for (InputAdapterPlugin<?, ?> p : this.getInstances()) {
-			Class<? extends DataValue> type = p.getDataValueType();
+		for (InputAdapter<?, ?> p : this.getInstances()) {
+			Class<? extends DataValue> type = p.getInputType();
 
-			Set<InputAdapterPlugin> set = m_pluginsByDataValue.get(type);
+			Set<InputAdapter> set = m_pluginsByDataValue.get(type);
 
 			if (set == null) {
-				set = new HashSet<InputAdapterPlugin>(1);
+				set = new HashSet<InputAdapter>(1);
 				m_pluginsByDataValue.put(type, set);
 			}
 
