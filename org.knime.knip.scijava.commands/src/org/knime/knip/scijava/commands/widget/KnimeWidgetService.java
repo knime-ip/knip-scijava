@@ -29,7 +29,7 @@
  * #L%
  */
 
-package org.knime.knip.scijava.commands.widget.impl;
+package org.knime.knip.scijava.commands.widget;
 
 import java.util.List;
 

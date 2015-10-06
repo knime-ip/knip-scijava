@@ -1,10 +1,9 @@
-package org.knime.knip.scijava.commands.widget.impl;
+package org.knime.knip.scijava.commands.widget;
 
 import java.util.List;
 
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.knip.scijava.commands.settings.NodeSettingsService;
-import org.knime.knip.scijava.commands.widget.DialogInputWidgetModel;
 import org.scijava.Context;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
@@ -13,21 +12,22 @@ import org.scijava.widget.DefaultWidgetModel;
 import org.scijava.widget.InputPanel;
 
 /**
- * Default implementation of DialoginputWidgetModel.
+ * Default implementation of DialogInputWidgetModel.
  *
  * @author Jonathan Hale (University of Konstanz)
  */
 public class DefaultKnimeWidgetModel extends DefaultWidgetModel implements DialogInputWidgetModel {
 
 	@Parameter
-	private NodeSettingsService m_settingsService;
+	private NodeSettingsService settingsService;
+	private SettingsModel model;
 	
 	public DefaultKnimeWidgetModel(Context context,
 			InputPanel<?, ?> inputPanel, Module module, ModuleItem<?> item,
 			List<?> objectPool) {
 		super(context, inputPanel, module, item, objectPool);
 		
-		m_settingsService.createSettingsModel(item);
+		model = settingsService.createSettingsModel(item);
 		updateToSettingsModel();
 	}
 	
@@ -41,17 +41,17 @@ public class DefaultKnimeWidgetModel extends DefaultWidgetModel implements Dialo
 		super.setValue(value);
 		
 		// keep track of the values, update settings model
-		m_settingsService.setValue(getItem(), value);
+		settingsService.setValue(getItem(), value);
 	}
 	
 	@Override
 	public SettingsModel getSettingsModel() {
-		return m_settingsService.getSettingsModel(getItem());
+		return model;
 	}
 	
 	@Override
 	public void updateToSettingsModel() {
-		super.setValue(m_settingsService.getValue(getItem()));
+		super.setValue(settingsService.getValue(getItem()));
 	}
 	
 }
