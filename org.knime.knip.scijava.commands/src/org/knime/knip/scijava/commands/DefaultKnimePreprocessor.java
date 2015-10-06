@@ -2,6 +2,7 @@ package org.knime.knip.scijava.commands;
 
 import org.knime.core.data.DataValue;
 import org.knime.knip.scijava.commands.adapter.InputAdapter;
+import org.knime.knip.scijava.commands.adapter.InputAdapterService;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 import org.scijava.module.process.AbstractPreprocessorPlugin;
@@ -51,7 +52,7 @@ public class DefaultKnimePreprocessor extends AbstractPreprocessorPlugin
 			for (final DataValue c : dataRowIn.getInputDataRow()) {
 				// TODO converters only have to be detected once
 				final InputAdapter<DataValue, Object> inputAdapter = inputAdapters
-						.getMatchingInputAdapter(c, i.getType());
+						.getMatchingInputAdapter(c.getClass(), i.getType());
 
 				if (inputAdapter != null) {
 					module.setInput(i.getName(),
