@@ -2,6 +2,7 @@ package org.knime.knip.scijava.commands.mapping;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataRow;
+import org.knime.core.data.DataTable;
 import org.knime.core.data.DataTableSpec;
 import org.knime.knip.scijava.commands.KnimeInputDataTableService;
 import org.knime.knip.scijava.commands.KnimePreprocessor;
@@ -17,13 +18,15 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
- *
+ * Preprocessor which fills unresolved {@link Module} inputs from KNIME
+ * {@link DataTable}s using {@link ColumnToModuleItemMapping}s from a
+ * {@link ColumnToModuleItemMappingService}.
+ * 
  * @author Jonathan Hale (University of Konstanz)
- *
  */
 @Plugin(type = PreprocessorPlugin.class, priority = Priority.NORMAL_PRIORITY)
-public class ColumnInputMappingKnimePreprocessor extends
-		AbstractPreprocessorPlugin implements KnimePreprocessor {
+public class ColumnInputMappingKnimePreprocessor
+		extends AbstractPreprocessorPlugin implements KnimePreprocessor {
 
 	@Parameter
 	ColumnToModuleItemMappingService m_cimService;

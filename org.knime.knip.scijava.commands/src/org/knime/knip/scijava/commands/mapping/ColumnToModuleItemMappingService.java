@@ -10,7 +10,7 @@ import org.scijava.module.ModuleItem;
 import org.scijava.service.Service;
 
 /**
- * ColumnToInputMappingService provides information on how to match names of
+ * ColumnToInputMappingService provides information on how to map names of
  * {@link DataTable} columns to names of {@link ModuleItem}s.
  *
  * @author Jonathan Hale (University of Konstanz)

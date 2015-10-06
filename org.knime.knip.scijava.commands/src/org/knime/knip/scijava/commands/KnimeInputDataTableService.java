@@ -16,15 +16,15 @@ import org.scijava.service.AbstractService;
  * and call either {@link #setInputDataTable(DataTable)} or
  * {@link #setInputDataTableIterator(RowIterator)} before use.
  * 
- * Be aware that {@link#getDataRow()} returns null if {@link #next()} hasn't
- * been called yet and if {@link #next()} was called although {@link #hasNext()}
- * returned false. this service!
+ * Be aware that {@link#getDataRow()} returns <code>null</code> if
+ * {@link #next()} hasn't been called yet and if {@link #next()} was called
+ * although {@link #hasNext()} returned false. this service!
  * 
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-public class KnimeInputDataTableService extends AbstractService implements
-		InputDataRowService, Iterator<DataRow> {
+public class KnimeInputDataTableService extends AbstractService
+		implements InputDataRowService, Iterator<DataRow> {
 
 	private DataTableSpec m_tableSpec;
 	private RowIterator m_rowItor;
@@ -51,8 +51,8 @@ public class KnimeInputDataTableService extends AbstractService implements
 	 * 
 	 * The input iterator continues at its current position and changes the
 	 * given iterator. Also, the current DataRow returned by
-	 * {@link #getInputDataRow()} will remain null until the next call of
-	 * {@link #next()}.
+	 * {@link #getInputDataRow()} will remain <code>null</code> until the next
+	 * call of {@link #next()}.
 	 * 
 	 * @param inItor
 	 *            RowIterator to get DataRows from.
