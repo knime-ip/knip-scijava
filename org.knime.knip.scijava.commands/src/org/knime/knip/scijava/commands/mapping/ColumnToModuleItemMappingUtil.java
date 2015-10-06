@@ -14,7 +14,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModelStringArray;
  * @author Jonathan Hale (University of Konstanz)
  *
  */
-public class Util {
+public class ColumnToModuleItemMappingUtil {
 
 	/**
 	 * Fill a SettingsModelStringArray with the contents of a
