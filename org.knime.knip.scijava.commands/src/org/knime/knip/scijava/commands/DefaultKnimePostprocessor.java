@@ -6,6 +6,7 @@ import java.util.List;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.knip.scijava.commands.adapter.OutputAdapter;
+import org.knime.knip.scijava.commands.adapter.OutputAdapterService;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
