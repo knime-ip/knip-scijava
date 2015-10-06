@@ -33,11 +33,9 @@ import org.scijava.ItemIO;
 import org.scijava.command.Command;
 import org.scijava.command.CommandModule;
 import org.scijava.command.CommandService;
-import org.scijava.module.process.PreprocessorPlugin;
 import org.scijava.plugin.DefaultPluginFinder;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.PluginIndex;
-import org.scijava.plugin.PluginInfo;
 import org.scijava.plugin.PluginService;
 import org.scijava.service.Service;
 
