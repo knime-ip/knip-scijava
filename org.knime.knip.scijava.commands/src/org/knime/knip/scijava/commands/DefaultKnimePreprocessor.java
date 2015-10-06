@@ -1,10 +1,8 @@
-package org.knime.knip.scijava.commands.impl;
+package org.knime.knip.scijava.commands;
 
 import org.knime.core.data.DataCell;
-import org.knime.knip.scijava.commands.InputDataRowService;
-import org.knime.knip.scijava.commands.KnimePreprocessor;
+import org.knime.core.data.DataValue;
 import org.knime.knip.scijava.commands.adapter.InputAdapter;
-import org.knime.knip.scijava.commands.adapter.InputAdapterService;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 import org.scijava.module.process.AbstractPreprocessorPlugin;
@@ -40,20 +38,25 @@ public class DefaultKnimePreprocessor extends AbstractPreprocessorPlugin
 	 * 
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void process(Module module) {
-		for (ModuleItem<?> i : module.getInfo().inputs()) {
+		for (final ModuleItem<?> i : module.getInfo().inputs()) {
+			// this is the case when we resolved the module via e.g. UI
 			if (module.isResolved(i.getName())) {
 				continue;
 			}
-			for (DataCell c : dataRowIn.getInputDataRow()) {
-				InputAdapter inputAdapter = inputAdapters
-						.getMatchingInputAdapter(c.getType().getCellClass(),
-								i.getType());
+
+			// if not, we have to resolve the value from the incoming DataRow.
+			// However, the corresponding row should _always_ be controlled.
+			for (final DataValue c : dataRowIn.getInputDataRow()) {
+				// TODO converters only have to be detected once
+				final InputAdapter<DataValue, Object> inputAdapter = inputAdapters
+						.getMatchingInputAdapter(c, i.getType());
 
 				if (inputAdapter != null) {
-					module.setInput(i.getName(), inputAdapter.getValue(c));
+					module.setInput(i.getName(),
+							inputAdapter.convert(c, i.getType()));
 					module.setResolved(i.getName(), true);
 
 					// found a matching cell, continue with next input.

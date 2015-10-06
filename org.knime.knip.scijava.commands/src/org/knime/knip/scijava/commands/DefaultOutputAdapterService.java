@@ -1,10 +1,11 @@
-package org.knime.knip.scijava.commands.impl;
+package org.knime.knip.scijava.commands;
 
 import org.knime.knip.scijava.commands.adapter.OutputAdapter;
-import org.knime.knip.scijava.commands.adapter.OutputAdapterPlugin;
-import org.knime.knip.scijava.commands.adapter.OutputAdapterService;
+import org.scijava.convert.ConvertService;
 import org.scijava.plugin.AbstractSingletonService;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.plugin.PluginService;
 
 /**
  * Default implementation of OutputAdapterService.
@@ -18,15 +19,17 @@ import org.scijava.plugin.Plugin;
 @SuppressWarnings("rawtypes")
 @Plugin(type = OutputAdapterService.class)
 public class DefaultOutputAdapterService extends
-		AbstractSingletonService<OutputAdapterPlugin> implements
-		OutputAdapterService {
+		AbstractSingletonService<OutputAdapter> implements OutputAdapterService {
+
+	@Parameter
+	private ConvertService cs;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Class<OutputAdapterPlugin> getPluginType() {
-		return OutputAdapterPlugin.class;
+	public Class<OutputAdapter> getPluginType() {
+		return OutputAdapter.class;
 	}
 
 	/**
@@ -34,12 +37,15 @@ public class DefaultOutputAdapterService extends
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public OutputAdapter getMatchingOutputAdapter(Class<?> valueClass) {
-		for (OutputAdapter outputAdapter : this.getInstances()) {
-			if (outputAdapter.getSourceType().isAssignableFrom(valueClass)) {
+	public OutputAdapter getMatchingOutputAdapter(final Class<?> valueClass) {
+
+		//TODO we can potentially cache the detected converters in a HashMap here here...
+		for (final OutputAdapter outputAdapter : this.getInstances()) {
+			if (outputAdapter.getInputType().isAssignableFrom(valueClass)) {
 				return outputAdapter;
 			}
 		}
+		
 		return null;
 	}
 

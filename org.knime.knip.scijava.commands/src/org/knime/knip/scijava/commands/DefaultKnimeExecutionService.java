@@ -1,7 +1,6 @@
-package org.knime.knip.scijava.commands.impl;
+package org.knime.knip.scijava.commands;
 
 import org.knime.core.node.ExecutionContext;
-import org.knime.knip.scijava.commands.KnimeExecutionService;
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;

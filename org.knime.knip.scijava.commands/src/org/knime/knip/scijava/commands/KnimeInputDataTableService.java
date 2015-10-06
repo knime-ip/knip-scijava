@@ -1,4 +1,4 @@
-package org.knime.knip.scijava.commands.impl;
+package org.knime.knip.scijava.commands;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -7,7 +7,6 @@ import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTable;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.RowIterator;
-import org.knime.knip.scijava.commands.InputDataRowService;
 import org.scijava.service.AbstractService;
 
 /**

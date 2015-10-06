@@ -1,8 +1,7 @@
-package org.knime.knip.scijava.commands.impl;
+package org.knime.knip.scijava.commands;
 
 import org.knime.core.data.DataRow;
 import org.knime.core.data.container.DataContainer;
-import org.knime.knip.scijava.commands.OutputDataRowService;
 import org.scijava.service.AbstractService;
 
 /**

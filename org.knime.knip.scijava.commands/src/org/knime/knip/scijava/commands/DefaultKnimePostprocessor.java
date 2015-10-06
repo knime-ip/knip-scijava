@@ -1,16 +1,11 @@
-package org.knime.knip.scijava.commands.impl;
+package org.knime.knip.scijava.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.knime.core.data.DataCell;
-import org.knime.core.data.DataRow;
 import org.knime.core.data.def.DefaultRow;
-import org.knime.knip.scijava.commands.InputDataRowService;
-import org.knime.knip.scijava.commands.KnimePostprocessor;
-import org.knime.knip.scijava.commands.OutputDataRowService;
 import org.knime.knip.scijava.commands.adapter.OutputAdapter;
-import org.knime.knip.scijava.commands.adapter.OutputAdapterService;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
@@ -43,7 +38,7 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 
 	@Parameter
 	private OutputDataRowService dataRowOut;
-	
+
 	@Parameter
 	private LogService log;
 
@@ -58,23 +53,22 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 	@Override
 	public void process(Module module) {
 
-		List<DataCell> dataCells = new ArrayList<DataCell>();
+		List<DataCell> cells = new ArrayList<DataCell>();
 
 		for (ModuleItem i : module.getInfo().outputs()) {
-			OutputAdapter outputAdapter = adapterService
+			final OutputAdapter<?, DataCell> outputAdapter = adapterService
 					.getMatchingOutputAdapter(i.getType());
 
 			if (outputAdapter != null) {
-				dataCells.add(outputAdapter.createCell(module.getOutput(i
-						.getName())));
+				cells.add(outputAdapter.convert(module.getOutput(i.getName()),
+						DataCell.class));
 			} else {
-				log.warn("Could not find a OutputAdapter for \"" + i.getName() + "\".");
+				log.warn("Could not find a OutputAdapter for \"" + i.getName()
+						+ "\".");
 			}
 		}
 
-		DataRow dataRow = new DefaultRow(dataRowIn.getInputDataRow().getKey(),
-				dataCells);
-		dataRowOut.setOutputDataRow(dataRow);
+		dataRowOut.setOutputDataRow(new DefaultRow(dataRowIn.getInputDataRow()
+				.getKey(), cells));
 	}
-
 }

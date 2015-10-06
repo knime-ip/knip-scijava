@@ -1,7 +1,6 @@
-package org.knime.knip.scijava.commands.impl;
+package org.knime.knip.scijava.commands;
 
 import org.knime.core.data.DataRow;
-import org.knime.knip.scijava.commands.OutputDataRowService;
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
