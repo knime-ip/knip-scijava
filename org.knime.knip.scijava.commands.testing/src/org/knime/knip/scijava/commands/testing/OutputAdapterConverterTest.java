@@ -50,11 +50,10 @@ public class OutputAdapterConverterTest {
 
 	@BeforeClass
 	public static void setUpOnce() {
-		ResourceAwareClassLoader cl = new ResourceAwareClassLoader(
-				OutputAdapterConverterTest.class.getClassLoader(), OutputAdapterConverterTest.class);
+		ResourceAwareClassLoader cl = new ResourceAwareClassLoader(OutputAdapterConverterTest.class.getClassLoader(),
+				OutputAdapterConverterTest.class);
 
-		context = new Context(requiredServices, new PluginIndex(
-				new DefaultPluginFinder(cl)));
+		context = new Context(requiredServices, new PluginIndex(new DefaultPluginFinder(cl)));
 	}
 
 	@AfterClass
@@ -67,60 +66,50 @@ public class OutputAdapterConverterTest {
 		context.inject(this);
 	}
 
-	public <T> void testOutputAdapterConversion(T o,
-			Class<? extends OutputAdapter<?, ?>> oa,
+	public <T> void testOutputAdapterConversion(T o, Class<? extends OutputAdapter<?, ?>> oa,
 			Class<? extends DataCell> cellClass) {
-		assertNotNull("Plugin " + oa.getClass().getName()
-				+ " could not be found",
+		assertNotNull("Plugin " + oa.getClass().getName() + " could not be found",
 				convertService.getInstance(BooleanOutputAdapter.class));
 
 		DataCell c = convertService.convert(o, cellClass);
 
-		assertNotNull("Conversion from " + o.getClass().getName() + " failed",
-				c);
+		assertNotNull("Conversion from " + o.getClass().getName() + " failed", c);
 	}
 
 	@Test
 	public void testBooleanOutputAdapter() {
-		testOutputAdapterConversion(new Boolean(true),
-				BooleanOutputAdapter.class, BooleanCell.class);
+		testOutputAdapterConversion(new Boolean(true), BooleanOutputAdapter.class, BooleanCell.class);
 	}
 
 	@Test
 	public void testIntOutputAdapter() {
-		testOutputAdapterConversion(new Integer(42), IntOutputAdapter.class,
-				IntCell.class);
+		testOutputAdapterConversion(new Integer(42), IntOutputAdapter.class, IntCell.class);
 	}
 
 	@Test
 	public void testLongOutputAdapter() {
-		testOutputAdapterConversion(new Long(42), LongOutputAdapter.class,
-				LongCell.class);
+		testOutputAdapterConversion(new Long(42), LongOutputAdapter.class, LongCell.class);
 	}
 
 	@Test
 	public void testStringOutputAdapter() {
-		testOutputAdapterConversion(
-				new String("This is not a String. Really."),
-				StringOutputAdapter.class, StringCell.class);
+		testOutputAdapterConversion(new String("This is not a String. Really."), StringOutputAdapter.class,
+				StringCell.class);
 	}
 
 	@Test
 	public void testShortOutputAdapter() {
-		testOutputAdapterConversion(new Short((short) 42),
-				ShortOutputAdapter.class, IntCell.class);
+		testOutputAdapterConversion(new Short((short) 42), ShortOutputAdapter.class, IntCell.class);
 	}
 
 	@Test
 	public void testByteOutputAdapter() {
-		testOutputAdapterConversion(new Byte((byte) 42),
-				ByteOutputAdapter.class, IntCell.class);
+		testOutputAdapterConversion(new Byte((byte) 42), ByteOutputAdapter.class, IntCell.class);
 	}
 
 	@Test
 	public void testCharOutputAdapter() {
-		testOutputAdapterConversion(new Character(' '),
-				CharOutputAdapter.class, StringCell.class);
+		testOutputAdapterConversion(new Character(' '), CharOutputAdapter.class, StringCell.class);
 	}
 
 }
