@@ -17,7 +17,7 @@ import org.scijava.plugin.SingletonService;
  */
 @SuppressWarnings("rawtypes")
 public interface OutputAdapterService extends
-		SingletonService<OutputAdapterPlugin> {
+		SingletonService<OutputAdapter> {
 
 	/**
 	 * Get a OutputAdapter which adapts valueClass to a DataCell.

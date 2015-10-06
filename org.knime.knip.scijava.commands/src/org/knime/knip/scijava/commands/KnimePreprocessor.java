@@ -1,7 +1,6 @@
 
 package org.knime.knip.scijava.commands;
 
-import org.knime.knip.scijava.commands.impl.KnimeInputDataTableService;
 import org.scijava.module.process.PreprocessorPlugin;
 import org.scijava.plugin.Plugin;
 

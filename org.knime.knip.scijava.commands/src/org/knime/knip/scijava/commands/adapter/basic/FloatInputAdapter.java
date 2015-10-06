@@ -1,7 +1,8 @@
 package org.knime.knip.scijava.commands.adapter.basic;
 
 import org.knime.core.data.DoubleValue;
-import org.knime.knip.scijava.commands.adapter.InputAdapterPlugin;
+import org.knime.knip.scijava.commands.AbstractInputAdapter;
+import org.knime.knip.scijava.commands.adapter.InputAdapter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -10,22 +11,21 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-@Plugin(type = InputAdapterPlugin.class)
-public class FloatInputAdapter implements
-		InputAdapterPlugin<DoubleValue, Float> {
+@Plugin(type = InputAdapter.class)
+public class FloatInputAdapter extends AbstractInputAdapter<DoubleValue, Float> {
 
 	@Override
 	public Float getValue(DoubleValue v) {
-		return (float)v.getDoubleValue();
+		return (float) v.getDoubleValue();
 	}
 
 	@Override
-	public Class<DoubleValue> getDataValueType() {
+	public Class<DoubleValue> getInputType() {
 		return DoubleValue.class;
 	}
 
 	@Override
-	public Class<Float> getType() {
+	public Class<Float> getOutputType() {
 		return Float.class;
 	}
 

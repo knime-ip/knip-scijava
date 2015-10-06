@@ -1,8 +1,8 @@
 package org.knime.knip.scijava.commands.adapter.basic;
 
-import org.knime.core.data.DataType;
 import org.knime.core.data.def.DoubleCell;
-import org.knime.knip.scijava.commands.adapter.OutputAdapterPlugin;
+import org.knime.knip.scijava.commands.AbstractOutputAdapter;
+import org.knime.knip.scijava.commands.adapter.OutputAdapter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -11,9 +11,9 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-@Plugin(type = OutputAdapterPlugin.class)
-public class DoubleOutputAdapter implements
-		OutputAdapterPlugin<Double, DoubleCell> {
+@Plugin(type = OutputAdapter.class)
+public class DoubleOutputAdapter
+		extends AbstractOutputAdapter<Double, DoubleCell> {
 
 	@Override
 	public DoubleCell createCell(Double o) {
@@ -21,13 +21,13 @@ public class DoubleOutputAdapter implements
 	}
 
 	@Override
-	public Class<Double> getSourceType() {
-		return Double.class;
+	public Class<DoubleCell> getOutputType() {
+		return DoubleCell.class;
 	}
 
 	@Override
-	public DataType getDataCellType() {
-		return DoubleCell.TYPE;
+	public Class<Double> getInputType() {
+		return Double.class;
 	}
 
 }
