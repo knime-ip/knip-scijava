@@ -14,6 +14,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.knime.core.data.DataRow;
+import org.knime.core.data.DataTable;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
 import org.knime.core.data.RowKey;
@@ -23,8 +25,11 @@ import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
+import org.knime.knip.scijava.commands.DefaultKnimePostprocessor;
 import org.knime.knip.scijava.commands.KnimeInputDataTableService;
+import org.knime.knip.scijava.commands.KnimeOutputDataTableService;
 import org.knime.knip.scijava.commands.adapter.InputAdapterService;
+import org.knime.knip.scijava.commands.adapter.OutputAdapterService;
 import org.knime.knip.scijava.commands.mapping.ColumnInputMappingKnimePreprocessor;
 import org.knime.knip.scijava.commands.mapping.ColumnToModuleItemMappingService;
 import org.knime.knip.scijava.core.ResourceAwareClassLoader;
@@ -40,34 +45,37 @@ import org.scijava.plugin.PluginService;
 import org.scijava.service.Service;
 
 /**
- * Test for {@link ColumnInputMappingKnimePreprocessor}.
+ * Test for {@link ColumnInputMappingKnimePreprocessor} and
+ * {@link DefaultKnimePostprocessor}.
  * 
  * @author Jonathan Hale (University of Konstanz)
  */
-public class ColumnInputMappingPreprocessorTest {
+public class KnimeProcessorTest {
 
 	private static Context context;
 
 	@Parameter
 	CommandService m_commandService;
 	@Parameter
-	KnimeInputDataTableService m_dataTableService;
+	KnimeInputDataTableService m_inputTableService;
+	@Parameter
+	KnimeOutputDataTableService m_outputTableService;
 	@Parameter
 	ColumnToModuleItemMappingService m_cimService;
 
 	protected static List<Class<? extends Service>> requiredServices = Arrays.<Class<? extends Service>> asList(
-			KnimeInputDataTableService.class, CommandService.class, ColumnToModuleItemMappingService.class,
-			InputAdapterService.class);
+			KnimeInputDataTableService.class, KnimeOutputDataTableService.class, CommandService.class,
+			ColumnToModuleItemMappingService.class, InputAdapterService.class, OutputAdapterService.class);
 
-
+	private static final DataTableSpec m_spec;
 	private static final DataContainer m_container;
 
 	static {
 		// Create the test table
-		DataTableSpec spec = new DataTableSpec("TestTable", new String[] { "b", "by", "s", "i", "l", "str", "c" },
+		m_spec = new DataTableSpec("TestTable", new String[] { "b", "by", "s", "i", "l", "str", "c" },
 				new DataType[] { BooleanCell.TYPE, IntCell.TYPE, IntCell.TYPE, IntCell.TYPE, LongCell.TYPE,
 						StringCell.TYPE, StringCell.TYPE });
-		m_container = new DataContainer(spec);
+		m_container = new DataContainer(m_spec);
 		m_container.addRowToTable(
 				new DefaultRow(new RowKey("TestRow001"), BooleanCell.TRUE, new IntCell(42), new IntCell(420),
 						new IntCell(42000), new LongCell(4200000), new StringCell("KNIME"), new StringCell(" ")));
@@ -92,6 +100,7 @@ public class ColumnInputMappingPreprocessorTest {
 	public void setUp() {
 		context.inject(this);
 
+		// add test mapping
 		m_cimService.addMapping("b", "b");
 		m_cimService.addMapping("by", "by");
 		m_cimService.addMapping("s", "s");
@@ -102,26 +111,48 @@ public class ColumnInputMappingPreprocessorTest {
 	}
 
 	@Test
-	public void testModulePreprocessing() throws InterruptedException, ExecutionException {
+	public void testModuleProcessing() throws InterruptedException, ExecutionException {
 		// check if the ColumnInputMappingPreprocessor plugin was found:
-		assertNotNull("ColumnInputMappingPreprocessor was not found.", context.getService(PluginService.class).getPlugin(ColumnInputMappingKnimePreprocessor.class));
-		
-		assertNotNull(m_dataTableService);
-		m_dataTableService.setInputDataTable(m_container.getTable());
+		assertNotNull("ColumnInputMappingPreprocessor was not found.",
+				context.getService(PluginService.class).getPlugin(ColumnInputMappingKnimePreprocessor.class));
+		assertNotNull("DefaultKnimePostprocessor was not found.",
+				context.getService(PluginService.class).getPlugin(DefaultKnimePostprocessor.class));
+
+		assertNotNull(m_inputTableService);
+		assertNotNull(m_outputTableService);
 		assertNotNull(m_commandService);
-		
-		m_dataTableService.next();
-		
+		m_inputTableService.setInputDataTable(m_container.getTable());
+		m_outputTableService.setOutputContainer(new DataContainer(m_spec));
+		m_inputTableService.next();
+
 		Future<CommandModule> command = m_commandService.run(MyCommand.class, true);
 		assertNotNull(command);
 		CommandModule commandModule = command.get();
 		assertNotNull(commandModule);
 		assertFalse("Command was cancelled: " + commandModule.getCancelReason(), commandModule.isCanceled());
+
+		m_outputTableService.appendRow();
+		m_outputTableService.getDataContainer().close();
+		DataTable table = m_outputTableService.getDataContainer().getTable();
+
+		DataRow row = table.iterator().next();
+		assertNotNull(row);
+
+		assertTrue("Boolean output was not extracted correctly!", ((BooleanCell) row.getCell(0)).getBooleanValue());
+		assertEquals("Byte output was not extracted correctly!", 42, ((IntCell) row.getCell(1)).getIntValue());
+		assertEquals("Short output was not extracted correctly!", 420, ((IntCell) row.getCell(2)).getIntValue());
+		assertEquals("Integer output was not extracted correctly!", 42000, ((IntCell) row.getCell(3)).getIntValue());
+		assertEquals("Long output was not extracted correctly!", 4200000, ((LongCell) row.getCell(4)).getLongValue());
+		assertEquals("String output was not extracted correctly!", "KNIME",
+				((StringCell) row.getCell(5)).getStringValue());
+		assertEquals("Character output was not extracted correctly!", " ",
+				((StringCell) row.getCell(6)).getStringValue());
 	}
 
 	/**
 	 * Test command which verifies that inputs have been filled by the
-	 * preprocessor.
+	 * preprocessor and feeds them directly back in the outputs which can then
+	 * be collected into a data row.
 	 * 
 	 * @author Jonathan Hale
 	 */
@@ -129,24 +160,33 @@ public class ColumnInputMappingPreprocessorTest {
 
 		@Parameter(type = ItemIO.INPUT)
 		Boolean b;
-
 		@Parameter(type = ItemIO.INPUT)
 		Byte by;
-
 		@Parameter(type = ItemIO.INPUT)
 		Short s;
-
 		@Parameter(type = ItemIO.INPUT)
 		Integer i;
-
 		@Parameter(type = ItemIO.INPUT)
 		Long l;
-
 		@Parameter(type = ItemIO.INPUT)
 		String str;
-
 		@Parameter(type = ItemIO.INPUT)
 		Character c;
+
+		@Parameter(type = ItemIO.OUTPUT)
+		Boolean ob;
+		@Parameter(type = ItemIO.OUTPUT)
+		Byte oby;
+		@Parameter(type = ItemIO.OUTPUT)
+		Short os;
+		@Parameter(type = ItemIO.OUTPUT)
+		Integer oi;
+		@Parameter(type = ItemIO.OUTPUT)
+		Long ol;
+		@Parameter(type = ItemIO.OUTPUT)
+		String ostr;
+		@Parameter(type = ItemIO.OUTPUT)
+		Character oc;
 
 		@Override
 		public void run() {
@@ -157,6 +197,14 @@ public class ColumnInputMappingPreprocessorTest {
 			assertEquals("Long input was not filled correctly!", new Long(4200000), l);
 			assertEquals("String input was not filled correctly!", "KNIME", str);
 			assertEquals("Character input was not filled correctly!", new Character(' '), c);
+
+			ob = b;
+			oby = by;
+			os = s;
+			oi = i;
+			ol = l;
+			ostr = str;
+			oc = c;
 		}
 
 	}
