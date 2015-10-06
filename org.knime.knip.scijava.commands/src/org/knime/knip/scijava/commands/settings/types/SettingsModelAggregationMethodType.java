@@ -1,4 +1,4 @@
-package org.knime.knip.scijava.commands.settings.impl.types;
+package org.knime.knip.scijava.commands.settings.types;
 
 import org.knime.base.data.aggregation.AggregationMethod;
 import org.knime.base.data.aggregation.dialogutil.SettingsModelAggregationMethod;

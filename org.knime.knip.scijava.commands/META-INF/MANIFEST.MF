@@ -25,6 +25,6 @@ Export-Package: org.knime.knip.scijava.commands,
  org.knime.knip.scijava.commands.impl,
  org.knime.knip.scijava.commands.settings,
  org.knime.knip.scijava.commands.settings.impl,
- org.knime.knip.scijava.commands.settings.impl.types,
+ org.knime.knip.scijava.commands.settings.types,
  org.knime.knip.scijava.commands.widget,
  org.knime.knip.scijava.commands.widget.impl

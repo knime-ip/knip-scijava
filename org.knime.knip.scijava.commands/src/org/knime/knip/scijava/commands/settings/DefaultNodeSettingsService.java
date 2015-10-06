@@ -1,4 +1,4 @@
-package org.knime.knip.scijava.commands.settings.impl;
+package org.knime.knip.scijava.commands.settings;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,9 +9,6 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
-import org.knime.knip.scijava.commands.settings.NodeSettingsService;
-import org.knime.knip.scijava.commands.settings.SettingsModelType;
-import org.knime.knip.scijava.commands.settings.SettingsModelTypeService;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -31,11 +28,6 @@ public class DefaultNodeSettingsService extends AbstractService implements
 
 	@Parameter
 	SettingsModelTypeService m_typeService;
-
-	@Override
-	public SettingsModel getSettingsModel(ModuleItem<?> moduleItem) {
-		return m_settingsModels.get(moduleItem.getName());
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override

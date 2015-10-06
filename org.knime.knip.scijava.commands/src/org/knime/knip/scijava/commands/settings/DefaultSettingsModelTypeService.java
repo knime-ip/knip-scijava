@@ -1,9 +1,6 @@
-package org.knime.knip.scijava.commands.settings.impl;
+package org.knime.knip.scijava.commands.settings;
 
 import org.knime.core.node.defaultnodesettings.SettingsModel;
-import org.knime.knip.scijava.commands.settings.SettingsModelType;
-import org.knime.knip.scijava.commands.settings.SettingsModelTypePlugin;
-import org.knime.knip.scijava.commands.settings.SettingsModelTypeService;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Plugin;
 

@@ -1,4 +1,4 @@
-package org.knime.knip.scijava.commands.settings.impl.types;
+package org.knime.knip.scijava.commands.settings.types;
 
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.knip.scijava.commands.settings.SettingsModelTypePlugin;

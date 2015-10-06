@@ -1,8 +1,6 @@
-package org.knime.knip.scijava.commands.settings.impl;
+package org.knime.knip.scijava.commands.settings;
 
-import org.knime.knip.scijava.commands.impl.DefaultKnimePreprocessor;
-import org.knime.knip.scijava.commands.settings.NodeSettingsHarvester;
-import org.knime.knip.scijava.commands.settings.NodeSettingsService;
+import org.knime.knip.scijava.commands.DefaultKnimePreprocessor;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
