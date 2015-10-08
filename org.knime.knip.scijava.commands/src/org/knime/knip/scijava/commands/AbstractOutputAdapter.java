@@ -20,10 +20,14 @@ public abstract class AbstractOutputAdapter<I, D extends DataCell>
 	@Override
 	public <T> T convert(Object src, Class<T> dest) {
 
+		if (src == null || dest == null) {
+			return null;
+		}
+		
 		if (!dest.isAssignableFrom(getOutputType())) {
 			return null;
 		}
-
+		
 		if (getInputType().isAssignableFrom(src.getClass())) {
 			return (T) createCell((I) src);
 		}
