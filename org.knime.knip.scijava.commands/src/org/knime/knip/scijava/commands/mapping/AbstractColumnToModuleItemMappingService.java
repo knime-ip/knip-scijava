@@ -1,6 +1,8 @@
 package org.knime.knip.scijava.commands.mapping;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.WeakHashMap;
 
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
@@ -11,17 +13,132 @@ import org.scijava.service.AbstractService;
 
 /**
  * Abstract Service implementing some simple methods via other methods and the
- * {@link ColumnModuleItemMapping}
- * interface as {@link DefaultColumnToModuleItemMapping}.
+ * {@link ColumnModuleItemMapping} interface as
+ * {@link DefaultColumnToModuleItemMapping}.
  *
  * @author Jonathan Hale (University of Konstanz)
  */
-public abstract class AbstractColumnToModuleItemMappingService extends
-		AbstractService implements ColumnToModuleItemMappingService,
+public abstract class AbstractColumnToModuleItemMappingService
+		extends AbstractService implements ColumnToModuleItemMappingService,
 		ColumnToModuleItemMappingChangeListener {
 
-	public class DefaultColumnToModuleItemMapping implements
-			ColumnModuleItemMapping {
+	/** list containing all mappings of this service */
+	private final ArrayList<ColumnModuleItemMapping> m_mappings = new ArrayList<ColumnModuleItemMapping>();
+
+	/** mappings optimized for {@link #getMappingForColumnName(String)} */
+	private final WeakHashMap<String, ColumnModuleItemMapping> m_mappingsByColumn = new WeakHashMap<String, ColumnModuleItemMapping>();
+	private final WeakHashMap<String, ColumnModuleItemMapping> m_mappingsByItem = new WeakHashMap<String, ColumnModuleItemMapping>();
+
+	@Override
+	public List<ColumnModuleItemMapping> getMappingsList() {
+		return m_mappings;
+	}
+
+	@Override
+	public ColumnModuleItemMapping getMappingForColumnName(
+			final String columnName) {
+		return m_mappingsByColumn.get(columnName);
+	}
+
+	@Override
+	public ColumnModuleItemMapping getMappingForModuleItemName(
+			final String inputName) {
+		return m_mappingsByItem.get(inputName);
+	}
+
+	@Override
+	public ColumnModuleItemMapping removeMapping(
+			final ColumnModuleItemMapping mapping) {
+
+		if (m_mappings.remove(mapping)) {
+			// a mapping has been removed, we need to update the hash maps
+			m_mappingsByColumn.remove(mapping.getColumnName());
+			m_mappingsByItem.remove(mapping.getItemName());
+
+			mapping.removeMappingChangeListener(this);
+
+			return mapping;
+		}
+
+		// given mapping was not found
+		return null;
+	}
+
+	@Override
+	public void onMappingColumnChanged(
+			final ColumnToModuleItemMappingChangeEvent e) {
+		// a column name has changed, we need to update the has maps to reflect
+		// that change
+		m_mappingsByColumn.remove(e.getPreviousValue());
+
+		final ColumnModuleItemMapping mapping = e.getSourceMapping();
+		m_mappingsByColumn.put(mapping.getColumnName(), mapping);
+	}
+
+	@Override
+	public void onMappingItemChanged(
+			final ColumnToModuleItemMappingChangeEvent e) {
+		// a module input name has changed, we need to update the has maps to
+		// reflect
+		// that change
+		m_mappingsByItem.remove(e.getPreviousValue());
+
+		final ColumnModuleItemMapping mapping = e.getSourceMapping();
+		m_mappingsByItem.put(mapping.getItemName(), mapping);
+	}
+
+	@Override
+	public void clear() {
+		// remove all mappings
+
+		m_mappings.clear();
+		m_mappingsByColumn.clear();
+		m_mappingsByItem.clear();
+	}
+
+	@Override
+	public ColumnModuleItemMapping getMappingForColumn(
+			final DataColumnSpec column) {
+		return getMappingForColumnName(column.getName());
+	}
+
+	@Override
+	public ColumnModuleItemMapping getMappingForModuleItem(
+			final ModuleItem<?> item) {
+		return getMappingForModuleItemName(item.getName());
+	}
+
+	@Override
+	public ColumnModuleItemMapping addMapping(final String columnName,
+			final String itemName) {
+		final ColumnModuleItemMapping m = new DefaultColumnToModuleItemMapping(
+				columnName, itemName);
+		m.addMappingChangeListener(this);
+		addMapping(m);
+
+		return m;
+	}
+
+	/**
+	 * Add a pre created {@link ColumnModuleItemMapping} to the Service. This
+	 * method is called by {@link #addMapping(String, String)}.
+	 *
+	 * @param mapping
+	 *            {@link ColumnModuleItemMapping} to add
+	 */
+	protected void addMapping(final ColumnModuleItemMapping mapping) {
+		m_mappings.add(mapping);
+		m_mappingsByColumn.put(mapping.getColumnName(), mapping);
+		m_mappingsByItem.put(mapping.getItemName(), mapping);
+	}
+
+	/**
+	 * Default implementation of {@link ColumnModuleItemMapping}
+	 * 
+	 * @author Jonathan Hale
+	 */
+	public static final class DefaultColumnToModuleItemMapping
+			implements ColumnModuleItemMapping {
 
 		protected String m_columnName;
 		protected String m_itemName;
@@ -126,37 +243,5 @@ public abstract class AbstractColumnToModuleItemMappingService extends
 		}
 
 	}
-
-	@Override
-	public ColumnModuleItemMapping getMappingForColumn(
-			final DataColumnSpec column) {
-		return getMappingForColumnName(column.getName());
-	}
-
-	@Override
-	public ColumnModuleItemMapping getMappingForModuleItem(
-			final ModuleItem<?> item) {
-		return getMappingForModuleItemName(item.getName());
-	}
-
-	@Override
-	public ColumnModuleItemMapping addMapping(final String columnName,
-			final String itemName) {
-		final ColumnModuleItemMapping m = new DefaultColumnToModuleItemMapping(
-				columnName, itemName);
-		m.addMappingChangeListener(this);
-		addMapping(m);
-
-		return m;
-	}
-
-	/**
-	 * Add a pre created {@link ColumnModuleItemMapping} to the Service. This
-	 * method is called by {@link #addMapping(String, String)}.
-	 *
-	 * @param mapping
-	 *            {@link ColumnModuleItemMapping} to add
-	 */
-	protected abstract void addMapping(ColumnModuleItemMapping mapping);
 
 }
