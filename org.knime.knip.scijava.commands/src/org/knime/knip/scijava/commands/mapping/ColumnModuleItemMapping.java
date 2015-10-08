@@ -2,7 +2,7 @@ package org.knime.knip.scijava.commands.mapping;
 
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
-import org.knime.knip.scijava.commands.mapping.ColumnToModuleItemMappingService.ColumnModuleItemMappingChangeEventDispatcher;
+import org.knime.knip.scijava.commands.mapping.ColumnModuleItemMappingService.ColumnModuleItemMappingChangeEventDispatcher;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 
@@ -12,7 +12,7 @@ import org.scijava.module.ModuleItem;
  * {@link Module} or a {@link Module} output mapped to a column.
  *
  * @author Jonathan Hale (University of Konstanz)
- * @see ColumnToModuleItemMappingService
+ * @see ColumnModuleItemMappingService
  * @see ColumnToModuleItemMappingUtil
  */
 public interface ColumnModuleItemMapping

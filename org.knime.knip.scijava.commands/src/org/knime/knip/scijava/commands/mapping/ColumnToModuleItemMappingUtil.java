@@ -28,7 +28,7 @@ public class ColumnToModuleItemMappingUtil {
 	 * @return model
 	 */
 	public static SettingsModelStringArray fillStringArraySettingsModel(
-			final ColumnToModuleItemMappingService service,
+			final ColumnModuleItemMappingService service,
 			final SettingsModelStringArray model) {
 		final List<ColumnModuleItemMapping> mappings = service
 				.getMappingsList();
@@ -46,7 +46,7 @@ public class ColumnToModuleItemMappingUtil {
 
 	/**
 	 * Add contents of a {@link SettingsModelStringArray} to a
-	 * {@link ColumnToModuleItemMappingService}.
+	 * {@link ColumnModuleItemMappingService}.
 	 *
 	 * @param modelValue
 	 *            value of the model to get the contents from
@@ -57,7 +57,7 @@ public class ColumnToModuleItemMappingUtil {
 	 */
 	public static boolean fillColumnToModuleItemMappingService(
 			final String[] modelValue,
-			final ColumnToModuleItemMappingService service) {
+			final ColumnModuleItemMappingService service) {
 		for (final String s : modelValue) {
 			final String[] names = s.split("\n");
 

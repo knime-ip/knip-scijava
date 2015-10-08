@@ -31,7 +31,7 @@ import org.knime.knip.scijava.commands.KnimeOutputDataTableService;
 import org.knime.knip.scijava.commands.adapter.InputAdapterService;
 import org.knime.knip.scijava.commands.adapter.OutputAdapterService;
 import org.knime.knip.scijava.commands.mapping.ColumnInputMappingKnimePreprocessor;
-import org.knime.knip.scijava.commands.mapping.ColumnToModuleItemMappingService;
+import org.knime.knip.scijava.commands.mapping.ColumnModuleItemMappingService;
 import org.knime.knip.scijava.core.ResourceAwareClassLoader;
 import org.scijava.Context;
 import org.scijava.ItemIO;
@@ -61,11 +61,11 @@ public class KnimeProcessorTest {
 	@Parameter
 	KnimeOutputDataTableService m_outputTableService;
 	@Parameter
-	ColumnToModuleItemMappingService m_cimService;
+	ColumnModuleItemMappingService m_cimService;
 
 	protected static List<Class<? extends Service>> requiredServices = Arrays.<Class<? extends Service>> asList(
 			KnimeInputDataTableService.class, KnimeOutputDataTableService.class, CommandService.class,
-			ColumnToModuleItemMappingService.class, InputAdapterService.class, OutputAdapterService.class);
+			ColumnModuleItemMappingService.class, InputAdapterService.class, OutputAdapterService.class);
 
 	private static final DataTableSpec m_spec;
 	private static final DataContainer m_container;

@@ -9,7 +9,7 @@ import org.scijava.plugin.Plugin;
  */
 @Plugin(type = ColumnToInputMappingService.class)
 public class DefaultColumnToInputMappingService
-		extends AbstractColumnToModuleItemMappingService
+		extends AbstractColumnModuleItemMappingService
 		implements ColumnToInputMappingService {
 	// Everything already implemented in superclass
 }

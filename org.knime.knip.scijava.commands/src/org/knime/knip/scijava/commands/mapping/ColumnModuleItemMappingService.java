@@ -16,7 +16,7 @@ import org.scijava.service.Service;
  * @author Jonathan Hale (University of Konstanz)
  *
  */
-public interface ColumnToModuleItemMappingService extends Service {
+public interface ColumnModuleItemMappingService extends Service {
 
 	/**
 	 * Event for {@link ColumnModuleItemMapping} changes.

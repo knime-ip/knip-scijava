@@ -10,6 +10,6 @@ import org.scijava.module.Module;
  * @see ColumnInputMappingKnimePreprocessor
  */
 public interface ColumnToInputMappingService
-		extends ColumnToModuleItemMappingService {
+		extends ColumnModuleItemMappingService {
 	// NB: Marker interface
 }

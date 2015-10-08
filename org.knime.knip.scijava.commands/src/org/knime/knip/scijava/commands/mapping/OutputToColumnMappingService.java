@@ -10,6 +10,6 @@ import org.scijava.module.Module;
  * @see 
  */
 public interface OutputToColumnMappingService
-		extends ColumnToModuleItemMappingService {
+		extends ColumnModuleItemMappingService {
 	// NB: Marker interface
 }
