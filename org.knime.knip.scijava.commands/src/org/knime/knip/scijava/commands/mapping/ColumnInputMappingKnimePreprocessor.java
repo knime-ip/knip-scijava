@@ -20,7 +20,7 @@ import org.scijava.plugin.Plugin;
 /**
  * Preprocessor which fills unresolved {@link Module} inputs from KNIME
  * {@link DataTable}s using {@link ColumnModuleItemMapping}s from a
- * {@link ColumnModuleItemMappingService}.
+ * {@link ColumnToInputMappingService}.
  * 
  * @author Jonathan Hale (University of Konstanz)
  */
@@ -29,7 +29,7 @@ public class ColumnInputMappingKnimePreprocessor
 		extends AbstractPreprocessorPlugin implements KnimePreprocessor {
 
 	@Parameter
-	ColumnModuleItemMappingService m_cimService;
+	ColumnToInputMappingService m_cimService;
 
 	@Parameter
 	KnimeInputDataTableService m_inputTable;
