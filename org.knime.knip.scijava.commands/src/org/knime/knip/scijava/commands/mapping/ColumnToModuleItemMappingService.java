@@ -19,7 +19,7 @@ import org.scijava.service.Service;
 public interface ColumnToModuleItemMappingService extends Service {
 
 	/**
-	 * Event for {@link ColumnToModuleItemMapping} changes.
+	 * Event for {@link ColumnModuleItemMapping} changes.
 	 *
 	 * @author Jonathan Hale (University of Konstanz)
 	 */
@@ -36,22 +36,22 @@ public interface ColumnToModuleItemMappingService extends Service {
 		 * Constructor
 		 *
 		 * @param source
-		 *            the changed {@link ColumnToModuleItemMapping}
+		 *            the changed {@link ColumnModuleItemMapping}
 		 */
 		public ColumnToModuleItemMappingChangeEvent(
-				final ColumnToModuleItemMapping source, final String oldValue) {
+				final ColumnModuleItemMapping source, final String oldValue) {
 			super(source);
 
 			this.oldValue = oldValue;
 		}
 
 		/**
-		 * Get the changed {@link ColumnToModuleItemMapping}.
+		 * Get the changed {@link ColumnModuleItemMapping}.
 		 *
 		 * @return the changed mapping
 		 */
-		public ColumnToModuleItemMapping getSourceMapping() {
-			return (ColumnToModuleItemMapping) source;
+		public ColumnModuleItemMapping getSourceMapping() {
+			return (ColumnModuleItemMapping) source;
 		}
 
 		/**
@@ -66,7 +66,7 @@ public interface ColumnToModuleItemMappingService extends Service {
 
 	/**
 	 * Interface for classes listening to changes to
-	 * {@link ColumnToModuleItemMapping}s.
+	 * {@link ColumnModuleItemMapping}s.
 	 *
 	 * @author Jonathan Hale (University of Konstanz)
 	 *
@@ -74,7 +74,7 @@ public interface ColumnToModuleItemMappingService extends Service {
 	public interface ColumnToModuleItemMappingChangeListener extends
 			EventListener {
 		/**
-		 * Called when a {@link ColumnToModuleItemMappingChangeEventDispatcher}
+		 * Called when a {@link ColumnModuleItemMappingChangeEventDispatcher}
 		 * this listener listens to fires a event when the column name changed.
 		 *
 		 * @param e
@@ -83,7 +83,7 @@ public interface ColumnToModuleItemMappingService extends Service {
 		void onMappingColumnChanged(ColumnToModuleItemMappingChangeEvent e);
 
 		/**
-		 * Called when a {@link ColumnToModuleItemMappingChangeEventDispatcher}
+		 * Called when a {@link ColumnModuleItemMappingChangeEventDispatcher}
 		 * this listener listens to fires a event when the item name changed.
 		 *
 		 * @param e
@@ -99,7 +99,7 @@ public interface ColumnToModuleItemMappingService extends Service {
 	 * @author Jonathan Hale (University of Konstanz)
 	 *
 	 */
-	public interface ColumnToModuleItemMappingChangeEventDispatcher {
+	public interface ColumnModuleItemMappingChangeEventDispatcher {
 
 		/**
 		 * Add a listener to dispatch events to.
@@ -141,81 +141,81 @@ public interface ColumnToModuleItemMappingService extends Service {
 	}
 
 	/**
-	 * Get a list of all {@link ColumnToModuleItemMapping}s currently contained
+	 * Get a list of all {@link ColumnModuleItemMapping}s currently contained
 	 * in this Service.
 	 *
-	 * @return {@link List} containing {@link ColumnToModuleItemMapping} of this
+	 * @return {@link List} containing {@link ColumnModuleItemMapping} of this
 	 *         Service.
 	 */
-	List<ColumnToModuleItemMapping> getMappingsList();
+	List<ColumnModuleItemMapping> getMappingsList();
 
 	/**
-	 * Get a {@link ColumnToModuleItemMapping} which maps the given columnName.
+	 * Get a {@link ColumnModuleItemMapping} which maps the given columnName.
 	 *
 	 * @param columnName
 	 *            name of the column to find a mapping for
-	 * @return {@link ColumnToModuleItemMapping} which maps columnName or null
+	 * @return {@link ColumnModuleItemMapping} which maps columnName or null
 	 *         if none could be found.
 	 */
-	ColumnToModuleItemMapping getMappingForColumnName(String columnName);
+	ColumnModuleItemMapping getMappingForColumnName(String columnName);
 
 	/**
-	 * Get a {@link ColumnToModuleItemMapping} which maps the given inputName.
+	 * Get a {@link ColumnModuleItemMapping} which maps the given inputName.
 	 *
 	 * @param inputName
 	 *            name of the input to find a mapping for
-	 * @return {@link ColumnToModuleItemMapping} which maps a column to
+	 * @return {@link ColumnModuleItemMapping} which maps a column to
 	 *         inputName or null if none could be found.
 	 */
-	ColumnToModuleItemMapping getMappingForModuleItemName(String inputName);
+	ColumnModuleItemMapping getMappingForModuleItemName(String inputName);
 
 	/**
-	 * Get a {@link ColumnToModuleItemMapping} which maps the given columns
+	 * Get a {@link ColumnModuleItemMapping} which maps the given columns
 	 * name.
 	 *
 	 * @param column
 	 *            column which to find a mapping for
-	 * @return {@link ColumnToModuleItemMapping} which maps the columns name or
+	 * @return {@link ColumnModuleItemMapping} which maps the columns name or
 	 *         null if none could be found.
 	 */
-	ColumnToModuleItemMapping getMappingForColumn(DataColumnSpec column);
+	ColumnModuleItemMapping getMappingForColumn(DataColumnSpec column);
 
 	/**
-	 * Get a {@link ColumnToModuleItemMapping} which maps to the given items
+	 * Get a {@link ColumnModuleItemMapping} which maps to the given items
 	 * name.
 	 *
 	 * @param item
 	 *            {@link ModuleItem} to find a mapping for
-	 * @return {@link ColumnToModuleItemMapping} wich maps top the given module
+	 * @return {@link ColumnModuleItemMapping} wich maps top the given module
 	 *         items name or null if none could be found.
 	 */
-	ColumnToModuleItemMapping getMappingForModuleItem(ModuleItem<?> item);
+	ColumnModuleItemMapping getMappingForModuleItem(ModuleItem<?> item);
 
 	/**
-	 * Add a {@link ColumnToModuleItemMapping} from this Service if no such
+	 * Add a {@link ColumnModuleItemMapping} from this Service if no such
 	 * mapping exists yet.
 	 *
 	 * @param columnName
 	 *            name of the column to map to inputName
 	 * @param inputName
 	 *            name of the input to map to
-	 * @return created or existing {@link ColumnToModuleItemMapping} mapping
+	 * @return created or existing {@link ColumnModuleItemMapping} mapping
 	 *         columnName to inputName
 	 */
-	ColumnToModuleItemMapping addMapping(String columnName, String inputName);
+	ColumnModuleItemMapping addMapping(String columnName, String inputName);
 
 	/**
-	 * Remove a {@link ColumnToModuleItemMapping} from this Service.
+	 * Remove a {@link ColumnModuleItemMapping} from this Service.
 	 *
 	 * @param mapping
-	 *            {@link ColumnToModuleItemMapping} to remove
-	 * @return removed {@link ColumnToModuleItemMapping} or null if no such
+	 *            {@link ColumnModuleItemMapping} to remove
+	 * @return removed {@link ColumnModuleItemMapping} or null if no such
 	 *         mapping was found in this Service
 	 */
-	ColumnToModuleItemMapping removeMapping(ColumnToModuleItemMapping mapping);
+	ColumnModuleItemMapping removeMapping(ColumnModuleItemMapping mapping);
 
 	/**
-	 * Remove all {@link ColumnToModuleItemMapping}s from this Service.
+	 * Remove all {@link ColumnModuleItemMapping}s from this Service.
 	 */
 	void clear();
 }

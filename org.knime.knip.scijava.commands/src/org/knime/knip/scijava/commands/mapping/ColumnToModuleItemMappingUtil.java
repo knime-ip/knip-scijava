@@ -9,7 +9,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModelStringArray;
  * Utility methods for column input mappings.
  *
  * This class contains static methods to serialize and deserialize
- * {@link ColumnToModuleItemMapping}s as {@link SettingsModelStringArray}.
+ * {@link ColumnModuleItemMapping}s as {@link SettingsModelStringArray}.
  *
  * @author Jonathan Hale (University of Konstanz)
  *
@@ -30,11 +30,11 @@ public class ColumnToModuleItemMappingUtil {
 	public static SettingsModelStringArray fillStringArraySettingsModel(
 			final ColumnToModuleItemMappingService service,
 			final SettingsModelStringArray model) {
-		final List<ColumnToModuleItemMapping> mappings = service
+		final List<ColumnModuleItemMapping> mappings = service
 				.getMappingsList();
 		final ArrayList<String> out = new ArrayList<String>(mappings.size());
 
-		for (final ColumnToModuleItemMapping m : mappings) {
+		for (final ColumnModuleItemMapping m : mappings) {
 			out.add(m.getColumnName() + "\n"
 					+ (m.isActive() ? "true" : "false") + "\n"
 					+ m.getItemName());
@@ -72,7 +72,7 @@ public class ColumnToModuleItemMappingUtil {
 			 * [1] active, either "true" or "false"
 			 * [2] module input name
 			 */
-			final ColumnToModuleItemMapping mapping = service.addMapping(
+			final ColumnModuleItemMapping mapping = service.addMapping(
 					names[0], names[2]);
 
 			if (names[1].equals("false")) {

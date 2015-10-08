@@ -2,18 +2,21 @@ package org.knime.knip.scijava.commands.mapping;
 
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
-import org.knime.knip.scijava.commands.mapping.ColumnToModuleItemMappingService.ColumnToModuleItemMappingChangeEventDispatcher;
+import org.knime.knip.scijava.commands.mapping.ColumnToModuleItemMappingService.ColumnModuleItemMappingChangeEventDispatcher;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 
 /**
- * Interfaces for classes containing a mapping from column name to input
- * name.
+ * Interfaces for classes containing a mapping from column name to
+ * {@link ModuleItem} name. This may be a column mapped to an input of a
+ * {@link Module} or a {@link Module} output mapped to a column.
  *
  * @author Jonathan Hale (University of Konstanz)
+ * @see ColumnToModuleItemMappingService
+ * @see ColumnToModuleItemMappingUtil
  */
-public interface ColumnToModuleItemMapping extends
-		ColumnToModuleItemMappingChangeEventDispatcher {
+public interface ColumnModuleItemMapping
+		extends ColumnModuleItemMappingChangeEventDispatcher {
 	/**
 	 * Get column name.
 	 *
@@ -22,9 +25,9 @@ public interface ColumnToModuleItemMapping extends
 	String getColumnName();
 
 	/**
-	 * Get module input name.
+	 * Get module item name.
 	 *
-	 * @return name of the input which is mapped to
+	 * @return name of the {@link ModuleItem} which is mapped
 	 */
 	String getItemName();
 
@@ -34,9 +37,8 @@ public interface ColumnToModuleItemMapping extends
 	 *
 	 * @param spec
 	 *            {@link DataTableSpec} to get {@link DataColumnSpec} from
-	 * @return a {@link DataColumnSpec} with the column name contained in
-	 *         this mapping or null if spec did not contain a column with
-	 *         that name
+	 * @return a {@link DataColumnSpec} with the column name contained in this
+	 *         mapping or null if spec did not contain a column with that name
 	 */
 	DataColumnSpec getColumnSpec(DataTableSpec spec);
 
@@ -44,7 +46,7 @@ public interface ColumnToModuleItemMapping extends
 	 * Get index of the column which is mapped to.
 	 *
 	 * @param spec
-	 *            {1link DataTableSpec} to find the column in
+	 *            {@link DataTableSpec} to find the column in
 	 * @return column index or -1 if column could not be found in spec
 	 */
 	Integer getColumnIndex(DataTableSpec spec);
@@ -54,8 +56,8 @@ public interface ColumnToModuleItemMapping extends
 	 *
 	 * @param module
 	 *            the module to find the {@link ModuleItem} in
-	 * @return {@link ModuleItem} with the contained name or null if module
-	 *         does not have a item with that name.
+	 * @return {@link ModuleItem} with the contained name or null if module does
+	 *         not have a item with that name.
 	 */
 	ModuleItem<?> getModuleItem(Module module);
 
@@ -67,18 +69,18 @@ public interface ColumnToModuleItemMapping extends
 	boolean isActive();
 
 	/**
-	 * Set this mapping as active or inactive. Inactive columns input
-	 * Mappings should usually not be used by other services.
+	 * Set this mapping as active or inactive. Inactive columns input Mappings
+	 * should usually not be used by other services.
 	 *
 	 * @param flag
-	 *            set to true to active, false to deactivate this
-	 *            {@link ColumnToModuleItemMapping}
+	 *            set to <code>true</code> to activate or <code>false</code> to
+	 *            deactivate this {@link ColumnModuleItemMapping}
 	 */
 	void setActive(boolean flag);
 
 	/**
-	 * Set this mappings column name and update listeners if changed. Needs
-	 * to call {@link #fireMappingColumnChanged(String)}.
+	 * Set this mappings column name and update listeners if changed. Needs to
+	 * call {@link #fireMappingColumnChanged(String)}.
 	 *
 	 * @param columnName
 	 *            name of the column to set to
@@ -93,4 +95,5 @@ public interface ColumnToModuleItemMapping extends
 	 *            name of the item to set to.
 	 */
 	void setItemName(String itemName);
+	
 }

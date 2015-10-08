@@ -8,13 +8,13 @@ import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 
 /**
- * Service which handles {@link ColumnToModuleItemMapping}s. They are used by
+ * Service which handles {@link ColumnModuleItemMapping}s. They are used by
  * {@link ColumnInputMappingKnimePreprocessor} to determine which data table
  * column should fill the value of a module input.
  *
  * @author Jonathan Hale (University of Konstanz)
  *
- * @see ColumnToModuleItemMapping
+ * @see ColumnModuleItemMapping
  * @see ColumnToModuleItemMappingService
  */
 @Plugin(type = ColumnToModuleItemMappingService.class, priority=Priority.NORMAL_PRIORITY)
@@ -22,39 +22,39 @@ public class DefaultColumnToModuleItemMappingService extends
 		AbstractColumnToModuleItemMappingService {
 
 	/** list containing all mappings of this service */
-	private final ArrayList<ColumnToModuleItemMapping> m_mappings = new ArrayList<ColumnToModuleItemMapping>();
+	private final ArrayList<ColumnModuleItemMapping> m_mappings = new ArrayList<ColumnModuleItemMapping>();
 
 	/** mappings optimized for {@link #getMappingForColumnName(String)} */
-	private final WeakHashMap<String, ColumnToModuleItemMapping> m_mappingsByColumn = new WeakHashMap<String, ColumnToModuleItemMapping>();
-	private final WeakHashMap<String, ColumnToModuleItemMapping> m_mappingsByItem = new WeakHashMap<String, ColumnToModuleItemMapping>();
+	private final WeakHashMap<String, ColumnModuleItemMapping> m_mappingsByColumn = new WeakHashMap<String, ColumnModuleItemMapping>();
+	private final WeakHashMap<String, ColumnModuleItemMapping> m_mappingsByItem = new WeakHashMap<String, ColumnModuleItemMapping>();
 
 	@Override
-	public List<ColumnToModuleItemMapping> getMappingsList() {
+	public List<ColumnModuleItemMapping> getMappingsList() {
 		return m_mappings;
 	}
 
 	@Override
-	public ColumnToModuleItemMapping getMappingForColumnName(
+	public ColumnModuleItemMapping getMappingForColumnName(
 			final String columnName) {
 		return m_mappingsByColumn.get(columnName);
 	}
 
 	@Override
-	public ColumnToModuleItemMapping getMappingForModuleItemName(
+	public ColumnModuleItemMapping getMappingForModuleItemName(
 			final String inputName) {
 		return m_mappingsByItem.get(inputName);
 	}
 
 	@Override
-	protected void addMapping(final ColumnToModuleItemMapping mapping) {
+	protected void addMapping(final ColumnModuleItemMapping mapping) {
 		m_mappings.add(mapping);
 		m_mappingsByColumn.put(mapping.getColumnName(), mapping);
 		m_mappingsByItem.put(mapping.getItemName(), mapping);
 	}
 
 	@Override
-	public ColumnToModuleItemMapping removeMapping(
-			final ColumnToModuleItemMapping mapping) {
+	public ColumnModuleItemMapping removeMapping(
+			final ColumnModuleItemMapping mapping) {
 
 		if (m_mappings.remove(mapping)) {
 			// a mapping has been removed, we need to update the hash maps
@@ -77,7 +77,7 @@ public class DefaultColumnToModuleItemMappingService extends
 		// that change
 		m_mappingsByColumn.remove(e.getPreviousValue());
 
-		final ColumnToModuleItemMapping mapping = e.getSourceMapping();
+		final ColumnModuleItemMapping mapping = e.getSourceMapping();
 		m_mappingsByColumn.put(mapping.getColumnName(), mapping);
 	}
 
@@ -89,7 +89,7 @@ public class DefaultColumnToModuleItemMappingService extends
 		// that change
 		m_mappingsByItem.remove(e.getPreviousValue());
 
-		final ColumnToModuleItemMapping mapping = e.getSourceMapping();
+		final ColumnModuleItemMapping mapping = e.getSourceMapping();
 		m_mappingsByItem.put(mapping.getItemName(), mapping);
 	}
 

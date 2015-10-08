@@ -19,7 +19,7 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Preprocessor which fills unresolved {@link Module} inputs from KNIME
- * {@link DataTable}s using {@link ColumnToModuleItemMapping}s from a
+ * {@link DataTable}s using {@link ColumnModuleItemMapping}s from a
  * {@link ColumnToModuleItemMappingService}.
  * 
  * @author Jonathan Hale (University of Konstanz)
@@ -46,7 +46,7 @@ public class ColumnInputMappingKnimePreprocessor
 		final DataTableSpec spec = m_inputTable.getInputDataTableSpec();
 
 		// some local variables set and used in the following loop
-		ColumnToModuleItemMapping mapping = null;
+		ColumnModuleItemMapping mapping = null;
 		String inputName = "";
 
 		// DataRow will remain the same while processing, this is a shortcut to

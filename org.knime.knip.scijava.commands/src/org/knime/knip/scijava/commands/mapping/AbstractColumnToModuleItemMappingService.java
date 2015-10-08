@@ -11,7 +11,7 @@ import org.scijava.service.AbstractService;
 
 /**
  * Abstract Service implementing some simple methods via other methods and the
- * {@link ColumnToModuleItemMapping}
+ * {@link ColumnModuleItemMapping}
  * interface as {@link DefaultColumnToModuleItemMapping}.
  *
  * @author Jonathan Hale (University of Konstanz)
@@ -21,7 +21,7 @@ public abstract class AbstractColumnToModuleItemMappingService extends
 		ColumnToModuleItemMappingChangeListener {
 
 	public class DefaultColumnToModuleItemMapping implements
-			ColumnToModuleItemMapping {
+			ColumnModuleItemMapping {
 
 		protected String m_columnName;
 		protected String m_itemName;
@@ -128,21 +128,21 @@ public abstract class AbstractColumnToModuleItemMappingService extends
 	}
 
 	@Override
-	public ColumnToModuleItemMapping getMappingForColumn(
+	public ColumnModuleItemMapping getMappingForColumn(
 			final DataColumnSpec column) {
 		return getMappingForColumnName(column.getName());
 	}
 
 	@Override
-	public ColumnToModuleItemMapping getMappingForModuleItem(
+	public ColumnModuleItemMapping getMappingForModuleItem(
 			final ModuleItem<?> item) {
 		return getMappingForModuleItemName(item.getName());
 	}
 
 	@Override
-	public ColumnToModuleItemMapping addMapping(final String columnName,
+	public ColumnModuleItemMapping addMapping(final String columnName,
 			final String itemName) {
-		final ColumnToModuleItemMapping m = new DefaultColumnToModuleItemMapping(
+		final ColumnModuleItemMapping m = new DefaultColumnToModuleItemMapping(
 				columnName, itemName);
 		m.addMappingChangeListener(this);
 		addMapping(m);
@@ -151,12 +151,12 @@ public abstract class AbstractColumnToModuleItemMappingService extends
 	}
 
 	/**
-	 * Add a pre created {@link ColumnToModuleItemMapping} to the Service. This
+	 * Add a pre created {@link ColumnModuleItemMapping} to the Service. This
 	 * method is called by {@link #addMapping(String, String)}.
 	 *
 	 * @param mapping
-	 *            {@link ColumnToModuleItemMapping} to add
+	 *            {@link ColumnModuleItemMapping} to add
 	 */
-	protected abstract void addMapping(ColumnToModuleItemMapping mapping);
+	protected abstract void addMapping(ColumnModuleItemMapping mapping);
 
 }
