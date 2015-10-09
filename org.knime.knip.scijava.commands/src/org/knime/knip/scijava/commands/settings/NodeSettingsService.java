@@ -25,7 +25,6 @@ import org.scijava.service.Service;
  */
 public interface NodeSettingsService extends Service {
 
-
 	/**
 	 * Set the value of the SettingsModel for a ModuleItem.
 	 * 
