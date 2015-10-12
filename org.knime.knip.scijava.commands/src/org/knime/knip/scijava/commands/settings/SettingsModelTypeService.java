@@ -16,8 +16,8 @@ import org.scijava.plugin.SingletonService;
  * @author Jonathan Hale (University of Konstanz)
  */
 @SuppressWarnings("rawtypes")
-public interface SettingsModelTypeService extends
-		SingletonService<SettingsModelTypePlugin> {
+public interface SettingsModelTypeService
+		extends SingletonService<SettingsModelTypePlugin> {
 
 	/**
 	 * Get a SettingModelType which can set and get values from the specified
@@ -26,15 +26,18 @@ public interface SettingsModelTypeService extends
 	 * @param settingsModel
 	 *            SettingsModel to find a SettingsModelType for.
 	 * @return a SettingsModelType which can set/get values from settingsModel
-	 *         or null if none could be found.
+	 *         or null if none could be found or <code>settingsModel</code> was
+	 *         <code>null</code>.
 	 */
 	SettingsModelType getSettingsModelTypeFor(SettingsModel settingsModel);
 
 	/**
 	 * Get a SettingsModel type which can assign value to a SettingsModel.
-	 * @param value the value which to store in a SettingsModel.
+	 * 
+	 * @param value
+	 *            the value which to store in a SettingsModel.
 	 * @return SettingsModelType which stores values of given value type.
 	 */
 	SettingsModelType getSettingsModelTypeFor(Class<?> value);
-	
+
 }
