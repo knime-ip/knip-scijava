@@ -1,5 +1,7 @@
 package org.knime.knip.scijava.commands;
 
+import java.lang.ref.WeakReference;
+
 import org.knime.core.data.DataRow;
 import org.knime.core.data.container.DataContainer;
 import org.scijava.service.AbstractService;
@@ -17,8 +19,8 @@ import org.scijava.service.AbstractService;
 public class KNIMEOutputDataTableService extends AbstractService implements
 		OutputDataRowService {
 
-	private DataContainer m_dataContainer;
-	private DataRow m_curRow = null;
+	private WeakReference<DataContainer> m_dataContainer = new WeakReference<>(null);
+	private WeakReference<DataRow> m_curRow = new WeakReference<>(null);
 
 	/**
 	 * Create a KnimeOutputDataTableService with given output DataTableSpec.
@@ -27,23 +29,17 @@ public class KNIMEOutputDataTableService extends AbstractService implements
 	 *            DataTableSpec of the output table.
 	 */
 	public void setOutputContainer(DataContainer container) {
-		m_dataContainer = container;
+		m_dataContainer = new WeakReference<>(container);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setOutputDataRow(DataRow r) {
-		m_curRow = r;
+		m_curRow = new WeakReference<>(r);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public DataRow getOutputDataRow() {
-		return m_curRow;
+		return m_curRow.get();
 	}
 
 	/**
@@ -51,17 +47,17 @@ public class KNIMEOutputDataTableService extends AbstractService implements
 	 * sets the current row to null.
 	 */
 	public void appendRow() {
-		if (m_dataContainer != null) {
-			m_dataContainer.addRowToTable(m_curRow);
+		if (m_dataContainer.get() != null) {
+			m_dataContainer.get().addRowToTable(m_curRow.get());
 		}
-		m_curRow = null;
+		m_curRow = new WeakReference<>(null);
 	}
 	
 	/**
 	 * @return the DataContainer set in the Constructor.
 	 */
 	public DataContainer getDataContainer() {
-		return m_dataContainer;
+		return m_dataContainer.get();
 	}
 
 }

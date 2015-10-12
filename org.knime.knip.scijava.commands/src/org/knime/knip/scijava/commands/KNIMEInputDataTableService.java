@@ -1,5 +1,6 @@
 package org.knime.knip.scijava.commands;
 
+import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -20,15 +21,20 @@ import org.scijava.service.AbstractService;
  * {@link #next()} hasn't been called yet and if {@link #next()} was called
  * although {@link #hasNext()} returned false. this service!
  * 
+ * This service only holds {@link WeakReference}s to the {@link DataTableSpec},
+ * {@link RowIterator} and {@link DataRow} to ensure those objects can be
+ * garbage collected once they are not referenced outside of this service.
+ * 
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
 public class KNIMEInputDataTableService extends AbstractService
 		implements InputDataRowService, Iterator<DataRow> {
 
-	private DataTableSpec m_tableSpec;
-	private RowIterator m_rowItor;
-	private DataRow m_curRow;
+	private WeakReference<DataTableSpec> m_tableSpec = new WeakReference<>(
+			null);
+	private WeakReference<RowIterator> m_rowItor = new WeakReference<>(null);
+	private WeakReference<DataRow> m_curRow = new WeakReference<>(null);
 
 	/**
 	 * Set input DataTable
@@ -39,10 +45,10 @@ public class KNIMEInputDataTableService extends AbstractService
 	public void setInputDataTable(DataTable inData) {
 		if (inData == null) {
 			setInputDataTableIterator(null);
-			m_tableSpec = null;
+			m_tableSpec = new WeakReference<>(null);
 		} else {
 			setInputDataTableIterator(inData.iterator());
-			m_tableSpec = inData.getDataTableSpec();
+			m_tableSpec = new WeakReference<>(inData.getDataTableSpec());
 		}
 	}
 
@@ -58,51 +64,39 @@ public class KNIMEInputDataTableService extends AbstractService
 	 *            RowIterator to get DataRows from.
 	 */
 	public void setInputDataTableIterator(RowIterator inItor) {
-		m_rowItor = inItor;
-		m_curRow = null;
+		m_rowItor = new WeakReference<>(inItor);
+		m_curRow = new WeakReference<>(null);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public DataRow getInputDataRow() {
-		return m_curRow;
+		return m_curRow.get();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public DataRow next() {
-		if (m_rowItor == null) {
+		if (m_rowItor.get() == null) {
 			return null;
 		}
 
 		try {
-			m_curRow = m_rowItor.next();
+			m_curRow = new WeakReference<>(m_rowItor.get().next());
 		} catch (NoSuchElementException e) {
-			m_curRow = null;
+			m_curRow = new WeakReference<>(null);
 			throw e;
 		}
 
-		return m_curRow;
+		return m_curRow.get();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean hasNext() {
-		if (m_rowItor == null) {
+		if (m_rowItor.get() == null) {
 			return false;
 		}
-		return m_rowItor.hasNext();
+		return m_rowItor.get().hasNext();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void remove() {
 		throw new UnsupportedOperationException(
@@ -111,7 +105,7 @@ public class KNIMEInputDataTableService extends AbstractService
 
 	@Override
 	public DataTableSpec getInputDataTableSpec() {
-		return m_tableSpec;
+		return m_tableSpec.get();
 	}
 
 }
