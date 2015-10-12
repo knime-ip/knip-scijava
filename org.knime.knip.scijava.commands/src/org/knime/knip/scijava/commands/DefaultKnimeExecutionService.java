@@ -1,34 +1,46 @@
 package org.knime.knip.scijava.commands;
 
+import java.lang.ref.WeakReference;
+
 import org.knime.core.node.ExecutionContext;
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 
 /**
- * Default implementation of KnimeExecutionService.
+ * Default implementation of KnimeExecutionService. Holds a KNIME Node
+ * {@link ExecutionContext} in a {@link WeakReference}, which ensures that the
+ * {@link ExecutionContext} can be garbage collected when execution of a Node
+ * terminates.
  * 
  * @author Jonathan Hale (University of Konstanz)
- * 
+ * @see ExecutionContext
  */
 @Plugin(type = KNIMEExecutionService.class, priority = DefaultKnimeExecutionService.PRIORITY)
-public class DefaultKnimeExecutionService extends AbstractService implements
-		KNIMEExecutionService {
+public class DefaultKnimeExecutionService extends AbstractService
+		implements KNIMEExecutionService {
 
 	/**
 	 * Priority of this {@link Plugin}
 	 */
 	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
 
-	private ExecutionContext m_exec = null;
+	private WeakReference<ExecutionContext> m_exec = new WeakReference<>(null);
 
-	public void setExecutionContex(ExecutionContext e) {
-		m_exec = e;
+	/**
+	 * Set the {@link ExecutionContext}. Note that this service holds the
+	 * {@link ExecutionContext} in a {@link WeakReference}, which means that the
+	 * reference needs to be kept valid outside the service.
+	 * 
+	 * @param e
+	 */
+	public void setExecutionContex(final ExecutionContext e) {
+		m_exec = new WeakReference<>(e);
 	}
-	
+
 	@Override
 	public ExecutionContext getExecutionContext() {
-		return m_exec;
+		return m_exec.get();
 	}
 
 }

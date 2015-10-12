@@ -18,6 +18,10 @@ import org.scijava.service.Service;
  */
 public interface KNIMEExecutionService extends Service {
 
+	/**
+	 * @return the ExecutionContext held by this service, or null if there is
+	 *         none.
+	 */
 	ExecutionContext getExecutionContext();
 
 }
