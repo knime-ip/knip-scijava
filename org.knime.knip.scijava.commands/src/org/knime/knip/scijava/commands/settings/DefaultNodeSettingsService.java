@@ -25,7 +25,8 @@ import org.scijava.service.AbstractService;
 public class DefaultNodeSettingsService extends AbstractService
 		implements NodeSettingsService {
 
-	private WeakReference<Map<String, SettingsModel>> m_settingsModels;
+	private WeakReference<Map<String, SettingsModel>> m_settingsModels = new WeakReference<Map<String, SettingsModel>>(
+			null);
 
 	@Parameter
 	SettingsModelTypeService m_typeService;
