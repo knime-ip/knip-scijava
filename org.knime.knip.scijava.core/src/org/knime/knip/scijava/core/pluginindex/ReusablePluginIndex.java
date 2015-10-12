@@ -15,6 +15,21 @@ public class ReusablePluginIndex extends PluginIndex {
 	/* flag to keep track of whether #discover() has been called already */
 	private boolean discovered = false;
 
+	/**
+	 * @see PluginIndex#PluginIndex()
+	 */
+	public ReusablePluginIndex() {
+		super();
+	}
+
+	/**
+	 * @param pluginFinder
+	 * @see PluginIndex#PluginIndex(PluginFinder)
+	 */
+	public ReusablePluginIndex(final PluginFinder pluginFinder) {
+		super(pluginFinder);
+	}
+
 	@Override
 	public void discover() {
 		if (!discovered) {
