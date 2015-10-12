@@ -23,7 +23,7 @@ import org.scijava.service.AbstractService;
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-public class KnimeInputDataTableService extends AbstractService
+public class KNIMEInputDataTableService extends AbstractService
 		implements InputDataRowService, Iterator<DataRow> {
 
 	private DataTableSpec m_tableSpec;

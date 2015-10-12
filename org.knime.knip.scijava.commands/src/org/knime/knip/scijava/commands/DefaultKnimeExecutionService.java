@@ -11,9 +11,9 @@ import org.scijava.service.AbstractService;
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-@Plugin(type = KnimeExecutionService.class, priority = DefaultKnimeExecutionService.PRIORITY)
+@Plugin(type = KNIMEExecutionService.class, priority = DefaultKnimeExecutionService.PRIORITY)
 public class DefaultKnimeExecutionService extends AbstractService implements
-		KnimeExecutionService {
+		KNIMEExecutionService {
 
 	/**
 	 * Priority of this {@link Plugin}

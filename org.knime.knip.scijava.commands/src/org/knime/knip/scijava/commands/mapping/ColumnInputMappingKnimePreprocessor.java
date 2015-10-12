@@ -4,7 +4,7 @@ import org.knime.core.data.DataCell;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTable;
 import org.knime.core.data.DataTableSpec;
-import org.knime.knip.scijava.commands.KnimeInputDataTableService;
+import org.knime.knip.scijava.commands.KNIMEInputDataTableService;
 import org.knime.knip.scijava.commands.KnimePreprocessor;
 import org.knime.knip.scijava.commands.adapter.InputAdapter;
 import org.knime.knip.scijava.commands.adapter.InputAdapterService;
@@ -32,7 +32,7 @@ public class ColumnInputMappingKnimePreprocessor
 	ColumnToInputMappingService m_cimService;
 
 	@Parameter
-	KnimeInputDataTableService m_inputTable;
+	KNIMEInputDataTableService m_inputTable;
 
 	@Parameter
 	InputAdapterService m_inputAdapters;

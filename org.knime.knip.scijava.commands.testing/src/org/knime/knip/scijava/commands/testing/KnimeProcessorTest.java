@@ -26,8 +26,8 @@ import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
 import org.knime.knip.scijava.commands.DefaultKnimePostprocessor;
-import org.knime.knip.scijava.commands.KnimeInputDataTableService;
-import org.knime.knip.scijava.commands.KnimeOutputDataTableService;
+import org.knime.knip.scijava.commands.KNIMEInputDataTableService;
+import org.knime.knip.scijava.commands.KNIMEOutputDataTableService;
 import org.knime.knip.scijava.commands.adapter.InputAdapterService;
 import org.knime.knip.scijava.commands.adapter.OutputAdapterService;
 import org.knime.knip.scijava.commands.mapping.ColumnInputMappingKnimePreprocessor;
@@ -57,14 +57,14 @@ public class KnimeProcessorTest {
 	@Parameter
 	CommandService m_commandService;
 	@Parameter
-	KnimeInputDataTableService m_inputTableService;
+	KNIMEInputDataTableService m_inputTableService;
 	@Parameter
-	KnimeOutputDataTableService m_outputTableService;
+	KNIMEOutputDataTableService m_outputTableService;
 	@Parameter
 	ColumnModuleItemMappingService m_cimService;
 
 	protected static List<Class<? extends Service>> requiredServices = Arrays.<Class<? extends Service>> asList(
-			KnimeInputDataTableService.class, KnimeOutputDataTableService.class, CommandService.class,
+			KNIMEInputDataTableService.class, KNIMEOutputDataTableService.class, CommandService.class,
 			ColumnModuleItemMappingService.class, InputAdapterService.class, OutputAdapterService.class);
 
 	private static final DataTableSpec m_spec;

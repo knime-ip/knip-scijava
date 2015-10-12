@@ -14,7 +14,7 @@ import org.scijava.service.AbstractService;
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-public class KnimeOutputDataTableService extends AbstractService implements
+public class KNIMEOutputDataTableService extends AbstractService implements
 		OutputDataRowService {
 
 	private DataContainer m_dataContainer;

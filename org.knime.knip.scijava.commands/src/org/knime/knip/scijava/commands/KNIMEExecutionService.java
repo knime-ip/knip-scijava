@@ -10,13 +10,13 @@ import org.scijava.service.Service;
  * <p>
  * KnimeExecutionService plugins discoverable at runtime must implement this
  * interface and be annotated with @{@link Plugin} with attribute
- * {@link Plugin#type()} = {@link KnimeExecutionService}.class.
+ * {@link Plugin#type()} = {@link KNIMEExecutionService}.class.
  * </p>
  * 
  * @author Jonathan Hale (University of Konstanz)
  * 
  */
-public interface KnimeExecutionService extends Service {
+public interface KNIMEExecutionService extends Service {
 
 	ExecutionContext getExecutionContext();
 
