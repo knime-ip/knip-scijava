@@ -32,10 +32,11 @@ public class DefaultKnimeExecutionService extends AbstractService
 	 * {@link ExecutionContext} in a {@link WeakReference}, which means that the
 	 * reference needs to be kept valid outside the service.
 	 * 
-	 * @param e
+	 * @param context
 	 */
-	public void setExecutionContex(final ExecutionContext e) {
-		m_exec = new WeakReference<>(e);
+	@Override
+	public void setExecutionContext(final ExecutionContext context) {
+		m_exec = new WeakReference<>(context);
 	}
 
 	@Override

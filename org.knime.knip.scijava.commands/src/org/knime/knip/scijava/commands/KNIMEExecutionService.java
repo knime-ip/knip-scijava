@@ -24,4 +24,9 @@ public interface KNIMEExecutionService extends Service {
 	 */
 	ExecutionContext getExecutionContext();
 
+	/**
+	 * Set the ExecutionContext for this service to hold.
+	 */
+	void setExecutionContext(ExecutionContext context);
+
 }
