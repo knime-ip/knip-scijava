@@ -6,7 +6,7 @@ import org.scijava.plugin.Plugin;
 
 /**
  * A preprocessor that handles unresolved parameters of various types using a
- * {@link KnimeInputDataTableService}.
+ * {@link KNIMEInputDataTableService}.
  * <p>
  * KnimePreprocessor plugins discoverable at runtime must implement this
  * interface and be annotated with @{@link Plugin} with attribute

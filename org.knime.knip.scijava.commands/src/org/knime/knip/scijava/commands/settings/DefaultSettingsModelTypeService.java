@@ -8,16 +8,16 @@ import org.scijava.plugin.Plugin;
  * Straight forward, rather ineffective default implementation of
  * SettingsModelTypeService.
  *
- * Ineffective because {@link #getSettingsModelTypeFor(SettingsModel)}
- * uses linear search to find a matching SettingsModelType.
+ * Ineffective because {@link #getSettingsModelTypeFor(SettingsModel)} uses
+ * linear search to find a matching SettingsModelType.
  * 
  * @author Jonathan Hale (University of Konstanz)
  */
 @SuppressWarnings("rawtypes")
 @Plugin(type = SettingsModelTypeService.class)
-public class DefaultSettingsModelTypeService extends
-		AbstractSingletonService<SettingsModelTypePlugin> implements
-		SettingsModelTypeService {
+public class DefaultSettingsModelTypeService
+		extends AbstractSingletonService<SettingsModelTypePlugin>
+		implements SettingsModelTypeService {
 
 	@Override
 	public Class<SettingsModelTypePlugin> getPluginType() {
@@ -25,7 +25,12 @@ public class DefaultSettingsModelTypeService extends
 	}
 
 	@Override
-	public SettingsModelType getSettingsModelTypeFor(SettingsModel settingsModel) {
+	public SettingsModelType getSettingsModelTypeFor(
+			SettingsModel settingsModel) {
+		if (settingsModel == null) {
+			return null;
+		}
+
 		for (SettingsModelTypePlugin p : getInstances()) {
 			if (p.getSettingsModelClass().isInstance(settingsModel)) {
 				return p;
@@ -43,7 +48,7 @@ public class DefaultSettingsModelTypeService extends
 				return p;
 			}
 		}
-		
+
 		return null;
 	}
 
