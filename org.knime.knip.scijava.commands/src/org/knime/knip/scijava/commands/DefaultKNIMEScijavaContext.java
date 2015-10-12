@@ -21,6 +21,7 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 
 	private Logger m_log = LoggerFactory.getLogger(getClass());
 
+	@Parameter
 	private Context m_context;
 
 	@Parameter
@@ -63,9 +64,8 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 		if (m_context == context) {
 			m_log.warn(
 					"CODING PROBLEM - Scijava context set mutiple times. Should only be set once.");
+			return;
 		}
-		m_context = context;
-
 		context.inject(this);
 	}
 
