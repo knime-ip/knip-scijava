@@ -732,5 +732,11 @@ propagated with or for interoperation with KNIME.
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+         
+   <plugin
+         id="org.knime.knip.scijava.commands"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>
