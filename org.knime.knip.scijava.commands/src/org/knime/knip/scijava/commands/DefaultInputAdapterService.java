@@ -1,6 +1,7 @@
 package org.knime.knip.scijava.commands;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -140,7 +141,7 @@ public class DefaultInputAdapterService extends AbstractInputAdapterService {
 			Set<InputAdapter> set = m_pluginsByDataValue.get(type);
 
 			if (set == null) {
-				set = new TreeSet<InputAdapter>(); // automatically sorts by priority
+				set = new TreeSet<InputAdapter>(Comparator.reverseOrder()); // automatically sorts by priority
 				m_pluginsByDataValue.put(type, set);
 			}
 
