@@ -3,12 +3,12 @@ package org.knime.knip.scijava.commands;
 import org.knime.core.data.DataValue;
 import org.knime.knip.scijava.commands.adapter.InputAdapter;
 import org.knime.knip.scijava.commands.adapter.InputAdapterService;
+import org.knime.knip.scijava.commands.mapping.ColumnInputMappingKnimePreprocessor;
+import org.knime.knip.scijava.commands.settings.DefaultNodeSettingsHarvester;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 import org.scijava.module.process.AbstractPreprocessorPlugin;
-import org.scijava.module.process.PreprocessorPlugin;
 import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
 import org.scijava.widget.InputHarvester;
 
 /**
@@ -18,8 +18,11 @@ import org.scijava.widget.InputHarvester;
  * Requires {@link InputAdapterService} and {@link InputDataRowService}.
  * 
  * @author Jonathan Hale (University of Konstanz)
+ * @deprecated Use something not so random, like
+ *             {@link ColumnInputMappingKnimePreprocessor} or
+ *             {@link DefaultNodeSettingsHarvester}.
  */
-@Plugin(type = PreprocessorPlugin.class, priority = DefaultKnimePreprocessor.PRIORITY)
+@Deprecated
 public class DefaultKnimePreprocessor extends AbstractPreprocessorPlugin
 		implements KnimePreprocessor {
 
@@ -50,7 +53,6 @@ public class DefaultKnimePreprocessor extends AbstractPreprocessorPlugin
 			// if not, we have to resolve the value from the incoming DataRow.
 			// However, the corresponding row should _always_ be controlled.
 			for (final DataValue c : dataRowIn.getInputDataRow()) {
-				// TODO converters only have to be detected once
 				final InputAdapter<DataValue, Object> inputAdapter = inputAdapters
 						.getMatchingInputAdapter(c.getClass(), i.getType());
 
