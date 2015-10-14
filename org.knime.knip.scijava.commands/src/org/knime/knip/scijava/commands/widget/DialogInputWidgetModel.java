@@ -18,7 +18,7 @@ public interface DialogInputWidgetModel extends WidgetModel {
 	/**
 	 * Update the SettingsModel to reflect changes in the component.
 	 */
-	public void updateModel();
+	public void updateSettingsModel();
 	
 	/**
 	 * Get the underlying SettingsModel

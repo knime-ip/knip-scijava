@@ -26,7 +26,7 @@ public class WidgetDialogComponent extends DialogComponent {
 	 *            InputWidget.
 	 */
 	public WidgetDialogComponent(SwingInputWidget<?> widget,
-			DefaultKnimeWidgetModel model) {
+			DefaultKNIMEWidgetModel model) {
 		super(model.getSettingsModel());
 
 		m_widget = widget;

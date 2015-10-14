@@ -54,23 +54,23 @@ public class KnimeSwingInputPanel extends SwingInputPanel {
 	public Collection<SettingsModel> getSettingsModels() {
 		return widgets.values().stream()
 				.filter((widget) -> widget
-						.get() instanceof DefaultKnimeWidgetModel)
-				.map((widget) -> ((DefaultKnimeWidgetModel) widget.get())
+						.get() instanceof DefaultKNIMEWidgetModel)
+				.map((widget) -> ((DefaultKNIMEWidgetModel) widget.get())
 						.getSettingsModel())
 				.collect(Collectors.toList());
 	}
 
 	/**
 	 * @return Wrappers around the {@link SwingInputWidget}s with
-	 *         {@link DefaultKnimeWidgetModel} in this InputPanel.
+	 *         {@link DefaultKNIMEWidgetModel} in this InputPanel.
 	 */
 	public Collection<DialogComponent> createDialogComponents() {
 		return widgets.values().stream()
 				.filter((widget) -> widget
-						.get() instanceof DefaultKnimeWidgetModel)
+						.get() instanceof DefaultKNIMEWidgetModel)
 				.map((widget) -> new WidgetDialogComponent(
 						(SwingInputWidget<?>) widget,
-						((DefaultKnimeWidgetModel) widget.get())))
+						((DefaultKNIMEWidgetModel) widget.get())))
 				.collect(Collectors.toList());
 	}
 

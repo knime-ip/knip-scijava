@@ -131,10 +131,13 @@ public interface NodeSettingsService extends Service {
 	 * Load settings in this service from <code>settings</code>.
 	 * 
 	 * @param settings
+	 *            Settings to load from
+	 * @param tolerant
+	 *            Whether to tolerate missing values
 	 * @return <code>true</code> on success
 	 * @throws InvalidSettingsException
 	 */
-	boolean loadSettingsFrom(NodeSettingsRO settings)
+	boolean loadSettingsFrom(NodeSettingsRO settings, boolean tolerant)
 			throws InvalidSettingsException;
 
 	/**

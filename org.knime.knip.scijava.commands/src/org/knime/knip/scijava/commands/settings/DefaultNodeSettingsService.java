@@ -118,10 +118,16 @@ public class DefaultNodeSettingsService extends AbstractService
 	}
 
 	@Override
-	public boolean loadSettingsFrom(final NodeSettingsRO settings)
+	public boolean loadSettingsFrom(final NodeSettingsRO settings, boolean tolerant)
 			throws InvalidSettingsException {
 		for (final SettingsModel sm : getSafeSettingsModelsMap().values()) {
-			sm.loadSettingsFrom(settings);
+			try {
+				sm.loadSettingsFrom(settings);
+			} catch (InvalidSettingsException e) {
+				if (!tolerant) {
+					throw e;
+				}
+			}
 		}
 
 		return true;
