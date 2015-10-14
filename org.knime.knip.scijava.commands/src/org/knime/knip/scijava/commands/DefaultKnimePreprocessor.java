@@ -14,9 +14,9 @@ import org.scijava.widget.InputHarvester;
 /**
  * A preprocessor plugin that handles unresolved parameters of any type by
  * filling them from a KNIME DataRow.
- * 
+ *
  * Requires {@link InputAdapterService} and {@link InputDataRowService}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  * @deprecated Use something not so random, like
  *             {@link ColumnInputMappingKnimePreprocessor} or
@@ -38,12 +38,12 @@ public class DefaultKnimePreprocessor extends AbstractPreprocessorPlugin
 	 * Straight forward implementation of filling the input of a module from a
 	 * DataRow. For every input searches linearly for a DataCell in the DataRow
 	 * which can be adapted to the inputs type.
-	 * 
+	 *
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public void process(Module module) {
+	public void process(final Module module) {
 		for (final ModuleItem<?> i : module.getInfo().inputs()) {
 			// this is the case when we resolved the module via e.g. UI
 			if (module.isResolved(i.getName())) {

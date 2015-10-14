@@ -12,7 +12,7 @@ import org.scijava.service.AbstractService;
  * {@link ExecutionContext} in a {@link WeakReference}, which ensures that the
  * {@link ExecutionContext} can be garbage collected when execution of a Node
  * terminates.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  * @see ExecutionContext
  */
@@ -31,7 +31,7 @@ public class DefaultKnimeExecutionService extends AbstractService
 	 * Set the {@link ExecutionContext}. Note that this service holds the
 	 * {@link ExecutionContext} in a {@link WeakReference}, which means that the
 	 * reference needs to be kept valid outside the service.
-	 * 
+	 *
 	 * @param context
 	 */
 	@Override

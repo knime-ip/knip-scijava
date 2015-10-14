@@ -7,16 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for {@link StringValue} to String.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = InputAdapter.class, priority = 0.0)
-public class StringInputAdapter extends
-		AbstractInputAdapter<StringValue, String> {
+public class StringInputAdapter
+		extends AbstractInputAdapter<StringValue, String> {
 
 	@Override
-	public String getValue(StringValue v) {
+	public String getValue(final StringValue v) {
 		return v.getStringValue();
 	}
 

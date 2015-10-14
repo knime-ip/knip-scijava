@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Default implementation of {@link KNIMEScijavaContext}. Enables convenient
  * access to the KNIME related services in a Scijava Context.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 
-	private Logger m_log = LoggerFactory.getLogger(getClass());
+	private final Logger m_log = LoggerFactory.getLogger(getClass());
 
 	@Parameter
 	private Context m_context;
@@ -55,12 +55,13 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @throws IllegalArgumentException
 	 *             If a service is missing
 	 */
 	@Override
-	public void setContext(Context context) throws IllegalArgumentException {
+	public void setContext(final Context context)
+			throws IllegalArgumentException {
 		if (m_context == context) {
 			m_log.warn(
 					"CODING PROBLEM - Scijava context set mutiple times. Should only be set once.");

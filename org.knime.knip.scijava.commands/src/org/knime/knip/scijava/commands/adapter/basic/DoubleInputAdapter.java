@@ -7,16 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for {@link DoubleValue} to Double.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = InputAdapter.class)
-public class DoubleInputAdapter extends
-		AbstractInputAdapter<DoubleValue, Double> {
+public class DoubleInputAdapter
+		extends AbstractInputAdapter<DoubleValue, Double> {
 
 	@Override
-	public Double getValue(DoubleValue v) {
+	public Double getValue(final DoubleValue v) {
 		return v.getDoubleValue();
 	}
 

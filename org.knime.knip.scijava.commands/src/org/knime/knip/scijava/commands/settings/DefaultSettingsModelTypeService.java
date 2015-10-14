@@ -10,7 +10,7 @@ import org.scijava.plugin.Plugin;
  *
  * Ineffective because {@link #getSettingsModelTypeFor(SettingsModel)} uses
  * linear search to find a matching SettingsModelType.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @SuppressWarnings("rawtypes")
@@ -26,12 +26,12 @@ public class DefaultSettingsModelTypeService
 
 	@Override
 	public SettingsModelType getSettingsModelTypeFor(
-			SettingsModel settingsModel) {
+			final SettingsModel settingsModel) {
 		if (settingsModel == null) {
 			return null;
 		}
 
-		for (SettingsModelTypePlugin p : getInstances()) {
+		for (final SettingsModelTypePlugin p : getInstances()) {
 			if (p.getSettingsModelClass().isInstance(settingsModel)) {
 				return p;
 			}
@@ -42,8 +42,8 @@ public class DefaultSettingsModelTypeService
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public SettingsModelType getSettingsModelTypeFor(Class<?> value) {
-		for (SettingsModelTypePlugin p : getInstances()) {
+	public SettingsModelType getSettingsModelTypeFor(final Class<?> value) {
+		for (final SettingsModelTypePlugin p : getInstances()) {
 			if (p.getValueClass().isAssignableFrom(value)) {
 				return p;
 			}

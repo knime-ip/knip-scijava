@@ -35,9 +35,8 @@ public class ColumnToModuleItemMappingUtil {
 		final ArrayList<String> out = new ArrayList<String>(mappings.size());
 
 		for (final ColumnModuleItemMapping m : mappings) {
-			out.add(m.getColumnName() + "\n"
-					+ (m.isActive() ? "true" : "false") + "\n"
-					+ m.getItemName());
+			out.add(m.getColumnName() + "\n" + (m.isActive() ? "true" : "false")
+					+ "\n" + m.getItemName());
 		}
 
 		model.setStringArrayValue(out.toArray(new String[] {}));
@@ -65,15 +64,13 @@ public class ColumnToModuleItemMappingUtil {
 				// Invalid format!
 				return false;
 			}
-			
-			/* 
-			 * format is
-			 * [0] column name
-			 * [1] active, either "true" or "false"
+
+			/*
+			 * format is [0] column name [1] active, either "true" or "false"
 			 * [2] module input name
 			 */
-			final ColumnModuleItemMapping mapping = service.addMapping(
-					names[0], names[2]);
+			final ColumnModuleItemMapping mapping = service.addMapping(names[0],
+					names[2]);
 
 			if (names[1].equals("false")) {
 				mapping.setActive(false);

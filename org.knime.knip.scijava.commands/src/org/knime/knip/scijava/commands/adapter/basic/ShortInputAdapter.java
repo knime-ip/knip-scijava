@@ -7,16 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for {@link IntValue} to Short.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  * @author Christian Dietz, University of Konstanz
- * 
+ *
  */
 @Plugin(type = InputAdapter.class)
 public class ShortInputAdapter extends AbstractInputAdapter<IntValue, Short> {
 
 	@Override
-	public Short getValue(IntValue v) {
+	public Short getValue(final IntValue v) {
 		return (short) v.getIntValue();
 	}
 

@@ -12,21 +12,21 @@ import org.scijava.service.AbstractService;
 
 /**
  * InputDataRowService implementation as iterator over a DataTable.
- * 
+ *
  * This Service is not discoverable at runtime. Add it to the Context manually
  * and call either {@link #setInputDataTable(DataTable)} or
  * {@link #setInputDataTableIterator(RowIterator)} before use.
- * 
+ *
  * Be aware that {@link#getDataRow()} returns <code>null</code> if
  * {@link #next()} hasn't been called yet and if {@link #next()} was called
  * although {@link #hasNext()} returned false. this service!
- * 
+ *
  * This service only holds {@link WeakReference}s to the {@link DataTableSpec},
  * {@link RowIterator} and {@link DataRow} to ensure those objects can be
  * garbage collected once they are not referenced outside of this service.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 public class KNIMEInputDataTableService extends AbstractService
 		implements InputDataRowService, Iterator<DataRow> {
@@ -38,11 +38,11 @@ public class KNIMEInputDataTableService extends AbstractService
 
 	/**
 	 * Set input DataTable
-	 * 
+	 *
 	 * @param inData
 	 *            DataTable to iterate over.
 	 */
-	public void setInputDataTable(DataTable inData) {
+	public void setInputDataTable(final DataTable inData) {
 		if (inData == null) {
 			setInputDataTableIterator(null);
 			m_tableSpec = new WeakReference<>(null);
@@ -54,16 +54,16 @@ public class KNIMEInputDataTableService extends AbstractService
 
 	/**
 	 * Set input DataTable RowIterator
-	 * 
+	 *
 	 * The input iterator continues at its current position and changes the
 	 * given iterator. Also, the current DataRow returned by
 	 * {@link #getInputDataRow()} will remain <code>null</code> until the next
 	 * call of {@link #next()}.
-	 * 
+	 *
 	 * @param inItor
 	 *            RowIterator to get DataRows from.
 	 */
-	public void setInputDataTableIterator(RowIterator inItor) {
+	public void setInputDataTableIterator(final RowIterator inItor) {
 		m_rowItor = new WeakReference<>(inItor);
 		m_curRow = new WeakReference<>(null);
 	}
@@ -81,7 +81,7 @@ public class KNIMEInputDataTableService extends AbstractService
 
 		try {
 			m_curRow = new WeakReference<>(m_rowItor.get().next());
-		} catch (NoSuchElementException e) {
+		} catch (final NoSuchElementException e) {
 			m_curRow = new WeakReference<>(null);
 			throw e;
 		}

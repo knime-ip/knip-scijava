@@ -18,12 +18,12 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Default implementation of KnimePostprocessor.
- * 
+ *
  * Requires {@link OutputAdapterService}, {@link InputDataRowService} and
  * {@link OutputDataRowService}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = PostprocessorPlugin.class, priority = DefaultKnimePostprocessor.PRIORITY)
 public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
@@ -47,16 +47,16 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 	 * Straight forward implementation of module output to DataRow: For every
 	 * output find an OutputAdapter to create a DataCell from it and create a
 	 * DefaultDataRow from created DataCells.
-	 * 
+	 *
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void process(Module module) {
+	public void process(final Module module) {
 
 		final List<DataCell> cells = new ArrayList<DataCell>();
 
-		for (ModuleItem i : module.getInfo().outputs()) {
+		for (final ModuleItem i : module.getInfo().outputs()) {
 			final OutputAdapter<?, DataCell> outputAdapter = adapterService
 					.getMatchingOutputAdapter(i.getType());
 
@@ -69,7 +69,7 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 			}
 		}
 
-		dataRowOut.setOutputDataRow(new DefaultRow(dataRowIn.getInputDataRow()
-				.getKey(), cells));
+		dataRowOut.setOutputDataRow(
+				new DefaultRow(dataRowIn.getInputDataRow().getKey(), cells));
 	}
 }

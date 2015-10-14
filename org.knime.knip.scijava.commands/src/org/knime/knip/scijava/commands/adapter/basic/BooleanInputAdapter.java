@@ -7,16 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for {@link BooleanValue} to Boolean.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = InputAdapter.class)
-public class BooleanInputAdapter extends
-		AbstractInputAdapter<BooleanValue, Boolean> {
+public class BooleanInputAdapter
+		extends AbstractInputAdapter<BooleanValue, Boolean> {
 
 	@Override
-	public Boolean getValue(BooleanValue v) {
+	public Boolean getValue(final BooleanValue v) {
 		return v.getBooleanValue();
 	}
 

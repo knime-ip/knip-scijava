@@ -95,5 +95,5 @@ public interface ColumnModuleItemMapping
 	 *            name of the item to set to.
 	 */
 	void setItemName(String itemName);
-	
+
 }

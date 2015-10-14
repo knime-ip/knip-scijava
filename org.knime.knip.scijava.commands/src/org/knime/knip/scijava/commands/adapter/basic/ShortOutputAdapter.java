@@ -7,16 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for Short to {@link IntCell}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  * @author Christian Dietz (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = OutputAdapter.class)
 public class ShortOutputAdapter extends AbstractOutputAdapter<Short, IntCell> {
 
 	@Override
-	public IntCell createCell(Short o) {
+	public IntCell createCell(final Short o) {
 		return new IntCell(o);
 	}
 

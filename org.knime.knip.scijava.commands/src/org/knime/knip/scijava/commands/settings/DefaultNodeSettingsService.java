@@ -17,7 +17,7 @@ import org.scijava.service.AbstractService;
 
 /**
  * Default implementation of NodeSettingsService.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @SuppressWarnings("rawtypes")
@@ -118,12 +118,12 @@ public class DefaultNodeSettingsService extends AbstractService
 	}
 
 	@Override
-	public boolean loadSettingsFrom(final NodeSettingsRO settings, boolean tolerant)
-			throws InvalidSettingsException {
+	public boolean loadSettingsFrom(final NodeSettingsRO settings,
+			final boolean tolerant) throws InvalidSettingsException {
 		for (final SettingsModel sm : getSafeSettingsModelsMap().values()) {
 			try {
 				sm.loadSettingsFrom(settings);
-			} catch (InvalidSettingsException e) {
+			} catch (final InvalidSettingsException e) {
 				if (!tolerant) {
 					throw e;
 				}

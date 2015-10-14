@@ -7,15 +7,15 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for {@link IntValue} to Integer.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = InputAdapter.class)
 public class IntInputAdapter extends AbstractInputAdapter<IntValue, Integer> {
 
 	@Override
-	public Integer getValue(IntValue v) {
+	public Integer getValue(final IntValue v) {
 		return v.getIntValue();
 	}
 

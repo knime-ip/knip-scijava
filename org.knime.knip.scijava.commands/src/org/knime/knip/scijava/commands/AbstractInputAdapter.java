@@ -6,7 +6,7 @@ import org.scijava.convert.AbstractConverter;
 
 /**
  * Abstract implementation of AbstractConverter as an InputAdapter.
- * 
+ *
  * @author Jonathan Hale
  *
  * @param <I>
@@ -18,7 +18,7 @@ public abstract class AbstractInputAdapter<I extends DataValue, O>
 		extends AbstractConverter<I, O> implements InputAdapter<I, O> {
 
 	@Override
-	public <T> T convert(Object arg0, Class<T> arg1) {
+	public <T> T convert(final Object arg0, final Class<T> arg1) {
 		return (T) getValue((I) arg0);
 	}
 

@@ -8,13 +8,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -48,29 +48,28 @@ import org.scijava.widget.WidgetService;
 
 /**
  * Default service for managing available {@link InputWidget}s.
- * 
+ *
  * @author Curtis Rueden
  */
 @Plugin(type = WidgetService.class, priority = Priority.HIGH_PRIORITY)
-public class KNIMEWidgetService extends
-	AbstractWrapperService<WidgetModel, InputWidget<?, ?>> implements
-	WidgetService
-{
+public class KNIMEWidgetService
+		extends AbstractWrapperService<WidgetModel, InputWidget<?, ?>>
+		implements WidgetService {
 
 	@Parameter
 	private LogService log;
-	
+
 	@Parameter
 	private DefaultWidgetService widgetService;
 
 	// -- WidgetService methods --
 
 	@Override
-	public WidgetModel createModel(InputPanel<?, ?> inputPanel, Module module,
-		ModuleItem<?> item, List<?> objectPool)
-	{
-		return new DefaultKNIMEWidgetModel(getContext(), inputPanel, module, item,
-			objectPool);
+	public WidgetModel createModel(final InputPanel<?, ?> inputPanel,
+			final Module module, final ModuleItem<?> item,
+			final List<?> objectPool) {
+		return new DefaultKNIMEWidgetModel(getContext(), inputPanel, module,
+				item, objectPool);
 	}
 
 	// -- WrapperService methods --
@@ -83,7 +82,7 @@ public class KNIMEWidgetService extends
 	// -- PTService methods --
 
 	@Override
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Class<InputWidget<?, ?>> getPluginType() {
 		return (Class) InputWidget.class;
 	}

@@ -7,16 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for Boolean to {@link BooleanCell}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = OutputAdapter.class)
 public class BooleanOutputAdapter
 		extends AbstractOutputAdapter<Boolean, BooleanCell> {
 
 	@Override
-	public BooleanCell createCell(Boolean o) {
+	public BooleanCell createCell(final Boolean o) {
 		return (o) ? BooleanCell.TRUE : BooleanCell.FALSE;
 	}
 

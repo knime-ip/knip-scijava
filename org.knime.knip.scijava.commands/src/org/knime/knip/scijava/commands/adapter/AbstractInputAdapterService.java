@@ -8,16 +8,16 @@ import org.scijava.plugin.AbstractSingletonService;
 /**
  * Abstract implementation of some convenience methods if
  * {@link InputAdapterService}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  *
  */
 public abstract class AbstractInputAdapterService extends
-		AbstractSingletonService<InputAdapter> implements
-		InputAdapterService {
+		AbstractSingletonService<InputAdapter> implements InputAdapterService {
 
 	@Override
-	public Collection<InputAdapter> getMatchingInputAdapters(DataType type) {
+	public Collection<InputAdapter> getMatchingInputAdapters(
+			final DataType type) {
 		// TODO: pray this works on all cases or what?
 		return getMatchingInputAdapters(type.getValueClasses().get(0));
 	}

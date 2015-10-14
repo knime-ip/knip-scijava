@@ -7,15 +7,15 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for Long to {@link LongCell}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = OutputAdapter.class)
 public class LongOutputAdapter extends AbstractOutputAdapter<Long, LongCell> {
 
 	@Override
-	public LongCell createCell(Long o) {
+	public LongCell createCell(final Long o) {
 		return new LongCell(o);
 	}
 

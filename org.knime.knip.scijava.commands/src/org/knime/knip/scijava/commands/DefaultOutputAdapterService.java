@@ -9,17 +9,18 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Default implementation of OutputAdapterService.
- * 
+ *
  * Rather inefficient since {@link #getMatchingOutputAdapter(Class)} searches
  * linearly through all existing implementations of OutputAdapterPlugin.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @SuppressWarnings("rawtypes")
 @Plugin(type = OutputAdapterService.class)
-public class DefaultOutputAdapterService extends
-		AbstractSingletonService<OutputAdapter> implements OutputAdapterService {
+public class DefaultOutputAdapterService
+		extends AbstractSingletonService<OutputAdapter>
+		implements OutputAdapterService {
 
 	@Parameter
 	private ConvertService cs;
@@ -39,13 +40,14 @@ public class DefaultOutputAdapterService extends
 	@Override
 	public OutputAdapter getMatchingOutputAdapter(final Class<?> valueClass) {
 
-		//TODO we can potentially cache the detected converters in a HashMap here here...
+		// TODO we can potentially cache the detected converters in a HashMap
+		// here here...
 		for (final OutputAdapter outputAdapter : this.getInstances()) {
 			if (outputAdapter.getInputType().isAssignableFrom(valueClass)) {
 				return outputAdapter;
 			}
 		}
-		
+
 		return null;
 	}
 

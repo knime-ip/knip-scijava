@@ -6,25 +6,27 @@ import org.scijava.plugin.Plugin;
 
 /**
  * SettingsModelType implementation for SettingsModelBoolean.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @Plugin(type = SettingsModelTypePlugin.class)
-public class SettingsModelBooleanType implements
-		SettingsModelTypePlugin<SettingsModelBoolean, Boolean> {
+public class SettingsModelBooleanType
+		implements SettingsModelTypePlugin<SettingsModelBoolean, Boolean> {
 
 	@Override
-	public SettingsModelBoolean create(String name, Boolean defaultValue) {
+	public SettingsModelBoolean create(final String name,
+			final Boolean defaultValue) {
 		return new SettingsModelBoolean(name, defaultValue);
 	}
 
 	@Override
-	public void setValue(SettingsModelBoolean settingsModel, Boolean value) {
+	public void setValue(final SettingsModelBoolean settingsModel,
+			final Boolean value) {
 		settingsModel.setBooleanValue(value);
 	}
 
 	@Override
-	public Boolean getValue(SettingsModelBoolean settingsModel) {
+	public Boolean getValue(final SettingsModelBoolean settingsModel) {
 		return settingsModel.getBooleanValue();
 	}
 

@@ -6,13 +6,13 @@ import org.scijava.plugin.SingletonService;
 
 /**
  * Interface for SettingsModelType functionality.
- * 
+ *
  * <p>
  * SettingsModelTypeService plugins discoverable at runtime must implement this
  * interface and be annotated with @{@link Plugin} with attribute
  * {@link Plugin#type()} = {@link SettingsModelTypeService}.class.
  * </p>
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @SuppressWarnings("rawtypes")
@@ -22,7 +22,7 @@ public interface SettingsModelTypeService
 	/**
 	 * Get a SettingModelType which can set and get values from the specified
 	 * SettingsModel.
-	 * 
+	 *
 	 * @param settingsModel
 	 *            SettingsModel to find a SettingsModelType for.
 	 * @return a SettingsModelType which can set/get values from settingsModel
@@ -33,7 +33,7 @@ public interface SettingsModelTypeService
 
 	/**
 	 * Get a SettingsModel type which can assign value to a SettingsModel.
-	 * 
+	 *
 	 * @param value
 	 *            the value which to store in a SettingsModel.
 	 * @return SettingsModelType which stores values of given value type.

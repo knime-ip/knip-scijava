@@ -17,7 +17,7 @@ import org.scijava.service.AbstractService;
  * {@link DefaultColumnToInputMappingService} or
  * {@link DefaultOutputToColumnMappingService} which define the use of the
  * contained mappings.
- * 
+ *
  * Although this class implements all the methods declared by its interfaces,
  * this class is named "Abstract" to make aware of the above note, while not
  * restricting uses on its own without the mentioned subclasses.
@@ -140,7 +140,7 @@ public class AbstractColumnModuleItemMappingService extends AbstractService
 
 	/**
 	 * Default implementation of {@link ColumnModuleItemMapping}
-	 * 
+	 *
 	 * @author Jonathan Hale
 	 */
 	public static final class DefaultColumnToModuleItemMapping

@@ -11,9 +11,9 @@ import org.scijava.service.AbstractService;
  * Default implementation of OutputDataRowService. Holds a {@link WeakReference}
  * to a {@link DataRow} to ensure that it can be garbage collected once the
  * {@link DataRow} is not referenced outside of this service.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = OutputDataRowService.class, priority = DefaultOutputDataRowService.PRIORITY)
 public class DefaultOutputDataRowService extends AbstractService
@@ -30,7 +30,7 @@ public class DefaultOutputDataRowService extends AbstractService
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setOutputDataRow(DataRow r) {
+	public void setOutputDataRow(final DataRow r) {
 		m_row = new WeakReference<>(r);
 	}
 

@@ -7,15 +7,15 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for {@link IntValue} to String.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = InputAdapter.class)
 public class ByteInputAdapter extends AbstractInputAdapter<IntValue, Byte> {
 
 	@Override
-	public Byte getValue(IntValue v) {
+	public Byte getValue(final IntValue v) {
 		return (byte) v.getIntValue();
 	}
 

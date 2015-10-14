@@ -12,7 +12,7 @@ import org.scijava.service.AbstractService;
  * Default implementation of InputDataRowService. Holds a {@link DataRow} and a
  * {@link DataTableSpec} via a {@link WeakReference} to ensure that they can be
  * garbage collected once they are not referenced outside this Service.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @Plugin(type = InputDataRowService.class, priority = DefaultInputDataRowService.PRIORITY)
@@ -37,7 +37,7 @@ public class DefaultInputDataRowService extends AbstractService
 
 	/**
 	 * Set the contained DataRow;
-	 * 
+	 *
 	 * @param dataRow
 	 */
 	public void setDataRow(final DataRow dataRow) {

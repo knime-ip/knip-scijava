@@ -7,13 +7,13 @@ import org.scijava.service.Service;
 
 /**
  * Service holding a DataRow for input.
- * 
+ *
  * <p>
  * InputDataRowService plugins discoverable at runtime must implement this
  * interface and be annotated with @{@link Plugin} with attribute
  * {@link Plugin#type()} = {@link InputDataRowService}.class.
  * </p>
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  * @see OutputDataRowService
  */

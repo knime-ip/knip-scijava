@@ -6,25 +6,27 @@ import org.scijava.plugin.Plugin;
 
 /**
  * SettingsModelType implementation for SettingsModelDouble.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @Plugin(type = SettingsModelTypePlugin.class)
-public class SettingsModelDoubleType implements
-		SettingsModelTypePlugin<SettingsModelDouble, Double> {
+public class SettingsModelDoubleType
+		implements SettingsModelTypePlugin<SettingsModelDouble, Double> {
 
 	@Override
-	public SettingsModelDouble create(String name, Double defaultValue) {
+	public SettingsModelDouble create(final String name,
+			final Double defaultValue) {
 		return new SettingsModelDouble(name, defaultValue);
 	}
 
 	@Override
-	public void setValue(SettingsModelDouble settingsModel, Double value) {
+	public void setValue(final SettingsModelDouble settingsModel,
+			final Double value) {
 		settingsModel.setDoubleValue(value);
 	}
 
 	@Override
-	public Double getValue(SettingsModelDouble settingsModel) {
+	public Double getValue(final SettingsModelDouble settingsModel) {
 		return settingsModel.getDoubleValue();
 	}
 

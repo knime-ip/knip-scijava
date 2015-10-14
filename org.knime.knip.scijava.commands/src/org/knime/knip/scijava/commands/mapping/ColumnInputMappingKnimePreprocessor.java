@@ -21,7 +21,7 @@ import org.scijava.plugin.Plugin;
  * Preprocessor which fills unresolved {@link Module} inputs from KNIME
  * {@link DataTable}s using {@link ColumnModuleItemMapping}s from a
  * {@link ColumnToInputMappingService}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @Plugin(type = PreprocessorPlugin.class, priority = Priority.NORMAL_PRIORITY)

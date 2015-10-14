@@ -7,15 +7,15 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for {@link LongValue} to Long.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = InputAdapter.class)
 public class LongInputAdapter extends AbstractInputAdapter<LongValue, Long> {
 
 	@Override
-	public Long getValue(LongValue v) {
+	public Long getValue(final LongValue v) {
 		return v.getLongValue();
 	}
 

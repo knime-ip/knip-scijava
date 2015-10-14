@@ -5,9 +5,9 @@ import org.scijava.module.Module;
 /**
  * Service which manages {@link ColumnModuleItemMapping}s used for mapping
  * {@link Module} outputs to columns.
- * 
+ *
  * @author Jonathan Hale
- * @see 
+ * @see
  */
 public interface OutputToColumnMappingService
 		extends ColumnModuleItemMappingService {

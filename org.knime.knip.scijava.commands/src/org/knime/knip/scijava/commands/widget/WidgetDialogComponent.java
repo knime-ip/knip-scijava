@@ -8,7 +8,7 @@ import org.scijava.ui.swing.widget.SwingInputWidget;
 
 /**
  * A small DialogComponent wrapper around a {@link SwingInputWidget}.
- * 
+ *
  * @author Jonathan Hale
  */
 public class WidgetDialogComponent extends DialogComponent {
@@ -18,18 +18,20 @@ public class WidgetDialogComponent extends DialogComponent {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param widget
 	 *            The {@link SwingInputWidget} to wrap
 	 * @param model
 	 *            The model which contains the settings model for the
 	 *            InputWidget.
 	 */
-	public WidgetDialogComponent(SwingInputWidget<?> widget,
-			DefaultKNIMEWidgetModel model) {
+	public WidgetDialogComponent(final SwingInputWidget<?> widget,
+			final DefaultKNIMEWidgetModel model) {
 		super(model.getSettingsModel());
 
 		m_widget = widget;
+
+		updateComponent();
 	}
 
 	@Override
@@ -44,18 +46,18 @@ public class WidgetDialogComponent extends DialogComponent {
 	}
 
 	@Override
-	protected void checkConfigurabilityBeforeLoad(PortObjectSpec[] specs)
+	protected void checkConfigurabilityBeforeLoad(final PortObjectSpec[] specs)
 			throws NotConfigurableException {
 		/* nothing to do. */
 	}
 
 	@Override
-	protected void setEnabledComponents(boolean enabled) {
+	protected void setEnabledComponents(final boolean enabled) {
 		m_widget.getComponent().setEnabled(enabled);
 	}
 
 	@Override
-	public void setToolTipText(String text) {
+	public void setToolTipText(final String text) {
 		m_widget.getComponent().setToolTipText(text);
 	}
 

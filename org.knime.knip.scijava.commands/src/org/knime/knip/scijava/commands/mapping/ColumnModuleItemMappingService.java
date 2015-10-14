@@ -71,8 +71,8 @@ public interface ColumnModuleItemMappingService extends Service {
 	 * @author Jonathan Hale (University of Konstanz)
 	 *
 	 */
-	public interface ColumnToModuleItemMappingChangeListener extends
-			EventListener {
+	public interface ColumnToModuleItemMappingChangeListener
+			extends EventListener {
 		/**
 		 * Called when a {@link ColumnModuleItemMappingChangeEventDispatcher}
 		 * this listener listens to fires a event when the column name changed.
@@ -141,8 +141,8 @@ public interface ColumnModuleItemMappingService extends Service {
 	}
 
 	/**
-	 * Get a list of all {@link ColumnModuleItemMapping}s currently contained
-	 * in this Service.
+	 * Get a list of all {@link ColumnModuleItemMapping}s currently contained in
+	 * this Service.
 	 *
 	 * @return {@link List} containing {@link ColumnModuleItemMapping} of this
 	 *         Service.
@@ -154,8 +154,8 @@ public interface ColumnModuleItemMappingService extends Service {
 	 *
 	 * @param columnName
 	 *            name of the column to find a mapping for
-	 * @return {@link ColumnModuleItemMapping} which maps columnName or null
-	 *         if none could be found.
+	 * @return {@link ColumnModuleItemMapping} which maps columnName or null if
+	 *         none could be found.
 	 */
 	ColumnModuleItemMapping getMappingForColumnName(String columnName);
 
@@ -164,14 +164,13 @@ public interface ColumnModuleItemMappingService extends Service {
 	 *
 	 * @param inputName
 	 *            name of the input to find a mapping for
-	 * @return {@link ColumnModuleItemMapping} which maps a column to
-	 *         inputName or null if none could be found.
+	 * @return {@link ColumnModuleItemMapping} which maps a column to inputName
+	 *         or null if none could be found.
 	 */
 	ColumnModuleItemMapping getMappingForModuleItemName(String inputName);
 
 	/**
-	 * Get a {@link ColumnModuleItemMapping} which maps the given columns
-	 * name.
+	 * Get a {@link ColumnModuleItemMapping} which maps the given columns name.
 	 *
 	 * @param column
 	 *            column which to find a mapping for
@@ -181,8 +180,7 @@ public interface ColumnModuleItemMappingService extends Service {
 	ColumnModuleItemMapping getMappingForColumn(DataColumnSpec column);
 
 	/**
-	 * Get a {@link ColumnModuleItemMapping} which maps to the given items
-	 * name.
+	 * Get a {@link ColumnModuleItemMapping} which maps to the given items name.
 	 *
 	 * @param item
 	 *            {@link ModuleItem} to find a mapping for

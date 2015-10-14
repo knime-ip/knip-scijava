@@ -20,15 +20,15 @@ import org.scijava.service.Service;
  * a {@link WeakReference} to manage the SettingsModels for a {@link NodeModel}
  * or {@link NodeDialog}, but not prevent the {@link SettingsModel}s to be
  * garbage collected when the NodeModel or NodeDialog are destroyed.
- * 
+ *
  * <p>
  * NodeSettingsService plugins discoverable at runtime must implement this
  * interface and be annotated with @{@link Plugin} with attribute
  * {@link Plugin#type()} = {@link NodeSettingsService}.class.
  * </p>
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 public interface NodeSettingsService extends Service {
 
@@ -36,11 +36,11 @@ public interface NodeSettingsService extends Service {
 	 * Set a {@link Map} of {@link String} to {@link SettingsModel}, which is
 	 * kept in a {@link WeakReference} and to which {@link SettingsModel}s are
 	 * added and read from.
-	 * 
+	 *
 	 * Since this service holds the {@link Map} in a {@link WeakReference}, the
 	 * instance must be enured to stay valid <i>outside</i> of this service
 	 * since may be garbage collected otherwise.
-	 * 
+	 *
 	 * @param settingsModels
 	 *            Map of {@link SettingsModel} managed outside of this Service.
 	 */
@@ -55,7 +55,7 @@ public interface NodeSettingsService extends Service {
 	/**
 	 * Set the value of the SettingsModel for a ModuleItem. Prints a warning if
 	 * no SettingsModel exists for the passed <code>moduleItem</code>.
-	 * 
+	 *
 	 * @param moduleItem
 	 *            name of the SettingsModel
 	 * @param value
@@ -65,7 +65,7 @@ public interface NodeSettingsService extends Service {
 
 	/**
 	 * Get the value of the SettingsModel of the given ModuleItem.
-	 * 
+	 *
 	 * @param moduleItem
 	 * @return the value of the found SettingsModel.
 	 */
@@ -74,7 +74,7 @@ public interface NodeSettingsService extends Service {
 	/**
 	 * Create a new {@link SettingsModel} for a {@link ModuleItem}. This does
 	 * not add the created {@link SettingsModel} to the Map.
-	 * 
+	 *
 	 * @param moduleItem
 	 *            ModuleItem to create a SettingsModel for.
 	 * @return the created SettignsModel or null if no SettingsModel could be
@@ -88,7 +88,7 @@ public interface NodeSettingsService extends Service {
 	 * Create a new {@link SettingsModel} for a {@link ModuleItem} and add it to
 	 * the {@link Map} of {@link SettingsModel}s set via
 	 * {@link #setSettingsModels(Map)}.
-	 * 
+	 *
 	 * @param moduleItem
 	 *            ModuleItem to create a SettingsModel for.
 	 * @return the created SettignsModel or null if no SettingsModel could be
@@ -100,7 +100,7 @@ public interface NodeSettingsService extends Service {
 
 	/**
 	 * Create new {@link SettingsModel} for {@link ModuleItem}s.
-	 * 
+	 *
 	 * @param moduleItems
 	 * @return the created SettingsModels
 	 */
@@ -110,7 +110,7 @@ public interface NodeSettingsService extends Service {
 	/**
 	 * Create new {@link SettingsModel}s for ModuleItems and add them to the
 	 * {@link Map} set via {@link #setSettingsModels(Map)}.
-	 * 
+	 *
 	 * @param moduleItems
 	 * @return the created SettingsModels
 	 */
@@ -119,7 +119,7 @@ public interface NodeSettingsService extends Service {
 
 	/**
 	 * Validate all settingsModels in this service.
-	 * 
+	 *
 	 * @param settings
 	 * @return <code>true</code> on success
 	 * @throws InvalidSettingsException
@@ -129,7 +129,7 @@ public interface NodeSettingsService extends Service {
 
 	/**
 	 * Load settings in this service from <code>settings</code>.
-	 * 
+	 *
 	 * @param settings
 	 *            Settings to load from
 	 * @param tolerant
@@ -142,7 +142,7 @@ public interface NodeSettingsService extends Service {
 
 	/**
 	 * Save settings in this service to <code>settings</code>.
-	 * 
+	 *
 	 * @param settings
 	 * @return <code>true</code> on success
 	 */

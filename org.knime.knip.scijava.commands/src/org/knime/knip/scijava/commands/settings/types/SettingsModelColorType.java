@@ -8,25 +8,27 @@ import org.scijava.plugin.Plugin;
 
 /**
  * SettingsModelType implementation for SettingsModelColor.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @Plugin(type = SettingsModelTypePlugin.class)
-public class SettingsModelColorType implements
-		SettingsModelTypePlugin<SettingsModelColor, Color> {
+public class SettingsModelColorType
+		implements SettingsModelTypePlugin<SettingsModelColor, Color> {
 
 	@Override
-	public SettingsModelColor create(String name, Color defaultValue) {
+	public SettingsModelColor create(final String name,
+			final Color defaultValue) {
 		return new SettingsModelColor(name, defaultValue);
 	}
 
 	@Override
-	public void setValue(SettingsModelColor settingsModel, Color value) {
+	public void setValue(final SettingsModelColor settingsModel,
+			final Color value) {
 		settingsModel.setColorValue(value);
 	}
 
 	@Override
-	public Color getValue(SettingsModelColor settingsModel) {
+	public Color getValue(final SettingsModelColor settingsModel) {
 		return settingsModel.getColorValue();
 	}
 

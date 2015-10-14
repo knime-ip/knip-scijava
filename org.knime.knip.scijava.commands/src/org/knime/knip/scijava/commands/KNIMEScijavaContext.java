@@ -11,7 +11,7 @@ import org.scijava.Contextual;
 
 /**
  * Holds all contextual data of a KNIME Node.
- * 
+ *
  * @author Jonathan Hale
  */
 public interface KNIMEScijavaContext extends Contextual {

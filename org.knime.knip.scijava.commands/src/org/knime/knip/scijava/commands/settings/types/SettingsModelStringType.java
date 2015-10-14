@@ -6,25 +6,27 @@ import org.scijava.plugin.Plugin;
 
 /**
  * SettingsModelType implementation for SettingsModelString.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @Plugin(type = SettingsModelTypePlugin.class)
-public class SettingsModelStringType implements SettingsModelTypePlugin<SettingsModelString, String> {
+public class SettingsModelStringType
+		implements SettingsModelTypePlugin<SettingsModelString, String> {
 
 	@Override
-	public SettingsModelString create(String name, String defaultValue) {
+	public SettingsModelString create(final String name,
+			final String defaultValue) {
 		return new SettingsModelString(name, defaultValue);
 	}
-	
+
 	@Override
-	public void setValue(SettingsModelString settingsModel, String value)
-			throws ClassCastException {
+	public void setValue(final SettingsModelString settingsModel,
+			final String value) throws ClassCastException {
 		settingsModel.setStringValue(value);
 	}
 
 	@Override
-	public String getValue(SettingsModelString settingsModel) {
+	public String getValue(final SettingsModelString settingsModel) {
 		return settingsModel.getStringValue();
 	}
 

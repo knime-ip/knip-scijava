@@ -4,7 +4,7 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Default implementation of {@link ColumnToInputMappingService}.
- * 
+ *
  * @author Jonathan Hale
  */
 @Plugin(type = ColumnToInputMappingService.class)

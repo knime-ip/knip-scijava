@@ -7,16 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for Double to {@link DoubleCell}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = OutputAdapter.class)
 public class DoubleOutputAdapter
 		extends AbstractOutputAdapter<Double, DoubleCell> {
 
 	@Override
-	public DoubleCell createCell(Double o) {
+	public DoubleCell createCell(final Double o) {
 		return new DoubleCell(o);
 	}
 

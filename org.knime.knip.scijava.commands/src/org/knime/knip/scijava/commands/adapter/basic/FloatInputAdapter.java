@@ -7,15 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for {@link DoubleValue} to Float.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = InputAdapter.class)
-public class FloatInputAdapter extends AbstractInputAdapter<DoubleValue, Float> {
+public class FloatInputAdapter
+		extends AbstractInputAdapter<DoubleValue, Float> {
 
 	@Override
-	public Float getValue(DoubleValue v) {
+	public Float getValue(final DoubleValue v) {
 		return (float) v.getDoubleValue();
 	}
 

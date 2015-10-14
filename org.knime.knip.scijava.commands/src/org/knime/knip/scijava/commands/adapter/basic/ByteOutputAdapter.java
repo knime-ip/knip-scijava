@@ -7,15 +7,15 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for Byte to {@link IntCell}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = OutputAdapter.class)
 public class ByteOutputAdapter extends AbstractOutputAdapter<Byte, IntCell> {
 
 	@Override
-	public IntCell createCell(Byte o) {
+	public IntCell createCell(final Byte o) {
 		return new IntCell(o);
 	}
 

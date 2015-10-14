@@ -16,42 +16,52 @@ import org.scijava.widget.InputPanel;
  *
  * @author Jonathan Hale (University of Konstanz)
  */
-public class DefaultKNIMEWidgetModel extends DefaultWidgetModel implements DialogInputWidgetModel {
+public class DefaultKNIMEWidgetModel extends DefaultWidgetModel
+		implements DialogInputWidgetModel {
 
 	@Parameter
 	private NodeSettingsService settingsService;
-	private SettingsModel model;
-	
-	public DefaultKNIMEWidgetModel(Context context,
-			InputPanel<?, ?> inputPanel, Module module, ModuleItem<?> item,
-			List<?> objectPool) {
+	private final SettingsModel model;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param context
+	 *            Context for the model
+	 * @param inputPanel
+	 * @param module
+	 * @param item
+	 * @param objectPool
+	 */
+	public DefaultKNIMEWidgetModel(final Context context,
+			final InputPanel<?, ?> inputPanel, final Module module,
+			final ModuleItem<?> item, final List<?> objectPool) {
 		super(context, inputPanel, module, item, objectPool);
-		
+
 		model = settingsService.createAndAddSettingsModel(item);
 		updateToSettingsModel();
 	}
-	
+
 	@Override
 	public void updateSettingsModel() {
-		updateToSettingsModel();
 	}
-	
+
 	@Override
-	public void setValue(Object value) {
+	public void setValue(final Object value) {
 		super.setValue(value);
-		
+
 		// keep track of the values, update settings model
 		settingsService.setValue(getItem(), value);
 	}
-	
+
 	@Override
 	public SettingsModel getSettingsModel() {
 		return model;
 	}
-	
+
 	@Override
 	public void updateToSettingsModel() {
 		super.setValue(settingsService.getValue(getItem()));
 	}
-	
+
 }

@@ -7,16 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for Character to {@link StringCell}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = OutputAdapter.class)
 public class CharOutputAdapter
 		extends AbstractOutputAdapter<Character, StringCell> {
 
 	@Override
-	public StringCell createCell(Character o) {
+	public StringCell createCell(final Character o) {
 		return new StringCell(o.toString());
 	}
 

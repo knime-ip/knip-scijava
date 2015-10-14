@@ -7,15 +7,15 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for Integer to {@link IntCell}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = OutputAdapter.class)
 public class IntOutputAdapter extends AbstractOutputAdapter<Integer, IntCell> {
 
 	@Override
-	public IntCell createCell(Integer o) {
+	public IntCell createCell(final Integer o) {
 		return new IntCell(o);
 	}
 

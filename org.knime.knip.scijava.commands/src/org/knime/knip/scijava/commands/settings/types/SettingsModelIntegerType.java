@@ -6,30 +6,31 @@ import org.scijava.plugin.Plugin;
 
 /**
  * SettingsModelType implementation for SettingsModelInteger.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @Plugin(type = SettingsModelTypePlugin.class)
-public class SettingsModelIntegerType implements
-		SettingsModelTypePlugin<SettingsModelInteger, Integer> {
+public class SettingsModelIntegerType
+		implements SettingsModelTypePlugin<SettingsModelInteger, Integer> {
 
 	@Override
-	public SettingsModelInteger create(String name, Integer defaultValue) {
+	public SettingsModelInteger create(final String name,
+			Integer defaultValue) {
 		if (defaultValue == null) {
 			defaultValue = new Integer(0);
 		}
-		
+
 		return new SettingsModelInteger(name, defaultValue);
 	}
 
 	@Override
-	public void setValue(SettingsModelInteger settingsModel, Integer value)
-			throws ClassCastException {
+	public void setValue(final SettingsModelInteger settingsModel,
+			final Integer value) throws ClassCastException {
 		settingsModel.setIntValue(value);
 	}
 
 	@Override
-	public Integer getValue(SettingsModelInteger settingsModel) {
+	public Integer getValue(final SettingsModelInteger settingsModel) {
 		return settingsModel.getIntValue();
 	}
 

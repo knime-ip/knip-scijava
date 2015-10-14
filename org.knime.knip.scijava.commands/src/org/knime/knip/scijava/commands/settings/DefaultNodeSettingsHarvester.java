@@ -11,7 +11,7 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Default implementation of NodeSettingsHarvester.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 @Plugin(type = PreprocessorPlugin.class, priority = Priority.NORMAL_PRIORITY)
@@ -26,7 +26,7 @@ public class DefaultNodeSettingsHarvester extends AbstractPreprocessorPlugin
 
 	@Override
 	public void process(final Module module) {
-		for (ModuleItem<?> input : module.getInfo().inputs()) {
+		for (final ModuleItem<?> input : module.getInfo().inputs()) {
 			// shortcut to inputName
 			final String inputName = input.getName();
 

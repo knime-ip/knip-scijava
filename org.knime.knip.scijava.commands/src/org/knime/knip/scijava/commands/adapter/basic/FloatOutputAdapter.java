@@ -7,16 +7,16 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Adapter for Float to {@link DoubleCell}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
- * 
+ *
  */
 @Plugin(type = OutputAdapter.class)
 public class FloatOutputAdapter
 		extends AbstractOutputAdapter<Float, DoubleCell> {
 
 	@Override
-	public DoubleCell createCell(Float o) {
+	public DoubleCell createCell(final Float o) {
 		return new DoubleCell(o);
 	}
 
