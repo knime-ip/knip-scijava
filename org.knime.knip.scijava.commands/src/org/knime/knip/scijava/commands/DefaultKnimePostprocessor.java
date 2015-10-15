@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.knime.core.data.DataCell;
-import org.knime.core.data.def.DefaultRow;
 import org.knime.knip.scijava.commands.adapter.OutputAdapter;
 import org.knime.knip.scijava.commands.adapter.OutputAdapterService;
 import org.scijava.Priority;
@@ -20,7 +19,7 @@ import org.scijava.plugin.Plugin;
  * Default implementation of KnimePostprocessor.
  *
  * Requires {@link OutputAdapterService}, {@link InputDataRowService} and
- * {@link OutputDataRowService}.
+ * {@link OutputCellsService}.
  *
  * @author Jonathan Hale (University of Konstanz)
  *
@@ -35,10 +34,7 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 	private OutputAdapterService adapterService;
 
 	@Parameter
-	private InputDataRowService dataRowIn;
-
-	@Parameter
-	private OutputDataRowService dataRowOut;
+	private OutputCellsService dataRowOut;
 
 	@Parameter
 	private LogService log;
@@ -69,7 +65,6 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 			}
 		}
 
-		dataRowOut.setOutputDataRow(
-				new DefaultRow(dataRowIn.getInputDataRow().getKey(), cells));
+		dataRowOut.setOutputCells(cells);
 	}
 }

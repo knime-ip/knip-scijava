@@ -27,14 +27,14 @@ public interface KNIMEScijavaContext extends Contextual {
 	public OutputAdapterService outputAdapters();
 
 	/**
-	 * @return the {@link KNIMEInputDataTableService} in this {@link Context}
+	 * @return the {@link InputDataRowService} in this {@link Context}
 	 */
-	public KNIMEInputDataTableService inputTable();
+	public InputDataRowService input();
 
 	/**
-	 * @return the {@link KNIMEOutputDataTableService} in this {@link Context}
+	 * @return the {@link OutputCellsService} in this {@link Context}
 	 */
-	public KNIMEOutputDataTableService outputTable();
+	public OutputCellsService output();
 
 	/**
 	 * @return the {@link ColumnToInputMappingService} in this {@link Context}

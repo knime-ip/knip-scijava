@@ -40,7 +40,8 @@ public class DefaultInputDataRowService extends AbstractService
 	 *
 	 * @param dataRow
 	 */
-	public void setDataRow(final DataRow dataRow) {
+	@Override
+	public void setInputDataRow(final DataRow dataRow) {
 		m_row = new WeakReference<>(dataRow);
 	}
 
@@ -49,6 +50,7 @@ public class DefaultInputDataRowService extends AbstractService
 		return m_spec.get();
 	}
 
+	@Override
 	public void setDataTableSpec(final DataTableSpec spec) {
 		m_spec = new WeakReference<>(spec);
 	}

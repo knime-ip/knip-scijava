@@ -29,9 +29,9 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 	@Parameter
 	private OutputAdapterService outputAdapterService;
 	@Parameter
-	private KNIMEInputDataTableService inputTableService;
+	private InputDataRowService inputRowService;
 	@Parameter
-	private KNIMEOutputDataTableService outputTableService;
+	private OutputCellsService outputRowService;
 	@Parameter
 	private ColumnToInputMappingService inputMappingService;
 	@Parameter
@@ -81,13 +81,13 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 	}
 
 	@Override
-	public KNIMEInputDataTableService inputTable() {
-		return inputTableService;
+	public InputDataRowService input() {
+		return inputRowService;
 	}
 
 	@Override
-	public KNIMEOutputDataTableService outputTable() {
-		return outputTableService;
+	public OutputCellsService output() {
+		return outputRowService;
 	}
 
 	@Override

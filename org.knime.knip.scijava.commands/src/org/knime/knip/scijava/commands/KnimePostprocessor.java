@@ -16,4 +16,5 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  */
 public interface KnimePostprocessor extends PostprocessorPlugin {
+	// Marker interface
 }

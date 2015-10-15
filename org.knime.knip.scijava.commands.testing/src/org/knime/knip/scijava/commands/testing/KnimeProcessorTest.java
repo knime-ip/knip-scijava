@@ -14,20 +14,19 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataRow;
-import org.knime.core.data.DataTable;
-import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.DataType;
 import org.knime.core.data.RowKey;
-import org.knime.core.data.container.DataContainer;
 import org.knime.core.data.def.BooleanCell;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
+import org.knime.knip.scijava.commands.DefaultInputDataRowService;
 import org.knime.knip.scijava.commands.DefaultKnimePostprocessor;
-import org.knime.knip.scijava.commands.KNIMEInputDataTableService;
-import org.knime.knip.scijava.commands.KNIMEOutputDataTableService;
+import org.knime.knip.scijava.commands.DefaultOutputDataRowService;
+import org.knime.knip.scijava.commands.InputDataRowService;
+import org.knime.knip.scijava.commands.OutputCellsService;
 import org.knime.knip.scijava.commands.adapter.InputAdapterService;
 import org.knime.knip.scijava.commands.adapter.OutputAdapterService;
 import org.knime.knip.scijava.commands.mapping.ColumnInputMappingKnimePreprocessor;
@@ -57,30 +56,22 @@ public class KnimeProcessorTest {
 	@Parameter
 	CommandService m_commandService;
 	@Parameter
-	KNIMEInputDataTableService m_inputTableService;
+	InputDataRowService m_inputRowService;
 	@Parameter
-	KNIMEOutputDataTableService m_outputTableService;
+	OutputCellsService m_outputCellsService;
 	@Parameter
 	ColumnModuleItemMappingService m_cimService;
 
 	protected static List<Class<? extends Service>> requiredServices = Arrays.<Class<? extends Service>> asList(
-			KNIMEInputDataTableService.class, KNIMEOutputDataTableService.class, CommandService.class,
+			DefaultInputDataRowService.class, DefaultOutputDataRowService.class, CommandService.class,
 			ColumnModuleItemMappingService.class, InputAdapterService.class, OutputAdapterService.class);
 
-	private static final DataTableSpec m_spec;
-	private static final DataContainer m_container;
+	private static final DataRow m_testRow;
 
 	static {
 		// Create the test table
-		m_spec = new DataTableSpec("TestTable", new String[] { "b", "by", "s", "i", "l", "str", "c" },
-				new DataType[] { BooleanCell.TYPE, IntCell.TYPE, IntCell.TYPE, IntCell.TYPE, LongCell.TYPE,
-						StringCell.TYPE, StringCell.TYPE });
-		m_container = new DataContainer(m_spec);
-		m_container.addRowToTable(
-				new DefaultRow(new RowKey("TestRow001"), BooleanCell.TRUE, new IntCell(42), new IntCell(420),
-						new IntCell(42000), new LongCell(4200000), new StringCell("KNIME"), new StringCell(" ")));
-
-		m_container.close();
+		m_testRow = new DefaultRow(new RowKey("TestRow001"), BooleanCell.TRUE, new IntCell(42), new IntCell(420),
+				new IntCell(42000), new LongCell(4200000), new StringCell("KNIME"), new StringCell(" "));
 	}
 
 	@BeforeClass
@@ -118,12 +109,10 @@ public class KnimeProcessorTest {
 		assertNotNull("DefaultKnimePostprocessor was not found.",
 				context.getService(PluginService.class).getPlugin(DefaultKnimePostprocessor.class));
 
-		assertNotNull(m_inputTableService);
-		assertNotNull(m_outputTableService);
+		assertNotNull(m_inputRowService);
+		assertNotNull(m_outputCellsService);
 		assertNotNull(m_commandService);
-		m_inputTableService.setInputDataTable(m_container.getTable());
-		m_outputTableService.setOutputContainer(new DataContainer(m_spec));
-		m_inputTableService.next();
+		m_inputRowService.setInputDataRow(m_testRow);
 
 		Future<CommandModule> command = m_commandService.run(MyCommand.class, true);
 		assertNotNull(command);
@@ -131,22 +120,17 @@ public class KnimeProcessorTest {
 		assertNotNull(commandModule);
 		assertFalse("Command was cancelled: " + commandModule.getCancelReason(), commandModule.isCanceled());
 
-		m_outputTableService.appendRow();
-		m_outputTableService.getDataContainer().close();
-		DataTable table = m_outputTableService.getDataContainer().getTable();
+		DataCell[] cells = m_outputCellsService.getOutputDataCells();
+		assertNotNull(cells);
+		assertEquals(7, cells.length);
 
-		DataRow row = table.iterator().next();
-		assertNotNull(row);
-
-		assertTrue("Boolean output was not extracted correctly!", ((BooleanCell) row.getCell(0)).getBooleanValue());
-		assertEquals("Byte output was not extracted correctly!", 42, ((IntCell) row.getCell(1)).getIntValue());
-		assertEquals("Short output was not extracted correctly!", 420, ((IntCell) row.getCell(2)).getIntValue());
-		assertEquals("Integer output was not extracted correctly!", 42000, ((IntCell) row.getCell(3)).getIntValue());
-		assertEquals("Long output was not extracted correctly!", 4200000, ((LongCell) row.getCell(4)).getLongValue());
-		assertEquals("String output was not extracted correctly!", "KNIME",
-				((StringCell) row.getCell(5)).getStringValue());
-		assertEquals("Character output was not extracted correctly!", " ",
-				((StringCell) row.getCell(6)).getStringValue());
+		assertTrue("Boolean output was not extracted correctly!", ((BooleanCell) cells[0]).getBooleanValue());
+		assertEquals("Byte output was not extracted correctly!", 42, ((IntCell) cells[1]).getIntValue());
+		assertEquals("Short output was not extracted correctly!", 420, ((IntCell) cells[2]).getIntValue());
+		assertEquals("Integer output was not extracted correctly!", 42000, ((IntCell) cells[3]).getIntValue());
+		assertEquals("Long output was not extracted correctly!", 4200000, ((LongCell) cells[4]).getLongValue());
+		assertEquals("String output was not extracted correctly!", "KNIME", ((StringCell) cells[5]).getStringValue());
+		assertEquals("Character output was not extracted correctly!", " ", ((StringCell) cells[6]).getStringValue());
 	}
 
 	/**

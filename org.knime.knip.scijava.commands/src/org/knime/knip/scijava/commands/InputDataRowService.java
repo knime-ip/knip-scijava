@@ -15,7 +15,7 @@ import org.scijava.service.Service;
  * </p>
  *
  * @author Jonathan Hale (University of Konstanz)
- * @see OutputDataRowService
+ * @see OutputCellsService
  */
 public interface InputDataRowService extends Service {
 
@@ -28,4 +28,16 @@ public interface InputDataRowService extends Service {
 	 * @return the data table spec for the contained DataRow.
 	 */
 	DataTableSpec getInputDataTableSpec();
+
+	/**
+	 * Set the input data row to hold.
+	 */
+	void setInputDataRow(DataRow row);
+
+	/**
+	 * Set the input table spec
+	 * 
+	 * @param spec
+	 */
+	void setDataTableSpec(DataTableSpec spec);
 }
