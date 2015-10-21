@@ -8,9 +8,9 @@ import java.util.TreeSet;
 import java.util.WeakHashMap;
 
 import org.knime.core.data.DataValue;
-import org.knime.knip.scijava.commands.adapter.AbstractInputAdapterService;
 import org.knime.knip.scijava.commands.adapter.InputAdapter;
 import org.knime.knip.scijava.commands.adapter.InputAdapterService;
+import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -26,7 +26,8 @@ import org.scijava.plugin.Plugin;
  */
 @SuppressWarnings("rawtypes")
 @Plugin(type = InputAdapterService.class)
-public class DefaultInputAdapterService extends AbstractInputAdapterService {
+public class DefaultInputAdapterService extends
+		AbstractSingletonService<InputAdapter> implements InputAdapterService {
 
 	private WeakHashMap<Class<? extends DataValue>, Set<InputAdapter>> m_pluginsByDataValue = null;
 
@@ -103,7 +104,7 @@ public class DefaultInputAdapterService extends AbstractInputAdapterService {
 	}
 
 	@Override
-	public Collection<InputAdapter> getMatchingInputAdapters(
+	public Set<InputAdapter> getMatchingInputAdapters(
 			final Class<? extends DataValue> dataValueClass) {
 		if (m_pluginsByDataValue == null) {
 			processInstances();
@@ -112,6 +113,7 @@ public class DefaultInputAdapterService extends AbstractInputAdapterService {
 		Set<InputAdapter> set = m_pluginsByDataValue.get(dataValueClass);
 
 		if (set == null) {
+
 			// check superclasses of dataValueClass
 			for (final Class<? extends DataValue> c : getDataValueSuperclassesAndInterfaces(
 					dataValueClass)) {
@@ -153,5 +155,4 @@ public class DefaultInputAdapterService extends AbstractInputAdapterService {
 			set.add(p);
 		}
 	}
-
 }

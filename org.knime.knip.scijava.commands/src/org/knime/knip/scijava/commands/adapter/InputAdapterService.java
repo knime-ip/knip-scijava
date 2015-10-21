@@ -2,7 +2,6 @@ package org.knime.knip.scijava.commands.adapter;
 
 import java.util.Collection;
 
-import org.knime.core.data.DataType;
 import org.knime.core.data.DataValue;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.SingletonService;
@@ -42,19 +41,6 @@ public interface InputAdapterService extends SingletonService<InputAdapter> {
 	 */
 	<D extends DataValue, T> InputAdapter getMatchingInputAdapter(
 			Class<D> dataValueClass, Class<T> valueClass);
-
-	/**
-	 * Convenience method to get all {@link InputAdapter}s which adapt a certain
-	 * {@link DataType}.
-	 *
-	 * @param type
-	 *            the {@link DataType}
-	 * @return a {@link Collection} of {@link InputAdapter} which adapt that
-	 *         DataType
-	 *
-	 * @see #getMatchingInputAdapters(Class)
-	 */
-	Collection<InputAdapter> getMatchingInputAdapters(DataType type);
 
 	/**
 	 * Get all {@link InputAdapter}s which adapt a certain {@link DataValue}.
