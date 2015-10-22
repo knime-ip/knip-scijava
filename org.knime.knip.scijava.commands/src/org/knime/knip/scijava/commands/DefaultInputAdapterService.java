@@ -145,7 +145,7 @@ public class DefaultInputAdapterService extends
 			Set<InputAdapter> set = m_pluginsByDataValue.get(type);
 
 			if (set == null) {
-				set = new TreeSet<InputAdapter>(Comparator.reverseOrder()); // automatically
+				set = new TreeSet<InputAdapter>(Comparator.naturalOrder()); // automatically
 																			// sorts
 																			// by
 																			// priority
