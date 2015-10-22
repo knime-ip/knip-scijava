@@ -3,6 +3,7 @@ package org.knime.knip.scijava.commands.adapter.basic;
 import org.knime.core.data.StringValue;
 import org.knime.knip.scijava.commands.AbstractInputAdapter;
 import org.knime.knip.scijava.commands.adapter.InputAdapter;
+import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -11,7 +12,7 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  *
  */
-@Plugin(type = InputAdapter.class, priority = 0.0)
+@Plugin(type = InputAdapter.class, priority = Priority.HIGH_PRIORITY)
 public class StringInputAdapter
 		extends AbstractInputAdapter<StringValue, String> {
 
