@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.knime.knip.scijava.update"
+      id="org.knime.scijava.update"
       label="KNIME SciJava Integration - Update-Site"
       version="0.2.0.qualifier"
       provider-name="University of Konstanz">
