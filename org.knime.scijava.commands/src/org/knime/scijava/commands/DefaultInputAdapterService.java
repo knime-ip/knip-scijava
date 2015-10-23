@@ -1,6 +1,7 @@
 package org.knime.scijava.commands;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,6 +9,7 @@ import java.util.TreeSet;
 import java.util.WeakHashMap;
 
 import org.knime.core.data.DataValue;
+import org.knime.core.data.StringValue;
 import org.knime.scijava.commands.adapter.InputAdapter;
 import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.scijava.plugin.AbstractSingletonService;
@@ -122,13 +124,13 @@ public class DefaultInputAdapterService extends
 				if (set != null) {
 					// save result for dataValueClass
 					m_pluginsByDataValue.put(dataValueClass, set);
-
 					break;
 				}
 			}
-
+			if (set == null) { // datatype is unknown
+				set = Collections.emptySet();
+			}
 		}
-
 		return set;
 	}
 
@@ -151,7 +153,6 @@ public class DefaultInputAdapterService extends
 																			// priority
 				m_pluginsByDataValue.put(type, set);
 			}
-
 			set.add(p);
 		}
 	}
