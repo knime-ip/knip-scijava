@@ -6,7 +6,7 @@
       provider-name="University of Konstanz">
 
    <includes
-         id="org.knime.knip.scijava.feature"
+         id="org.knime.scijava.feature"
          version="0.0.0"/>
 
    <requires>
