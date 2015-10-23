@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: KNIP Scijava Commands Testing
+Bundle-SymbolicName: org.knime.scijava.commands.testing;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.knime.scijava.commands;bundle-version="0.1.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Eclipse-BuddyPolicy: registered
+Require-Bundle: org.knime.testing;bundle-version="3.0.0",
+ org.knime.core;bundle-version="3.0.0",
+ slf4j-log4j12;bundle-version="1.7.10",
+ org.junit;bundle-version="4.12.0",
+ scijava-common,
+ org.knime.scijava.commands,
+ org.knime.scijava.core;bundle-version="0.2.0"
