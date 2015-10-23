@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.knime.knip.scijava.update"
+      label="KNIME SciJava Integration - Update-Site"
+      version="0.2.0.qualifier"
+      provider-name="University of Konstanz">
+
+   <includes
+         id="org.knime.knip.scijava.feature"
+         version="0.0.0"/>
+
+   <requires>
+      <import plugin="scijava-common" version="2.45.0" match="greaterOrEqual"/>
+      <import plugin="slf4j-api" version="1.7.10" match="greaterOrEqual"/>
+      <import plugin="miglayout" version="3.7.4" match="greaterOrEqual"/>
+      <import plugin="miglayout-swing" version="4.2.0" match="greaterOrEqual"/>
+      <import plugin="scijava-ui-awt" version="0.1.3" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="scijava-common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="scijava-log-slf4j"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="scijava-plugins-text-plain"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="scijava-plugins-commands"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="scijava-plugins-text-markdown"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="scijava-ui-awt"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="scijava-ui-swing"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="scripting-java"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="scripting-jython"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="miglayout"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="miglayout-swing"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
