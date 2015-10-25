@@ -1,21 +1,27 @@
 package org.knime.scijava.core;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.osgi.container.ModuleWire;
+import org.eclipse.osgi.container.ModuleWiring;
+import org.eclipse.osgi.internal.loader.EquinoxClassLoader;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.namespace.BundleNamespace;
+import org.osgi.framework.namespace.PackageNamespace;
 
 /**
  * ResourceAwareClassLoader
@@ -26,14 +32,14 @@ import org.osgi.framework.FrameworkUtil;
  * @author Jonathan Hale (University of Konstanz)
  *
  */
+@SuppressWarnings("restriction")
 public class ResourceAwareClassLoader extends ClassLoader {
 
 	/**
 	 * Resources which need to be treated in a special way.
 	 */
 	// TODO make an extension point to add resources as needed (later)
-	private final String[] RESOURCES = new String[] {
-			"META-INF/json/org.scijava.plugin.Plugin",
+	private final String[] RESOURCES = new String[] { "META-INF/json/org.scijava.plugin.Plugin",
 			"META-INF/services/javax.script.ScriptEngineFactory" };
 
 	private final Map<String, Set<URL>> urls = new HashMap<String, Set<URL>>();
@@ -77,51 +83,75 @@ public class ResourceAwareClassLoader extends ClassLoader {
 			urls.put(res, new HashSet<URL>());
 		}
 
-		final String requireBundle = (String) FrameworkUtil.getBundle(clazz)
-				.getHeaders().get(Constants.REQUIRE_BUNDLE);
-		try {
-			final ManifestElement[] elements = ManifestElement.parseHeader(
-					Constants.BUNDLE_CLASSPATH, requireBundle);
-			for (final ManifestElement manifestElement : elements) {
-				final Bundle bundle = org.eclipse.core.runtime.Platform
-						.getBundle(manifestElement.getValue());
+		processBuddies(clazz);
 
-				try {
-					// get file url for this bundle
-					bundleUrls.add(new URL("file://"
-							+ FileLocator.getBundleFile(bundle)
-									.getAbsolutePath()));
-				} catch (MalformedURLException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+		processBundle(FrameworkUtil.getBundle(clazz), true);
+	}
+
+	private void processBuddies(Class<?> clazz) {
+		final EquinoxClassLoader loader = (EquinoxClassLoader) clazz.getClassLoader();
+		ArrayList<ModuleWiring> allDependents = new ArrayList<ModuleWiring>();
+		List<ModuleWire> providedWires = loader.getBundleLoader().getWiring().getProvidedModuleWires(null);
+		if (providedWires != null) {
+			for (ModuleWire wire : providedWires) {
+				String namespace = wire.getRequirement().getNamespace();
+				if (PackageNamespace.PACKAGE_NAMESPACE.equals(namespace)
+						|| BundleNamespace.BUNDLE_NAMESPACE.equals(namespace)) {
+					ModuleWiring dependent = wire.getRequirerWiring();
+					if (!allDependents.contains(dependent)) {
+						bundleUrls.add(createBundleURL(dependent.getBundle()));
+						processBundle(dependent.getBundle(), false);
+					}
 				}
+			}
+		}
+	}
 
-				for (final String res : RESOURCES) {
-					Enumeration<URL> resources;
-					try {
-						resources = bundle.getResources(res);
-					} catch (IOException e) {
-						continue;
-					}
+	private void processBundle(final Bundle b, final boolean addRessources) {
+		final String requireBundle = (String) b.getHeaders().get(Constants.REQUIRE_BUNDLE);
+		try {
+			final ManifestElement[] elements = ManifestElement.parseHeader(Constants.BUNDLE_CLASSPATH, requireBundle);
+			for (final ManifestElement manifestElement : elements) {
+				final Bundle bundle = org.eclipse.core.runtime.Platform.getBundle(manifestElement.getValue());
 
-					if (resources == null) {
-						continue;
-					}
+				// get file url for this bundle
+				bundleUrls.add(createBundleURL(bundle));
 
-					while (resources.hasMoreElements()) {
-						final URL resource = resources.nextElement();
-						// we want to avoid transitive resolving of dependencies
-						final String host = resource.getHost();
-						if (bundle.getBundleId() == Long.valueOf(host
-								.substring(0, host.indexOf(".")))) {
-							safeAdd(urls.get(res), resource);
+				if (addRessources) {
+					for (final String res : RESOURCES) {
+						Enumeration<URL> resources;
+						try {
+							resources = bundle.getResources(res);
+						} catch (IOException e) {
+							continue;
+						}
+
+						if (resources == null) {
+							continue;
+						}
+
+						while (resources.hasMoreElements()) {
+							final URL resource = resources.nextElement();
+							// we want to avoid transitive resolving of
+							// dependencies
+							final String host = resource.getHost();
+							if (bundle.getBundleId() == Long.valueOf(host.substring(0, host.indexOf(".")))) {
+								safeAdd(urls.get(res), resource);
+							}
 						}
 					}
 				}
 			}
 		} catch (BundleException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	private URL createBundleURL(final Bundle bundle) {
+		try {
+			return new URL("file://" + FileLocator.getBundleFile(bundle).getAbsolutePath());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -133,26 +163,30 @@ public class ResourceAwareClassLoader extends ClassLoader {
 			return super.getResources(name);
 		}
 
-		for(final URL url : Collections.list(super.getResources(name))){
+		for (final URL url : Collections.list(super.getResources(name))) {
 			safeAdd(urlList, url);
 		}
-		
+
 		return Collections.enumeration(urlList);
 	}
-	
+
 	/**
 	 * Get a set of file URLs to the bundles dependency bundles.
+	 * 
 	 * @return set of dependency bundle file urls
 	 */
 	public Set<URL> getBundleUrls() {
 		return bundleUrls;
 	}
-	
+
 	/*
 	 * Add url to urls while making sure, that the resulting file urls are
 	 * always unique.
+	 * 
 	 * @param urls Set to add the url to
+	 * 
 	 * @param urlToAdd Url to add to the set
+	 * 
 	 * @see FileLocator
 	 */
 	private static void safeAdd(final Set<URL> urls, final URL urlToAdd) {
@@ -173,5 +207,5 @@ public class ResourceAwareClassLoader extends ClassLoader {
 		// no duplicate found, we can safely add this url.
 		urls.add(urlToAdd);
 	}
-	
+
 }
