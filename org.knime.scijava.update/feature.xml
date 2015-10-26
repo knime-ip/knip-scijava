@@ -2,7 +2,7 @@
 <feature
       id="org.knime.scijava.update"
       label="KNIME SciJava Integration - Update-Site"
-      version="0.2.0.qualifier"
+      version="0.2.1.qualifier"
       provider-name="University of Konstanz">
 
    <includes
@@ -86,7 +86,7 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
    <plugin
          id="jython-shaded"
          download-size="0"
@@ -104,7 +104,7 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-         
+
    <plugin
          id="imagej-deprecated"
          download-size="0"
