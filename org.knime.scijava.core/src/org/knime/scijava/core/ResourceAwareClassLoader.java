@@ -100,7 +100,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 					ModuleWiring dependent = wire.getRequirerWiring();
 					if (!allDependents.contains(dependent)) {
 						bundleUrls.add(createBundleURL(dependent.getBundle()));
-						processBundle(dependent.getBundle(), false);
+						processBundle(dependent.getBundle(), true);
 					}
 				}
 			}
