@@ -11,11 +11,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.internal.preferences.EclipsePreferences;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.equinox.internal.app.EclipseAppContainer;
 import org.eclipse.osgi.container.ModuleWire;
 import org.eclipse.osgi.container.ModuleWiring;
+import org.eclipse.osgi.container.namespaces.EclipsePlatformNamespace;
 import org.eclipse.osgi.internal.loader.EquinoxClassLoader;
 import org.eclipse.osgi.util.ManifestElement;
+import org.knime.core.util.EclipseUtil;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -84,23 +88,33 @@ public class ResourceAwareClassLoader extends ClassLoader {
 		}
 
 		processBuddies(clazz);
-
 		processBundle(FrameworkUtil.getBundle(clazz), true);
 	}
 
-	private void processBuddies(Class<?> clazz) {
+	private void processBuddies(final Class<?> clazz) {
 		final EquinoxClassLoader loader = (EquinoxClassLoader) clazz.getClassLoader();
-		ArrayList<ModuleWiring> allDependents = new ArrayList<ModuleWiring>();
 		List<ModuleWire> providedWires = loader.getBundleLoader().getWiring().getProvidedModuleWires(null);
 		if (providedWires != null) {
 			for (ModuleWire wire : providedWires) {
 				String namespace = wire.getRequirement().getNamespace();
 				if (PackageNamespace.PACKAGE_NAMESPACE.equals(namespace)
 						|| BundleNamespace.BUNDLE_NAMESPACE.equals(namespace)) {
-					ModuleWiring dependent = wire.getRequirerWiring();
-					if (!allDependents.contains(dependent)) {
-						bundleUrls.add(createBundleURL(dependent.getBundle()));
-						processBundle(dependent.getBundle(), true);
+					final Bundle child = wire.getRequirerWiring().getBundle();
+					final Bundle parent = FrameworkUtil.getBundle(clazz);
+					try {
+						final ManifestElement[] elements = ManifestElement.parseHeader("Eclipse-RegisterBuddy",
+								(String) child.getHeaders().get("Eclipse-RegisterBuddy"));
+
+						if (elements != null) {
+							for (ManifestElement element : elements) {
+								if (parent.equals(org.eclipse.core.runtime.Platform.getBundle(element.getValue()))) {
+									safeAdd(bundleUrls, createBundleURL(child));
+									processBundle(child, true);
+								}
+							}
+						}
+					} catch (Exception e) {
+						throw new RuntimeException(e);
 					}
 				}
 			}
@@ -115,7 +129,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 				final Bundle bundle = org.eclipse.core.runtime.Platform.getBundle(manifestElement.getValue());
 
 				// get file url for this bundle
-				bundleUrls.add(createBundleURL(bundle));
+				safeAdd(bundleUrls, createBundleURL(bundle));
 
 				if (addRessources) {
 					for (final String res : RESOURCES) {
