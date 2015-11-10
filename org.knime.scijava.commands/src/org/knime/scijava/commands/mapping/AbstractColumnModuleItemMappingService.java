@@ -1,6 +1,7 @@
 package org.knime.scijava.commands.mapping;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.WeakHashMap;
 
@@ -37,7 +38,7 @@ public class AbstractColumnModuleItemMappingService extends AbstractService
 
 	@Override
 	public List<ColumnModuleItemMapping> getMappingsList() {
-		return m_mappings;
+		return Collections.unmodifiableList(m_mappings);
 	}
 
 	@Override
