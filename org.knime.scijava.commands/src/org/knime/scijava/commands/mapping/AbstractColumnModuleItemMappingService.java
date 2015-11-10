@@ -13,19 +13,14 @@ import org.scijava.module.ModuleItem;
 import org.scijava.service.AbstractService;
 
 /**
- * Default implementation of ColumnModuleItemMappingService. Usually this class
- * should not be instantiated on its own. Instead use
- * {@link DefaultColumnToInputMappingService} or
- * {@link DefaultOutputToColumnMappingService} which define the use of the
+ * Abstract implementation of ColumnModuleItemMappingService. 
+ * Use the subclasses {@link DefaultColumnToInputMappingService} or
+ * {@link DefaultOutputToColumnMappingService} to which mark the use of the
  * contained mappings.
- *
- * Although this class implements all the methods declared by its interfaces,
- * this class is named "Abstract" to make aware of the above note, while not
- * restricting uses on its own without the mentioned subclasses.
  *
  * @author Jonathan Hale (University of Konstanz)
  */
-public class AbstractColumnModuleItemMappingService extends AbstractService
+public abstract class AbstractColumnModuleItemMappingService extends AbstractService
 		implements ColumnModuleItemMappingService,
 		ColumnToModuleItemMappingChangeListener {
 
