@@ -1,7 +1,6 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.adapter;
 
 import org.knime.core.data.DataValue;
-import org.knime.scijava.commands.adapter.InputAdapter;
 import org.scijava.convert.AbstractConverter;
 
 /**

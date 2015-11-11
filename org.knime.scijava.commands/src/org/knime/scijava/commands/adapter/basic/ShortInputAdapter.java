@@ -1,7 +1,7 @@
 package org.knime.scijava.commands.adapter.basic;
 
 import org.knime.core.data.IntValue;
-import org.knime.scijava.commands.AbstractInputAdapter;
+import org.knime.scijava.commands.adapter.AbstractInputAdapter;
 import org.knime.scijava.commands.adapter.InputAdapter;
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;

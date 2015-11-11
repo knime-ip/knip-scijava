@@ -1,7 +1,5 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.adapter;
 
-import org.knime.scijava.commands.adapter.OutputAdapter;
-import org.knime.scijava.commands.adapter.OutputAdapterService;
 import org.scijava.convert.ConvertService;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Parameter;

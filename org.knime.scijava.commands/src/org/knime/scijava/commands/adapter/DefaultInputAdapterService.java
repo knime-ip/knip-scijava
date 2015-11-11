@@ -1,4 +1,4 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.adapter;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -10,8 +10,6 @@ import java.util.WeakHashMap;
 
 import org.knime.core.data.DataValue;
 import org.knime.core.data.StringValue;
-import org.knime.scijava.commands.adapter.InputAdapter;
-import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Plugin;
 
