@@ -1,4 +1,4 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.io;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import org.scijava.service.Service;
  * @author Jonathan Hale (University of Konstanz)
  * @see InputDataRowService
  */
-public interface OutputCellsService extends Service {
+public interface OutputDataRowService extends Service {
 
 	/**
 	 * Set the contained DataRow.

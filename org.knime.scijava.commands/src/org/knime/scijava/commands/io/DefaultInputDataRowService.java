@@ -1,4 +1,4 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.io;
 
 import java.lang.ref.WeakReference;
 

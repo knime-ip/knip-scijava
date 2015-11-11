@@ -1,5 +1,5 @@
 
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.mapping.process;
 
 import org.scijava.module.process.PreprocessorPlugin;
 import org.scijava.plugin.Plugin;

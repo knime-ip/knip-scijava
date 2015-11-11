@@ -1,4 +1,4 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.io;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -19,9 +19,9 @@ import org.scijava.service.AbstractService;
  * @author Jonathan Hale (University of Konstanz)
  *
  */
-@Plugin(type = OutputCellsService.class, priority = DefaultOutputDataRowService.PRIORITY)
+@Plugin(type = OutputDataRowService.class, priority = DefaultOutputDataRowService.PRIORITY)
 public class DefaultOutputDataRowService extends AbstractService
-		implements OutputCellsService {
+		implements OutputDataRowService {
 
 	/**
 	 * Priority of this {@link Plugin}

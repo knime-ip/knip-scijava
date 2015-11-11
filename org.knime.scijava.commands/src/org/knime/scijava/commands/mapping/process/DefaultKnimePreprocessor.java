@@ -1,9 +1,9 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.mapping.process;
 
 import org.knime.core.data.DataValue;
 import org.knime.scijava.commands.adapter.InputAdapter;
 import org.knime.scijava.commands.adapter.InputAdapterService;
-import org.knime.scijava.commands.mapping.ColumnInputMappingKnimePreprocessor;
+import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.settings.DefaultNodeSettingsHarvester;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;

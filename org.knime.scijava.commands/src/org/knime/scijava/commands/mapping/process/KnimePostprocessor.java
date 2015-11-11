@@ -1,4 +1,4 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.mapping.process;
 
 import org.knime.core.data.DataRow;
 import org.scijava.module.process.PostprocessorPlugin;

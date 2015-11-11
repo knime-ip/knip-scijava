@@ -2,6 +2,8 @@ package org.knime.scijava.commands;
 
 import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
+import org.knime.scijava.commands.io.InputDataRowService;
+import org.knime.scijava.commands.io.OutputDataRowService;
 import org.knime.scijava.commands.mapping.ColumnToInputMappingService;
 import org.knime.scijava.commands.mapping.OutputToColumnMappingService;
 import org.knime.scijava.commands.settings.NodeSettingsService;
@@ -31,7 +33,7 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 	@Parameter
 	private InputDataRowService inputRowService;
 	@Parameter
-	private OutputCellsService outputRowService;
+	private OutputDataRowService outputRowService;
 	@Parameter
 	private ColumnToInputMappingService inputMappingService;
 	@Parameter
@@ -86,7 +88,7 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 	}
 
 	@Override
-	public OutputCellsService output() {
+	public OutputDataRowService output() {
 		return outputRowService;
 	}
 

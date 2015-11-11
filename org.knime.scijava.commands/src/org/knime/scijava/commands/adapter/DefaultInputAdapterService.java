@@ -9,7 +9,6 @@ import java.util.TreeSet;
 import java.util.WeakHashMap;
 
 import org.knime.core.data.DataValue;
-import org.knime.core.data.StringValue;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Plugin;
 

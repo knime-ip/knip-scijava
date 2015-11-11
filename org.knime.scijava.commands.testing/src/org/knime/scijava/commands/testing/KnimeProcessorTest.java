@@ -22,15 +22,15 @@ import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
-import org.knime.scijava.commands.DefaultInputDataRowService;
-import org.knime.scijava.commands.DefaultKnimePostprocessor;
-import org.knime.scijava.commands.DefaultOutputDataRowService;
-import org.knime.scijava.commands.InputDataRowService;
-import org.knime.scijava.commands.OutputCellsService;
 import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
-import org.knime.scijava.commands.mapping.ColumnInputMappingKnimePreprocessor;
+import org.knime.scijava.commands.io.DefaultInputDataRowService;
+import org.knime.scijava.commands.io.DefaultOutputDataRowService;
+import org.knime.scijava.commands.io.InputDataRowService;
+import org.knime.scijava.commands.io.OutputDataRowService;
 import org.knime.scijava.commands.mapping.ColumnModuleItemMappingService;
+import org.knime.scijava.commands.mapping.process.ColumnInputMappingKnimePreprocessor;
+import org.knime.scijava.commands.mapping.process.DefaultKnimePostprocessor;
 import org.knime.scijava.core.ResourceAwareClassLoader;
 import org.scijava.Context;
 import org.scijava.ItemIO;
@@ -58,7 +58,7 @@ public class KnimeProcessorTest {
 	@Parameter
 	InputDataRowService m_inputRowService;
 	@Parameter
-	OutputCellsService m_outputCellsService;
+	OutputDataRowService m_outputCellsService;
 	@Parameter
 	ColumnModuleItemMappingService m_cimService;
 

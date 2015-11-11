@@ -1,4 +1,4 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.mapping.process;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.knime.core.data.DataCell;
 import org.knime.scijava.commands.adapter.OutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
+import org.knime.scijava.commands.io.InputDataRowService;
+import org.knime.scijava.commands.io.OutputDataRowService;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
@@ -19,7 +21,7 @@ import org.scijava.plugin.Plugin;
  * Default implementation of KnimePostprocessor.
  *
  * Requires {@link OutputAdapterService}, {@link InputDataRowService} and
- * {@link OutputCellsService}.
+ * {@link OutputDataRowService}.
  *
  * @author Jonathan Hale (University of Konstanz)
  *
@@ -34,7 +36,7 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 	private OutputAdapterService adapterService;
 
 	@Parameter
-	private OutputCellsService dataRowOut;
+	private OutputDataRowService dataRowOut;
 
 	@Parameter
 	private LogService log;

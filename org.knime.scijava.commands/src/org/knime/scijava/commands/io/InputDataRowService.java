@@ -1,4 +1,4 @@
-package org.knime.scijava.commands;
+package org.knime.scijava.commands.io;
 
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
@@ -15,7 +15,7 @@ import org.scijava.service.Service;
  * </p>
  *
  * @author Jonathan Hale (University of Konstanz)
- * @see OutputCellsService
+ * @see OutputDataRowService
  */
 public interface InputDataRowService extends Service {
 
