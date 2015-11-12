@@ -6,7 +6,8 @@ import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.io.OutputDataRowService;
 import org.knime.scijava.commands.mapping.ColumnToInputMappingService;
 import org.knime.scijava.commands.mapping.OutputToColumnMappingService;
-import org.knime.scijava.commands.settings.NodeSettingsService;
+import org.knime.scijava.commands.settings.NodeDialogSettingsService;
+import org.knime.scijava.commands.settings.NodeModelSettingsService;
 import org.knime.scijava.commands.settings.SettingsModelTypeService;
 import org.scijava.Context;
 import org.scijava.Contextual;
@@ -54,10 +55,14 @@ public interface KNIMEScijavaContext extends Contextual {
 	public SettingsModelTypeService settingsModelTypes();
 
 	/**
-	 * @return the {@link NodeSettingsService} in this {@link Context}
+	 * @return the {@link NodeDialogSettingsService} in this {@link Context}
 	 */
-	public NodeSettingsService nodeSettings();
+	public NodeDialogSettingsService nodeDialogSettings();
 
+	/**
+	 * @return the {@link NodeModelSettingsService} in this {@link Context}
+	 */
+	public NodeModelSettingsService nodeModelSettings();
 	/**
 	 * @return the {@link KNIMEExecutionService} in this {@link Context}
 	 */

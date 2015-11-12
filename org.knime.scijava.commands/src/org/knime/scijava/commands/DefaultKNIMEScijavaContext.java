@@ -6,9 +6,12 @@ import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.io.OutputDataRowService;
 import org.knime.scijava.commands.mapping.ColumnToInputMappingService;
 import org.knime.scijava.commands.mapping.OutputToColumnMappingService;
+import org.knime.scijava.commands.settings.NodeDialogSettingsService;
+import org.knime.scijava.commands.settings.NodeModelSettingsService;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.knime.scijava.commands.settings.SettingsModelTypeService;
 import org.scijava.Context;
+import org.scijava.NullContextException;
 import org.scijava.plugin.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,15 +47,20 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 	private NodeSettingsService nodeSettingsService;
 	@Parameter
 	private KNIMEExecutionService executionService;
+	@Parameter
+	private NodeModelSettingsService nodeModelService;
+	@Parameter
+	private NodeDialogSettingsService nodeDialogService;
 
 	@Override
 	public Context context() {
+		if (m_context == null) throw new NullContextException();
 		return m_context;
 	}
 
 	@Override
 	public Context getContext() {
-		return context();
+		return m_context;
 	}
 
 	/**
@@ -108,13 +116,18 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 	}
 
 	@Override
-	public NodeSettingsService nodeSettings() {
-		return nodeSettingsService;
+	public KNIMEExecutionService execution() {
+		return executionService;
 	}
 
 	@Override
-	public KNIMEExecutionService execution() {
-		return executionService;
+	public NodeDialogSettingsService nodeDialogSettings() {
+		return nodeDialogService;
+	}
+
+	@Override
+	public NodeModelSettingsService nodeModelSettings() {
+		return nodeModelService;
 	}
 
 }

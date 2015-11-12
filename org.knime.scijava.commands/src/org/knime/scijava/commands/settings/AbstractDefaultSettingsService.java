@@ -12,7 +12,6 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Parameter;
-import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 
 /**
@@ -21,8 +20,7 @@ import org.scijava.service.AbstractService;
  * @author Jonathan Hale (University of Konstanz)
  */
 @SuppressWarnings("rawtypes")
-@Plugin(type = NodeSettingsService.class)
-public class DefaultNodeSettingsService extends AbstractService
+public abstract class AbstractDefaultSettingsService extends AbstractService
 		implements NodeSettingsService {
 
 	private WeakReference<Map<String, SettingsModel>> m_settingsModels = new WeakReference<Map<String, SettingsModel>>(
