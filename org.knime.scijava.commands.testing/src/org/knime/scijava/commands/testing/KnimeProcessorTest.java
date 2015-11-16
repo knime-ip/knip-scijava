@@ -16,6 +16,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataRow;
+import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DataType;
 import org.knime.core.data.RowKey;
 import org.knime.core.data.def.BooleanCell;
 import org.knime.core.data.def.DefaultRow;
@@ -66,13 +68,13 @@ public class KnimeProcessorTest {
 			DefaultInputDataRowService.class, DefaultOutputDataRowService.class, CommandService.class,
 			ColumnModuleItemMappingService.class, InputAdapterService.class, OutputAdapterService.class);
 
-	private static final DataRow m_testRow;
+	// Create the test table
+	private static final DataRow m_testRow = new DefaultRow(new RowKey("TestRow001"), BooleanCell.TRUE, new IntCell(42),
+			new IntCell(420), new IntCell(42000), new LongCell(4200000), new StringCell("KNIME"), new StringCell(" "));
 
-	static {
-		// Create the test table
-		m_testRow = new DefaultRow(new RowKey("TestRow001"), BooleanCell.TRUE, new IntCell(42), new IntCell(420),
-				new IntCell(42000), new LongCell(4200000), new StringCell("KNIME"), new StringCell(" "));
-	}
+	private static final DataTableSpec m_spec = new DataTableSpec(new String[] { "b", "by", "s", "i", "l", "str", "c" },
+			new DataType[] { BooleanCell.TYPE, IntCell.TYPE, IntCell.TYPE, IntCell.TYPE, LongCell.TYPE, StringCell.TYPE,
+					StringCell.TYPE });
 
 	@BeforeClass
 	public static void setUpOnce() {
@@ -113,6 +115,7 @@ public class KnimeProcessorTest {
 		assertNotNull(m_outputCellsService);
 		assertNotNull(m_commandService);
 		m_inputRowService.setInputDataRow(m_testRow);
+		m_inputRowService.setDataTableSpec(m_spec);
 
 		Future<CommandModule> command = m_commandService.run(MyCommand.class, true);
 		assertNotNull(command);
