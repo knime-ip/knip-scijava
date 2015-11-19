@@ -26,11 +26,9 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  *
  */
-@Plugin(type = PostprocessorPlugin.class, priority = DefaultKnimePostprocessor.PRIORITY)
+@Plugin(type = PostprocessorPlugin.class, priority = Priority.NORMAL_PRIORITY)
 public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 		implements KnimePostprocessor {
-
-	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
 
 	@Parameter
 	private OutputAdapterService adapterService;
