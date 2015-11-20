@@ -2,91 +2,74 @@ package org.knime.scijava.commands.mapping;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.List;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
-import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataTableSpec;
 import org.knime.scijava.commands.mapping.ColumnModuleItemMappingService.ColumnToModuleItemMappingChangeListener;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 import org.scijava.service.AbstractService;
 
 /**
- * Abstract implementation of ColumnModuleItemMappingService. 
- * Use the subclasses {@link DefaultColumnToInputMappingService} or
+ * Abstract implementation of ColumnModuleItemMappingService. Use the subclasses
+ * {@link DefaultColumnToInputMappingService} or
  * {@link DefaultOutputToColumnMappingService} to which mark the use of the
  * contained mappings.
  *
  * @author Jonathan Hale (University of Konstanz)
+ * @author Gabriel Einsdorf (University of Konstanz)
  */
-public abstract class AbstractColumnModuleItemMappingService extends AbstractService
+abstract class AbstractColumnModuleItemMappingService extends AbstractService
 		implements ColumnModuleItemMappingService,
 		ColumnToModuleItemMappingChangeListener {
 
-	/** list containing all mappings of this service */
-	private final ArrayList<ColumnModuleItemMapping> m_mappings = new ArrayList<ColumnModuleItemMapping>();
+	/** List that stores the order of the MappingIds */
+	private final List<String> m_orderedMappingIds = new ArrayList<>();
 
-	/** mappings optimized for {@link #getMappingForColumnName(String)} */
-	private final WeakHashMap<String, ColumnModuleItemMapping> m_mappingsByColumn = new WeakHashMap<String, ColumnModuleItemMapping>();
-	private final WeakHashMap<String, ColumnModuleItemMapping> m_mappingsByItem = new WeakHashMap<String, ColumnModuleItemMapping>();
+	private final WeakHashMap<String, ColumnModuleItemMapping> m_mappings = new WeakHashMap<>();
+	private final WeakHashMap<String, String> m_mappingIdsByItemName = new WeakHashMap<>();
 
 	@Override
 	public List<ColumnModuleItemMapping> getMappingsList() {
-		return Collections.unmodifiableList(m_mappings);
-	}
-
-	@Override
-	public ColumnModuleItemMapping getMappingForColumnName(
-			final String columnName) {
-		return m_mappingsByColumn.get(columnName);
-	}
-
-	@Override
-	public ColumnModuleItemMapping getMappingForModuleItemName(
-			final String inputName) {
-		return m_mappingsByItem.get(inputName);
-	}
-
-	@Override
-	public ColumnModuleItemMapping removeMapping(
-			final ColumnModuleItemMapping mapping) {
-
-		if (m_mappings.remove(mapping)) {
-			// a mapping has been removed, we need to update the hash maps
-			m_mappingsByColumn.remove(mapping.getColumnName());
-			m_mappingsByItem.remove(mapping.getItemName());
-
-			mapping.removeMappingChangeListener(this);
-
-			return mapping;
-		}
-
-		// given mapping was not found
-		return null;
+		return Collections
+				.unmodifiableList(new ArrayList<>(m_mappings.values()));
 	}
 
 	@Override
 	public void onMappingColumnChanged(
-			final ColumnToModuleItemMappingChangeEvent e) {
-		// a column name has changed, we need to update the has maps to reflect
-		// that change
-		m_mappingsByColumn.remove(e.getPreviousValue());
-
-		final ColumnModuleItemMapping mapping = e.getSourceMapping();
-		m_mappingsByColumn.put(mapping.getColumnName(), mapping);
+			final AbstractColumnModuleItemMappingService.ColumnToModuleItemMappingChangeEvent e) {
+		// NB: nothing to do here currently.
 	}
 
 	@Override
 	public void onMappingItemChanged(
-			final ColumnToModuleItemMappingChangeEvent e) {
-		// a module input name has changed, we need to update the has maps to
-		// reflect
-		// that change
-		m_mappingsByItem.remove(e.getPreviousValue());
+			final AbstractColumnModuleItemMappingService.ColumnToModuleItemMappingChangeEvent e) {
 
-		final ColumnModuleItemMapping mapping = e.getSourceMapping();
-		m_mappingsByItem.put(mapping.getItemName(), mapping);
+		// free previously mapped value
+		m_mappingIdsByItemName.remove(e.getPreviousValue());
+
+		final ColumnModuleItemMapping sourceMapping = e.getSourceMapping();
+
+		String itemName = sourceMapping.getItemName();
+
+		// check if input was mapped before
+		String otherMappingID = m_mappingIdsByItemName.get(itemName);
+		if (otherMappingID != null) {
+			// deactivate old mapping
+			ColumnModuleItemMapping otherMapping = m_mappings
+					.get(otherMappingID);
+			otherMapping.setActive(false);
+			// unlink the mapping
+			m_mappingIdsByItemName.remove(itemName);
+			otherMapping.setItemName("");
+
+			// ensure new mapping is active
+			sourceMapping.setActive(true);
+		}
+		// save new item mapping.
+		m_mappingIdsByItemName.put(itemName, sourceMapping.getID());
 	}
 
 	@Override
@@ -94,44 +77,106 @@ public abstract class AbstractColumnModuleItemMappingService extends AbstractSer
 		// remove all mappings
 
 		m_mappings.clear();
-		m_mappingsByColumn.clear();
-		m_mappingsByItem.clear();
+		m_mappingIdsByItemName.clear();
+		m_orderedMappingIds.clear();
 	}
 
 	@Override
-	public ColumnModuleItemMapping getMappingForColumn(
-			final DataColumnSpec column) {
-		return getMappingForColumnName(column.getName());
+	public void addMapping(final String columnName, final String inputName) {
+		addMapping(columnName, inputName, true);
 	}
 
 	@Override
-	public ColumnModuleItemMapping getMappingForModuleItem(
-			final ModuleItem<?> item) {
-		return getMappingForModuleItemName(item.getName());
+	public void addMapping(String columnName, String inputName,
+			boolean active) {
+		final ColumnModuleItemMapping mapping = new DefaultColumnToModuleItemMapping(
+				columnName, inputName);
+		mapping.addMappingChangeListener(this);
+		mapping.setActive(active);
+
+		String id = mapping.getID();
+		m_mappings.put(id, mapping);
+		m_mappingIdsByItemName.put(inputName, id);
+		m_orderedMappingIds.add(id);
 	}
 
 	@Override
-	public ColumnModuleItemMapping addMapping(final String columnName,
-			final String itemName) {
-		final ColumnModuleItemMapping m = new DefaultColumnToModuleItemMapping(
-				columnName, itemName);
-		m.addMappingChangeListener(this);
-		addMapping(m);
+	public int numMappings() {
+		return m_mappings.size();
+	}
 
-		return m;
+	@Override
+	public void removeMappingsByPosition(int... rows) {
+		// collect id's of maps to remove
+		List<String> removeList = new ArrayList<>(rows.length);
+		for (int i : rows) {
+			String id = m_orderedMappingIds.get(i);
+			removeList.add(id);
+		}
+		// remove the elements
+		removeList.forEach((String id) -> removeMapping(id));
 	}
 
 	/**
-	 * Add a pre created {@link ColumnModuleItemMapping} to the Service. This
-	 * method is called by {@link #addMapping(String, String)}.
+	 * Remove a mapping
 	 *
-	 * @param mapping
-	 *            {@link ColumnModuleItemMapping} to add
+	 * @param id
+	 *            the id of the mapping
+	 * @return
 	 */
-	protected void addMapping(final ColumnModuleItemMapping mapping) {
-		m_mappings.add(mapping);
-		m_mappingsByColumn.put(mapping.getColumnName(), mapping);
-		m_mappingsByItem.put(mapping.getItemName(), mapping);
+	private ColumnModuleItemMapping removeMapping(String id) {
+		ColumnModuleItemMapping mapping = m_mappings.remove(id);
+		if (mapping == null) {
+			// mapping was not found.
+			return null;
+		}
+		m_orderedMappingIds.remove(id);
+		m_mappingIdsByItemName.remove(mapping.getColumnName());
+		mapping.removeMappingChangeListener(this);
+		return mapping;
+	}
+
+	@Override
+	public void setColumnNameByPosition(int rowIndex, String value) {
+		m_mappings.get(m_orderedMappingIds.get(rowIndex)).setColumnName(value);
+	}
+
+	@Override
+	public void setActiveByPosition(int rowIndex, Boolean value) {
+		m_mappings.get(m_orderedMappingIds.get(rowIndex)).setActive(value);
+	}
+
+	@Override
+	public void setItemNameByPosition(int rowIndex, String value) {
+		m_mappings.get(m_orderedMappingIds.get(rowIndex)).setItemName(value);
+	}
+
+	@Override
+	public String getColumnNameByPosition(int rowIndex) {
+		return m_mappings.get(m_orderedMappingIds.get(rowIndex))
+				.getColumnName();
+	}
+
+	@Override
+	public boolean isActiveByPosition(int rowIndex) {
+		return m_mappings.get(m_orderedMappingIds.get(rowIndex)).isActive();
+	}
+
+	@Override
+	public String getItemNameByPosition(int rowIndex) {
+		return m_mappings.get(m_orderedMappingIds.get(rowIndex)).getItemName();
+	}
+
+	@Override
+	public boolean isInputMapped(String inputName) {
+		String id = m_mappingIdsByItemName.get(inputName);
+		return id != null && m_mappings.get(id).isActive();
+	}
+
+	@Override
+	public String getColumnNameForInput(String inputName) {
+		return m_mappings.get(m_mappingIdsByItemName.get(inputName))
+				.getColumnName();
 	}
 
 	/**
@@ -146,6 +191,7 @@ public abstract class AbstractColumnModuleItemMappingService extends AbstractSer
 		protected String m_itemName;
 		protected boolean m_active;
 		protected ArrayList<ColumnToModuleItemMappingChangeListener> m_listeners;
+		private String m_uuID;
 
 		public DefaultColumnToModuleItemMapping(final String columnName,
 				final String itemName) {
@@ -153,6 +199,7 @@ public abstract class AbstractColumnModuleItemMappingService extends AbstractSer
 			m_itemName = itemName;
 			m_active = true;
 			m_listeners = new ArrayList<ColumnToModuleItemMappingChangeListener>();
+			m_uuID = UUID.randomUUID().toString();
 		}
 
 		@Override
@@ -163,16 +210,6 @@ public abstract class AbstractColumnModuleItemMappingService extends AbstractSer
 		@Override
 		public String getItemName() {
 			return m_itemName;
-		}
-
-		@Override
-		public DataColumnSpec getColumnSpec(final DataTableSpec spec) {
-			return spec.getColumnSpec(m_columnName);
-		}
-
-		@Override
-		public Integer getColumnIndex(final DataTableSpec spec) {
-			return spec.findColumnIndex(m_columnName);
 		}
 
 		@Override
@@ -204,7 +241,7 @@ public abstract class AbstractColumnModuleItemMappingService extends AbstractSer
 
 		@Override
 		public void fireMappingColumnChanged(final String oldValue) {
-			final ColumnToModuleItemMappingChangeEvent e = new ColumnToModuleItemMappingChangeEvent(
+			final AbstractColumnModuleItemMappingService.ColumnToModuleItemMappingChangeEvent e = new AbstractColumnModuleItemMappingService.ColumnToModuleItemMappingChangeEvent(
 					this, oldValue);
 			for (final ColumnToModuleItemMappingChangeListener l : m_listeners) {
 				l.onMappingColumnChanged(e);
@@ -213,7 +250,7 @@ public abstract class AbstractColumnModuleItemMappingService extends AbstractSer
 
 		@Override
 		public void fireMappingItemChanged(final String oldValue) {
-			final ColumnToModuleItemMappingChangeEvent e = new ColumnToModuleItemMappingChangeEvent(
+			final AbstractColumnModuleItemMappingService.ColumnToModuleItemMappingChangeEvent e = new AbstractColumnModuleItemMappingService.ColumnToModuleItemMappingChangeEvent(
 					this, oldValue);
 			for (final ColumnToModuleItemMappingChangeListener l : m_listeners) {
 				l.onMappingItemChanged(e);
@@ -244,6 +281,87 @@ public abstract class AbstractColumnModuleItemMappingService extends AbstractSer
 			}
 		}
 
+		@Override
+		public String getID() {
+			return m_uuID;
+		}
 	}
 
+	/**
+	 * Event for {@link ColumnModuleItemMapping} changes.
+	 *
+	 * @author Jonathan Hale (University of Konstanz)
+	 */
+	public static class ColumnToModuleItemMappingChangeEvent
+			extends EventObject {
+
+		/**
+		 * Generated serialVersionID
+		 */
+		private static final long serialVersionUID = 8652877000556694115L;
+
+		private final String oldValue;
+
+		/**
+		 * Constructor
+		 *
+		 * @param source
+		 *            the changed {@link ColumnModuleItemMapping}
+		 */
+		public ColumnToModuleItemMappingChangeEvent(
+				final ColumnModuleItemMapping source, final String oldValue) {
+			super(source);
+
+			this.oldValue = oldValue;
+		}
+
+		/**
+		 * Get the changed {@link ColumnModuleItemMapping}.
+		 *
+		 * @return the changed mapping
+		 */
+		public ColumnModuleItemMapping getSourceMapping() {
+			return (ColumnModuleItemMapping) source;
+		}
+
+		/**
+		 * Get the previous value of the column/input name.
+		 *
+		 * @return the previous column or input name.
+		 */
+		public String getPreviousValue() {
+			return oldValue;
+		}
+	}
+
+	@Override
+	public String[] serialize() {
+		List<String> out = new ArrayList<>();
+
+		for (String id : m_orderedMappingIds) {
+			ColumnModuleItemMapping m = m_mappings.get(id);
+			out.add(m.getColumnName() + "\n" + (m.isActive() ? "true" : "false")
+					+ "\n" + m.getItemName());
+		}
+		return out.toArray(new String[numMappings()]);
+	}
+
+	@Override
+	public void deserialize(String[] serializedMappings) {
+		for (final String s : serializedMappings) {
+			final String[] names = s.split("\n");
+
+			if (names.length != 3) {
+				// Invalid format!
+				throw new IllegalArgumentException();
+			}
+
+			/*
+			 * format is [0] column name [1] active, either "true" or "false"
+			 * [2] module input name
+			 */
+			boolean active = names[1].equals("true");
+			addMapping(names[0], names[2], active);
+		}
+	}
 }

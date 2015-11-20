@@ -34,6 +34,7 @@ public class ColumnToModuleItemMappingUtil {
 				.getMappingsList();
 		final ArrayList<String> out = new ArrayList<String>(mappings.size());
 
+		// FIXME: still uses columnmapping
 		for (final ColumnModuleItemMapping m : mappings) {
 			out.add(m.getColumnName() + "\n" + (m.isActive() ? "true" : "false")
 					+ "\n" + m.getItemName());
@@ -69,15 +70,10 @@ public class ColumnToModuleItemMappingUtil {
 			 * format is [0] column name [1] active, either "true" or "false"
 			 * [2] module input name
 			 */
-			final ColumnModuleItemMapping mapping = service.addMapping(names[0],
-					names[2]);
-
-			if (names[1].equals("false")) {
-				mapping.setActive(false);
-			} // else: keep active as default "true"
+			boolean active = names[1].equals("true");
+			service.addMapping(names[0], names[2], active);
 		}
 		// done, no problems
 		return true;
 	}
-
 }

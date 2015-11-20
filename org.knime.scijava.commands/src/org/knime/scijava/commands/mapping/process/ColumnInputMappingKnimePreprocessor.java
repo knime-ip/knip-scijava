@@ -7,7 +7,6 @@ import org.knime.core.data.DataTableSpec;
 import org.knime.scijava.commands.adapter.InputAdapter;
 import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.knime.scijava.commands.io.InputDataRowService;
-import org.knime.scijava.commands.mapping.ColumnModuleItemMapping;
 import org.knime.scijava.commands.mapping.ColumnToInputMappingService;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
@@ -20,8 +19,8 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Preprocessor which fills unresolved {@link Module} inputs from KNIME
- * {@link DataTable}s using {@link ColumnModuleItemMapping}s from a
- * {@link ColumnToInputMappingService}.
+ * {@link DataTable}s using a {@link ColumnToInputMappingService}.
+ * 
  *
  * @author Jonathan Hale (University of Konstanz)
  */
@@ -30,16 +29,16 @@ public class ColumnInputMappingKnimePreprocessor
 		extends AbstractPreprocessorPlugin implements KnimePreprocessor {
 
 	@Parameter
-	ColumnToInputMappingService m_cimService;
+	private ColumnToInputMappingService m_cimService;
 
 	@Parameter
-	InputDataRowService m_inputTable;
+	private InputDataRowService m_inputTable;
 
 	@Parameter
-	InputAdapterService m_inputAdapters;
+	private InputAdapterService m_inputAdapters;
 
 	@Parameter
-	LogService m_log;
+	private LogService m_log;
 
 	@Override
 	public void process(final Module module) {
@@ -47,7 +46,6 @@ public class ColumnInputMappingKnimePreprocessor
 		final DataTableSpec spec = m_inputTable.getInputDataTableSpec();
 
 		// some local variables set and used in the following loop
-		ColumnModuleItemMapping mapping = null;
 		String inputName = "";
 
 		// DataRow will remain the same while processing, this is a shortcut to
@@ -62,33 +60,24 @@ public class ColumnInputMappingKnimePreprocessor
 			// preprocessor.
 			if (!module.isResolved(inputName)) {
 				// get a column to input mapping
-				mapping = m_cimService.getMappingForModuleItemName(inputName);
 
-				// there might be no mapping for this input
-				if (mapping == null) {
-					// skip this one, it wont be resolved by this Preprocessor
-					m_log.warn("Couldn't find column input mapping for input \""
-							+ inputName + "\".");
-					continue;
-				}
-
-				// the mapping may be inactive in which case we wont use it
-				if (!mapping.isActive()) {
-					// skip this one, it wont be resolved by this Preprocessor
-					m_log.warn("Mapping for input \"" + inputName
-							+ "\" was found, but is not active.");
+				if (!m_cimService.isInputMapped(inputName)) {
+					m_log.warn(
+							"Couldn't find an active column input mapping for input \""
+									+ inputName + "\".");
 					continue;
 				}
 
 				// try to get the data cell matching the mapped column
 				DataCell cell = null;
+				String mappedColumn = m_cimService
+						.getColumnNameForInput(inputName);
 				try {
-					cell = row.getCell(mapping.getColumnIndex(spec));
+					cell = row.getCell(spec.findColumnIndex(mappedColumn));
 				} catch (final IndexOutOfBoundsException e) {
 					// getColumnIndex() might return -1 or a index greater the
 					// column count
-					m_log.warn("Couldn't find column \""
-							+ mapping.getColumnName()
+					m_log.warn("Couldn't find column \"" + mappedColumn
 							+ "\" which is mapped to input " + inputName + ".");
 					continue;
 				}

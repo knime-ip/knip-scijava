@@ -1,8 +1,5 @@
 package org.knime.scijava.commands.mapping;
 
-import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataTableSpec;
-import org.knime.scijava.commands.mapping.ColumnModuleItemMappingService.ColumnModuleItemMappingChangeEventDispatcher;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 
@@ -32,26 +29,6 @@ public interface ColumnModuleItemMapping
 	String getItemName();
 
 	/**
-	 * Get the {@link DataColumnSpec} which matches the column name of this
-	 * mapping.
-	 *
-	 * @param spec
-	 *            {@link DataTableSpec} to get {@link DataColumnSpec} from
-	 * @return a {@link DataColumnSpec} with the column name contained in this
-	 *         mapping or null if spec did not contain a column with that name
-	 */
-	DataColumnSpec getColumnSpec(DataTableSpec spec);
-
-	/**
-	 * Get index of the column which is mapped to.
-	 *
-	 * @param spec
-	 *            {@link DataTableSpec} to find the column in
-	 * @return column index or -1 if column could not be found in spec
-	 */
-	Integer getColumnIndex(DataTableSpec spec);
-
-	/**
 	 * Get the {@link ModuleItem} with name contained by this mapping.
 	 *
 	 * @param module
@@ -74,7 +51,7 @@ public interface ColumnModuleItemMapping
 	 *
 	 * @param flag
 	 *            set to <code>true</code> to activate or <code>false</code> to
-	 *            deactivate this {@link ColumnModuleItemMapping}
+	 *            deactivate this mapping.
 	 */
 	void setActive(boolean flag);
 
@@ -95,5 +72,10 @@ public interface ColumnModuleItemMapping
 	 *            name of the item to set to.
 	 */
 	void setItemName(String itemName);
+
+	/**
+	 * @return The universally unique ID of this mapping.
+	 */
+	String getID();
 
 }
