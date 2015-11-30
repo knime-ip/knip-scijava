@@ -30,27 +30,27 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 	private Context m_context;
 
 	@Parameter
-	private InputAdapterService inputAdapterService;
+	private InputAdapterService m_inputAdapterService;
 	@Parameter
-	private OutputAdapterService outputAdapterService;
+	private OutputAdapterService m_outputAdapterService;
 	@Parameter
-	private InputDataRowService inputRowService;
+	private InputDataRowService m_inputRowService;
 	@Parameter
-	private OutputDataRowService outputRowService;
+	private OutputDataRowService m_outputRowService;
 	@Parameter
-	private ColumnToInputMappingService inputMappingService;
+	private ColumnToInputMappingService m_inputMappingService;
 	@Parameter
-	private OutputToColumnMappingService outputMappingService;
+	private OutputToColumnMappingService m_outputMappingService;
 	@Parameter
-	private SettingsModelTypeService settingsModelTypesService;
+	private SettingsModelTypeService m_settingsModelTypesService;
 	@Parameter
-	private NodeSettingsService nodeSettingsService;
+	private NodeSettingsService m_nodeSettingsService;
 	@Parameter
-	private KNIMEExecutionService executionService;
+	private KNIMEExecutionService m_executionService;
 	@Parameter
-	private NodeModelSettingsService nodeModelService;
+	private NodeModelSettingsService m_nodeModelService;
 	@Parameter
-	private NodeDialogSettingsService nodeDialogService;
+	private NodeDialogSettingsService m_nodeDialogService;
 
 	@Override
 	public Context context() {
@@ -82,52 +82,52 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 
 	@Override
 	public InputAdapterService inputAdapters() {
-		return inputAdapterService;
+		return m_inputAdapterService;
 	}
 
 	@Override
 	public OutputAdapterService outputAdapters() {
-		return outputAdapterService;
+		return m_outputAdapterService;
 	}
 
 	@Override
 	public InputDataRowService input() {
-		return inputRowService;
+		return m_inputRowService;
 	}
 
 	@Override
 	public OutputDataRowService output() {
-		return outputRowService;
+		return m_outputRowService;
 	}
 
 	@Override
 	public ColumnToInputMappingService inputMapping() {
-		return inputMappingService;
+		return m_inputMappingService;
 	}
 
 	@Override
 	public OutputToColumnMappingService outputMapping() {
-		return outputMappingService;
+		return m_outputMappingService;
 	}
 
 	@Override
 	public SettingsModelTypeService settingsModelTypes() {
-		return settingsModelTypesService;
+		return m_settingsModelTypesService;
 	}
 
 	@Override
 	public KNIMEExecutionService execution() {
-		return executionService;
+		return m_executionService;
 	}
 
 	@Override
 	public NodeDialogSettingsService nodeDialogSettings() {
-		return nodeDialogService;
+		return m_nodeDialogService;
 	}
 
 	@Override
 	public NodeModelSettingsService nodeModelSettings() {
-		return nodeModelService;
+		return m_nodeModelService;
 	}
 
 }
