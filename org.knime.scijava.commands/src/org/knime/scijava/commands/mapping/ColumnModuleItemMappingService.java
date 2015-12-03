@@ -11,6 +11,9 @@ import org.scijava.service.Service;
  * ColumnToInputMappingService provides information on how to map names of
  * {@link DataTable} columns to names of {@link ModuleItem}s.
  *
+ * Use the subinterfaces {@link ColumnToInputMappingService} and
+ * {@link OutputToColumnMappingService}.
+ *
  * @author Jonathan Hale (University of Konstanz)
  *
  */
@@ -74,7 +77,7 @@ public interface ColumnModuleItemMappingService extends Service {
 	 *            name of the input to map to.
 	 * @param active
 	 *            if the added mapping is active.
-	 * 
+	 *
 	 */
 	void addMapping(String columnName, String inputName, boolean active);
 
@@ -92,7 +95,7 @@ public interface ColumnModuleItemMappingService extends Service {
 
 	/**
 	 * Removes all mappings at the given positions.
-	 * 
+	 *
 	 * @param rows
 	 *            the positions of the mappings to remove.
 	 * @return the removed mappings.
@@ -118,7 +121,7 @@ public interface ColumnModuleItemMappingService extends Service {
 	/**
 	 * Set the name of the mapped input item of the mapping at the given
 	 * position.
-	 * 
+	 *
 	 * @param rowIndex
 	 *            the position of the mapping.
 	 * @param itemName
@@ -130,7 +133,7 @@ public interface ColumnModuleItemMappingService extends Service {
 	 * @param rowIndex
 	 *            the position
 	 * @return the name of the mapped column
-	 * 
+	 *
 	 */
 	String getColumnNameByPosition(int rowIndex);
 
@@ -142,7 +145,7 @@ public interface ColumnModuleItemMappingService extends Service {
 	boolean isActiveByPosition(int rowIndex);
 
 	/**
-	 * 
+	 *
 	 * @param rowIndex
 	 *            the position
 	 * @return the name of the input of the mapping at the given position.
@@ -150,7 +153,7 @@ public interface ColumnModuleItemMappingService extends Service {
 	String getItemNameByPosition(int rowIndex);
 
 	/**
-	 * 
+	 *
 	 * @param inputName
 	 *            the name of the input
 	 * @return true if there is an active mapping for this input.
@@ -158,7 +161,7 @@ public interface ColumnModuleItemMappingService extends Service {
 	boolean isInputMapped(String inputName);
 
 	/**
-	 * 
+	 *
 	 * @param inputName
 	 *            the name of the input
 	 * @return the column mapped to this input
@@ -173,7 +176,7 @@ public interface ColumnModuleItemMappingService extends Service {
 
 	/**
 	 * Reads the mappings from the given array, adding them to the Service.
-	 * 
+	 *
 	 * @param serializedMappings
 	 *            mappings serialized with
 	 *            {@link ColumnModuleItemMappingService#serialize()}.

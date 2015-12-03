@@ -10,7 +10,6 @@ import org.scijava.module.ModuleItem;
  *
  * @author Jonathan Hale (University of Konstanz)
  * @see ColumnModuleItemMappingService
- * @see ColumnToModuleItemMappingUtil
  */
 public interface ColumnModuleItemMapping
 		extends ColumnModuleItemMappingChangeEventDispatcher {
