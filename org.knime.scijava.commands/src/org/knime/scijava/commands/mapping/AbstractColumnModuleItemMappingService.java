@@ -91,12 +91,17 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			boolean active) {
 		final ColumnModuleItemMapping mapping = new DefaultColumnToModuleItemMapping(
 				columnName, inputName);
+		setupMapping(active, mapping);
+	}
+
+	private void setupMapping(boolean active,
+			final ColumnModuleItemMapping mapping) {
 		mapping.addMappingChangeListener(this);
 		mapping.setActive(active);
 
 		String id = mapping.getID();
 		m_mappings.put(id, mapping);
-		m_mappingIdsByItemName.put(inputName, id);
+		m_mappingIdsByItemName.put(mapping.getItemName(), id);
 		m_orderedMappingIds.add(id);
 	}
 
@@ -170,7 +175,9 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 	@Override
 	public boolean isInputMapped(String inputName) {
 		String id = m_mappingIdsByItemName.get(inputName);
-		return id != null && m_mappings.get(id).isActive();
+
+		boolean out = id != null && m_mappings.get(id).isActive();
+		return out;
 	}
 
 	@Override
@@ -184,7 +191,7 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 	 *
 	 * @author Jonathan Hale
 	 */
-	public static final class DefaultColumnToModuleItemMapping
+	static final class DefaultColumnToModuleItemMapping
 			implements ColumnModuleItemMapping {
 
 		protected String m_columnName;
@@ -200,6 +207,15 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			m_active = true;
 			m_listeners = new ArrayList<ColumnToModuleItemMappingChangeListener>();
 			m_uuID = UUID.randomUUID().toString();
+		}
+
+		public DefaultColumnToModuleItemMapping(String columnName,
+				String inputName, String id) {
+			m_columnName = columnName;
+			m_itemName = inputName;
+			m_active = true;
+			m_listeners = new ArrayList<ColumnToModuleItemMappingChangeListener>();
+			m_uuID = id;
 		}
 
 		@Override
@@ -340,8 +356,8 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 
 		for (String id : m_orderedMappingIds) {
 			ColumnModuleItemMapping m = m_mappings.get(id);
-			out.add(m.getColumnName() + "\n" + (m.isActive() ? "true" : "false")
-					+ "\n" + m.getItemName());
+			out.add(m.getColumnName() + "\n" + m.getItemName() + "\n"
+					+ m.getID() + "\n" + (m.isActive() ? "true" : "false"));
 		}
 		return out.toArray(new String[numMappings()]);
 	}
@@ -351,17 +367,22 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 		for (final String s : serializedMappings) {
 			final String[] names = s.split("\n");
 
-			if (names.length != 3) {
+			if (names.length != 4) {
 				// Invalid format!
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException(
+						"Unable to deserialize settings: invalid amount of input tokens!");
 			}
 
 			/*
-			 * format is [0] column name [1] active, either "true" or "false"
-			 * [2] module input name
+			 * format is [0] column name [1] module input name [2] id of the
+			 * mapping [3] active, either "true" or "false"
 			 */
-			boolean active = names[1].equals("true");
-			addMapping(names[0], names[2], active);
+			boolean active = names[3].equals("true");
+
+			// recreate mapping with the deserialization constructor
+			final ColumnModuleItemMapping mapping = new DefaultColumnToModuleItemMapping(
+					names[0], names[1], names[2]);
+			setupMapping(active, mapping);
 		}
 	}
 }
