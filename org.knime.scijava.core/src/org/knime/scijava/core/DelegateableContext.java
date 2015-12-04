@@ -31,6 +31,7 @@
 package org.knime.scijava.core;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.scijava.Context;
 import org.scijava.NoSuchServiceException;
@@ -95,7 +96,8 @@ public class DelegateableContext extends Context {
 	 */
 	public DelegateableContext(Context delegate, Collection<Class<? extends Service>> serviceClasses,
 			PluginIndex pluginIndex) {
-		super(true);
+		//create fully empty super context
+		super(Collections.<Class<? extends Service>> emptyList(), new PluginIndex(null));
 		this.m_delegate = delegate;
 		m_serviceIndex = new ServiceIndex();
 
