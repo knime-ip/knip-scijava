@@ -42,19 +42,19 @@ import org.scijava.service.ServiceIndex;
 import org.scijava.util.ClassUtils;
 
 /**
- * DelegateContext is a context which allows a selection of services to be
- * scoped locally, while providing access to all Services of a SuperContext (the
- * Delegate).
+ * SubContex is a context which allows a selection of services to be scoped
+ * locally, while providing access to all Services of a super context. This
+ * allows the cheap creation of local contexts without running into problems
+ * with missing services.
  *
- * @author gabriel
+ * @author Gabriel Einsdorf
  *
  */
-public class DelegateableContext extends Context {
+public class SubContext extends Context {
 
-	// the super context delegate Context
-	private Context m_delegate;
+	/** the super context */
+	private Context m_superContext;
 
-	// Context members
 	/** Index of the Subcontext's services. */
 	private final ServiceIndex m_serviceIndex;
 
@@ -62,43 +62,45 @@ public class DelegateableContext extends Context {
 	private final PluginIndex m_pluginIndex;
 
 	/**
-	 * Create a Delegate Context that keeps the given services local.
+	 * Creates a Context that keeps the given services local.
 	 *
-	 * @param delegate
+	 * @param supercontext
 	 *            the Context that provides access to more services.
 	 * @param serviceClasses
 	 *            the services this context will provide directly.
 	 */
 	@SuppressWarnings("rawtypes")
-	public DelegateableContext(Context delegate, Class... serviceClasses) {
-		this(delegate, serviceClassList(serviceClasses));
+	public SubContext(Context supercontext, Class... serviceClasses) {
+		this(supercontext, serviceClassList(serviceClasses));
 	}
 
 	/**
-	 * Create a Delegate Context that keeps the given services local.
+	 * Creates a Context that keeps the given services local.
 	 *
-	 * @param delegate
+	 * @param supercontext
 	 *            the Context that provides access to more services.
 	 * @param serviceClasses
 	 *            the services this context will provide directly.
 	 */
-	public DelegateableContext(Context delegate, Collection<Class<? extends Service>> serviceClasses) {
-		this(delegate, serviceClasses, null);
+	public SubContext(Context supercontext, Collection<Class<? extends Service>> serviceClasses) {
+		this(supercontext, serviceClasses, null);
 	}
 
 	/**
-	 * Create a Delegate Context that keeps the given services local.
+	 * Creates a Context that keeps the given services local.
 	 *
-	 * @param delegate
+	 * @param supercontext
 	 *            the Context that provides access to more services.
 	 * @param serviceClasses
 	 *            the services this context will provide directly.
+	 * @param pluginIndex
+	 *            the PluginIndex to use.
 	 */
-	public DelegateableContext(Context delegate, Collection<Class<? extends Service>> serviceClasses,
+	public SubContext(Context supercontext, Collection<Class<? extends Service>> serviceClasses,
 			PluginIndex pluginIndex) {
-		//create fully empty super context
+		// create fully empty super context
 		super(Collections.<Class<? extends Service>> emptyList(), new PluginIndex(null));
-		this.m_delegate = delegate;
+		this.m_superContext = supercontext;
 		m_serviceIndex = new ServiceIndex();
 
 		this.m_pluginIndex = pluginIndex == null ? new PluginIndex() : pluginIndex;
@@ -110,7 +112,7 @@ public class DelegateableContext extends Context {
 
 	@Override
 	public ServiceIndex getServiceIndex() {
-		if (m_serviceIndex == null) { // Hack to satisfy the superconstructor.
+		if (m_serviceIndex == null) {
 			return new ServiceIndex();
 		}
 		return m_serviceIndex;
@@ -126,7 +128,7 @@ public class DelegateableContext extends Context {
 
 	@Override
 	public boolean isStrict() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -138,6 +140,9 @@ public class DelegateableContext extends Context {
 	 * Gets the service of the given class. Will deliver local Services before
 	 * delegate context ones.
 	 *
+	 * @param c
+	 *            the Class of the desired Service.
+	 *
 	 * @throws NoSuchServiceException
 	 *             if the context does not have the requested service.
 	 */
@@ -147,7 +152,7 @@ public class DelegateableContext extends Context {
 		// not a local service
 		if (service == null) {
 			// try delegate
-			service = m_delegate.getService(c);
+			service = m_superContext.getService(c);
 			// still not found
 			if (service == null) {
 				throw new NoSuchServiceException("Service " + c.getName() + " not found.");
@@ -205,7 +210,7 @@ public class DelegateableContext extends Context {
 		// not a local service
 		if (service == null) {
 			// try delegate
-			service = m_delegate.getService(c);
+			service = m_superContext.getService(c);
 		}
 		return service;
 	}
