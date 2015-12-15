@@ -31,7 +31,6 @@
 package org.knime.scijava.core;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.scijava.Context;
 import org.scijava.NoSuchServiceException;
@@ -62,12 +61,19 @@ public class SubContext extends Context {
 	private final PluginIndex m_pluginIndex;
 
 	/**
-	 * Creates a Context that keeps the given services local.
+	 * If the super context is searched in case a plugin can not be found
+	 * locally.
+	 */
+	private boolean delegating = false;
+
+	/**
+	 * Creates a Context that keeps the given services local, while still
+	 * providing access to the services of a super context.
 	 *
 	 * @param supercontext
 	 *            the Context that provides access to more services.
 	 * @param serviceClasses
-	 *            the services this context will provide directly.
+	 *            the services this context will provide locally.
 	 */
 	@SuppressWarnings("rawtypes")
 	public SubContext(Context supercontext, Class... serviceClasses) {
@@ -75,7 +81,8 @@ public class SubContext extends Context {
 	}
 
 	/**
-	 * Creates a Context that keeps the given services local.
+	 * Creates a Context that keeps the given services local, while still
+	 * providing access to the services of a super context.
 	 *
 	 * @param supercontext
 	 *            the Context that provides access to more services.
@@ -87,27 +94,33 @@ public class SubContext extends Context {
 	}
 
 	/**
-	 * Creates a Context that keeps the given services local.
+	 * Creates a Context that keeps the given services local, while still
+	 * providing access to the services of a super context.
 	 *
 	 * @param supercontext
 	 *            the Context that provides access to more services.
 	 * @param serviceClasses
 	 *            the services this context will provide directly.
 	 * @param pluginIndex
-	 *            the PluginIndex to use.
+	 *            the {@link PluginIndex} to use.
 	 */
 	public SubContext(Context supercontext, Collection<Class<? extends Service>> serviceClasses,
 			PluginIndex pluginIndex) {
+
 		// create fully empty super context
-		super(Collections.<Class<? extends Service>> emptyList(), new PluginIndex(null));
-		this.m_superContext = supercontext;
+		super(true, true);
+
+		m_superContext = supercontext;
 		m_serviceIndex = new ServiceIndex();
 
-		this.m_pluginIndex = pluginIndex == null ? new PluginIndex() : pluginIndex;
-		this.m_pluginIndex.discover();
+		m_pluginIndex = (pluginIndex == null ? new PluginIndex() : pluginIndex);
+		m_pluginIndex.discover();
 
 		final ServiceHelper serviceHelper = new ServiceHelper(this, serviceClasses, true);
 		serviceHelper.loadServices();
+
+		// enable delegating
+		delegating = true;
 	}
 
 	@Override
@@ -149,14 +162,9 @@ public class SubContext extends Context {
 	@Override
 	public <S extends Service> S service(final Class<S> c) {
 		S service = getService(c);
-		// not a local service
+		// service not found
 		if (service == null) {
-			// try delegate
-			service = m_superContext.getService(c);
-			// still not found
-			if (service == null) {
-				throw new NoSuchServiceException("Service " + c.getName() + " not found.");
-			}
+			throw new NoSuchServiceException("Service " + c.getName() + " not found.");
 		}
 		return service;
 	}
@@ -198,7 +206,7 @@ public class SubContext extends Context {
 
 	/**
 	 * Gets the service of the given class, or null if there is no matching
-	 * service.
+	 * service. Will deliver local Services before trying the delegate context.
 	 */
 	@Override
 	public <S extends Service> S getService(final Class<S> c) {
@@ -208,7 +216,7 @@ public class SubContext extends Context {
 		}
 		S service = m_serviceIndex.getService(c);
 		// not a local service
-		if (service == null) {
+		if (service == null && delegating) {
 			// try delegate
 			service = m_superContext.getService(c);
 		}
