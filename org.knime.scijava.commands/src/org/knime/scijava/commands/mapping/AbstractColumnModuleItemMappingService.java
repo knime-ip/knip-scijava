@@ -173,8 +173,8 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 	}
 
 	@Override
-	public boolean isInputMapped(String inputName) {
-		String id = m_mappingIdsByItemName.get(inputName);
+	public boolean isItemMapped(String itemName) {
+		String id = m_mappingIdsByItemName.get(itemName);
 
 		boolean out = id != null && m_mappings.get(id).isActive();
 		return out;

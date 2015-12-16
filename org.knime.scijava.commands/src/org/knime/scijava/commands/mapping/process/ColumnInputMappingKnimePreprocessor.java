@@ -61,7 +61,7 @@ public class ColumnInputMappingKnimePreprocessor
 			if (!module.isResolved(inputName)) {
 				// get a column to input mapping
 
-				if (!m_cimService.isInputMapped(inputName)) {
+				if (!m_cimService.isItemMapped(inputName)) {
 					m_log.warn(
 							"Couldn't find an active column input mapping for input \""
 									+ inputName + "\".");

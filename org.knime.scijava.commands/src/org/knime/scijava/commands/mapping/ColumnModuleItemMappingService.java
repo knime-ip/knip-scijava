@@ -158,7 +158,7 @@ public interface ColumnModuleItemMappingService extends Service {
 	 *            the name of the input
 	 * @return true if there is an active mapping for this input.
 	 */
-	boolean isInputMapped(String inputName);
+	boolean isItemMapped(String inputName);
 
 	/**
 	 *
