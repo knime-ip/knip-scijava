@@ -136,7 +136,7 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			return null;
 		}
 		m_orderedMappingIds.remove(id);
-		m_mappingIdsByItemName.remove(mapping.getColumnName());
+		m_mappingIdsByItemName.remove(mapping.getItemName());
 		mapping.removeMappingChangeListener(this);
 		return mapping;
 	}
