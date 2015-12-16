@@ -24,9 +24,8 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 
-	private final Logger m_log = LoggerFactory.getLogger(getClass());
+	// private final Logger m_log = LoggerFactory.getLogger(getClass());
 
-	@Parameter
 	private Context m_context;
 
 	@Parameter
@@ -54,7 +53,8 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 
 	@Override
 	public Context context() {
-		if (m_context == null) throw new NullContextException();
+		if (m_context == null)
+			throw new NullContextException();
 		return m_context;
 	}
 
@@ -72,11 +72,11 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 	@Override
 	public void setContext(final Context context)
 			throws IllegalArgumentException {
-		if (m_context == context) {
-			m_log.warn(
+		if (m_context != null) {
+			throw new IllegalArgumentException(
 					"CODING PROBLEM - Scijava context set mutiple times. Should only be set once.");
-			return;
 		}
+		m_context = context;
 		context.inject(this);
 	}
 
