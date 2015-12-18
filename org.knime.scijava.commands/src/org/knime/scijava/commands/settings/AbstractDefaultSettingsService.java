@@ -182,4 +182,8 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 		return settingsModels;
 	}
 
+	@Override
+	public void clear() {
+		getSafeSettingsModelsMap().clear();
+	}
 }

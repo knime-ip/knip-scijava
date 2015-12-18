@@ -148,4 +148,8 @@ public interface NodeSettingsService extends Service {
 	 */
 	boolean saveSettingsTo(NodeSettingsWO settings);
 
+	/**
+	 * Removes all settings from the Service.
+	 */
+	void clear();
 }
