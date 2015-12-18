@@ -23,7 +23,7 @@ import org.scijava.service.AbstractService;
 public abstract class AbstractDefaultSettingsService extends AbstractService
 		implements NodeSettingsService {
 
-	private WeakReference<Map<String, SettingsModel>> m_settingsModels = new WeakReference<Map<String, SettingsModel>>(
+	private WeakReference<Map<String, SettingsModel>> m_settingsModels = new WeakReference<>(
 			null);
 
 	@Parameter
@@ -32,8 +32,7 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	@Override
 	public void setSettingsModels(
 			final Map<String, SettingsModel> settingsModels) {
-		m_settingsModels = new WeakReference<Map<String, SettingsModel>>(
-				settingsModels);
+		m_settingsModels = new WeakReference<>(settingsModels);
 	}
 
 	/*
@@ -96,7 +95,7 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	@Override
 	public Collection<SettingsModel> createSettingsModels(
 			final Iterable<ModuleItem<?>> moduleItems) {
-		final ArrayList<SettingsModel> settingsModels = new ArrayList<SettingsModel>();
+		final ArrayList<SettingsModel> settingsModels = new ArrayList<>();
 
 		for (final ModuleItem i : moduleItems) {
 			final SettingsModel sm = createSettingsModel(i);
@@ -172,7 +171,7 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 			return createSettingsModels(moduleItems);
 		}
 
-		final ArrayList<SettingsModel> settingsModels = new ArrayList<SettingsModel>();
+		final ArrayList<SettingsModel> settingsModels = new ArrayList<>();
 
 		for (final ModuleItem i : moduleItems) {
 			final SettingsModel sm = createAndAddSettingsModel(i);

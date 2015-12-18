@@ -136,7 +136,7 @@ public class DefaultInputAdapterService extends
 	 * for faster access later on)
 	 */
 	private void processInstances() {
-		m_pluginsByDataValue = new WeakHashMap<Class<? extends DataValue>, Set<InputAdapter>>();
+		m_pluginsByDataValue = new WeakHashMap<>();
 
 		for (final InputAdapter<?, ?> p : this.getInstances()) {
 			final Class<? extends DataValue> type = p.getInputType();
@@ -144,7 +144,7 @@ public class DefaultInputAdapterService extends
 			Set<InputAdapter> set = m_pluginsByDataValue.get(type);
 
 			if (set == null) {
-				set = new TreeSet<InputAdapter>(Comparator.naturalOrder()); // automatically
+				set = new TreeSet<>(Comparator.naturalOrder()); // automatically
 																			// sorts
 																			// by
 																			// priority

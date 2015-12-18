@@ -13,8 +13,6 @@ import org.knime.scijava.commands.settings.SettingsModelTypeService;
 import org.scijava.Context;
 import org.scijava.NullContextException;
 import org.scijava.plugin.Parameter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link KNIMEScijavaContext}. Enables convenient

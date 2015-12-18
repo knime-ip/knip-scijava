@@ -50,7 +50,7 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 	@Override
 	public void process(final Module module) {
 
-		final List<DataCell> cells = new ArrayList<DataCell>();
+		final List<DataCell> cells = new ArrayList<>();
 
 		for (final ModuleItem i : module.getInfo().outputs()) {
 			final OutputAdapter<?, DataCell> outputAdapter = adapterService
