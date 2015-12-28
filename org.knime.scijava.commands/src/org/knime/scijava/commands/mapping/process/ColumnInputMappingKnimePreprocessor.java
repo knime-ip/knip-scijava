@@ -24,7 +24,8 @@ import org.scijava.plugin.Plugin;
  *
  * @author Jonathan Hale (University of Konstanz)
  */
-@Plugin(type = PreprocessorPlugin.class, priority = Priority.NORMAL_PRIORITY)
+// Low Priority ensures that this is run after the other preprocessors
+@Plugin(type = PreprocessorPlugin.class, priority = Priority.LOW_PRIORITY) 
 public class ColumnInputMappingKnimePreprocessor
 		extends AbstractPreprocessorPlugin implements KnimePreprocessor {
 
@@ -57,15 +58,13 @@ public class ColumnInputMappingKnimePreprocessor
 			inputName = i.getName();
 
 			// the input may have already been filled by a previous
-			// preprocessor.
+			// preprocessor, in that case there is nothing left to do for us.
 			if (!module.isResolved(inputName)) {
 				// get a column to input mapping
 
 				if (!m_cimService.isItemMapped(inputName)) {
-					m_log.warn(
-							"Couldn't find an active column input mapping for input \""
+					cancel("Couldn't find an active column input mapping for input \""
 									+ inputName + "\".");
-					continue;
 				}
 
 				// try to get the data cell matching the mapped column
@@ -77,9 +76,8 @@ public class ColumnInputMappingKnimePreprocessor
 				} catch (final IndexOutOfBoundsException e) {
 					// getColumnIndex() might return -1 or a index greater the
 					// column count
-					m_log.warn("Couldn't find column \"" + mappedColumn
+					cancel("Couldn't find column \"" + mappedColumn
 							+ "\" which is mapped to input " + inputName + ".");
-					continue;
 				}
 
 				// find a input adapter which can convert the cells value to the
@@ -97,10 +95,6 @@ public class ColumnInputMappingKnimePreprocessor
 				// set the input and mark resolved
 				module.setInput(inputName, ia.convert(cell, i.getType()));
 				module.setResolved(inputName, true);
-			} else {
-				// Often this is not intended, so we should inform about this
-				// problem
-				m_log.warn("Input \"" + inputName + "\" was already resolved!");
 			}
 		}
 	}
