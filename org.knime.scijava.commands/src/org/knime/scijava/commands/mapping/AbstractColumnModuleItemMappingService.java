@@ -25,6 +25,8 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 		implements ColumnModuleItemMappingService,
 		ColumnToModuleItemMappingChangeListener {
 
+	private static final String INACTIVE = "INACTIVE_MAPPING";
+
 	/** List that stores the order of the MappingIds */
 	private final List<String> m_orderedMappingIds = new ArrayList<>();
 
@@ -48,11 +50,18 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			final AbstractColumnModuleItemMappingService.ColumnToModuleItemMappingChangeEvent e) {
 
 		// free previously mapped value
-		m_mappingIdsByItemName.remove(e.getPreviousValue());
+		String prev = e.getPreviousValue();
+		if(!INACTIVE.equals(prev)){
+			m_mappingIdsByItemName.remove(e.getPreviousValue());
+		}
 
 		final ColumnModuleItemMapping sourceMapping = e.getSourceMapping();
 
 		String itemName = sourceMapping.getItemName();
+
+		if(INACTIVE.equals(itemName)){
+			return;
+		}
 
 		// check if input was mapped before
 		String otherMappingID = m_mappingIdsByItemName.get(itemName);
@@ -63,7 +72,7 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			otherMapping.setActive(false);
 			// unlink the mapping
 			m_mappingIdsByItemName.remove(itemName);
-			otherMapping.setItemName("");
+			otherMapping.setItemName(INACTIVE);
 
 			// ensure new mapping is active
 			sourceMapping.setActive(true);
