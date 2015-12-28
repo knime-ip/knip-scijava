@@ -15,11 +15,10 @@ public class SettingsModelIntegerType
 
 	@Override
 	public SettingsModelInteger create(final String name,
-			Integer defaultValue) {
+			final Integer defaultValue) {
 		if (defaultValue == null) {
-			defaultValue = new Integer(0);
+			return new SettingsModelInteger(name, 0);
 		}
-
 		return new SettingsModelInteger(name, defaultValue);
 	}
 

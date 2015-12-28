@@ -84,7 +84,9 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 		final SettingsModelType t = m_typeService
 				.getSettingsModelTypeFor(moduleItem.getType());
 		if (t == null) {
-			return null;
+			throw new IllegalArgumentException(
+					"Can't create a settingsModelType for moduleItem with the type: "
+							+ moduleItem.getType().getName());
 		}
 
 		sm = t.create(moduleItem.getName(), moduleItem.getMinimumValue());
@@ -136,7 +138,6 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 			sm.saveSettingsTo(settings);
 		}
 		return true;
-
 	}
 
 	@Override
