@@ -1,6 +1,5 @@
 package org.knime.scijava.commands.settings.types;
 
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.scijava.commands.settings.SettingsModelTypePlugin;
 import org.scijava.plugin.Plugin;

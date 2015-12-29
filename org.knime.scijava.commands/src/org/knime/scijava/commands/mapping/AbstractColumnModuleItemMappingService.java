@@ -214,7 +214,7 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			m_columnName = columnName;
 			m_itemName = itemName;
 			m_active = true;
-			m_listeners = new ArrayList<ColumnToModuleItemMappingChangeListener>();
+			m_listeners = new ArrayList<>();
 			m_uuID = UUID.randomUUID().toString();
 		}
 
@@ -223,7 +223,7 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			m_columnName = columnName;
 			m_itemName = inputName;
 			m_active = true;
-			m_listeners = new ArrayList<ColumnToModuleItemMappingChangeListener>();
+			m_listeners = new ArrayList<>();
 			m_uuID = id;
 		}
 
