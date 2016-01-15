@@ -77,13 +77,12 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 		return null;
 	}
 
-	@Override
-	public SettingsModel createSettingsModel(final ModuleItem<?> moduleItem) {
-		SettingsModel sm = getSafeSettingsModelsMap().get(moduleItem.getName());
+	private SettingsModel createSettingsModel(final ModuleItem<?> moduleItem) {
+		SettingsModel sm;
 
 		final SettingsModelType t = m_typeService
 				.getSettingsModelTypeFor(moduleItem.getType());
-		if (t == null) {
+		if (t != null) {
 			throw new IllegalArgumentException(
 					"Can't create a settingsModelType for moduleItem with the type: "
 							+ moduleItem.getType().getName());
@@ -95,14 +94,12 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	}
 
 	@Override
-	public Collection<SettingsModel> createSettingsModels(
+	public Collection<SettingsModel> createAndAddSettingsModels(
 			final Iterable<ModuleItem<?>> moduleItems) {
 		final ArrayList<SettingsModel> settingsModels = new ArrayList<>();
-
-		for (final ModuleItem i : moduleItems) {
-			final SettingsModel sm = createSettingsModel(i);
-			settingsModels.add(sm);
-		}
+		moduleItems.forEach(item -> {
+			settingsModels.add(createAndAddSettingsModel(item));
+		});
 		return settingsModels;
 	}
 
@@ -145,41 +142,10 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 		return m_settingsModels.get();
 	}
 
-	@Override
-	public SettingsModel createAndAddSettingsModel(
-			final ModuleItem<?> moduleItem) {
-		SettingsModel sm = getSafeSettingsModelsMap().get(moduleItem.getName());
-		if (sm != null) {
-			// already exists, do not overwrite.
-			return sm;
-		}
-
-		sm = createSettingsModel(moduleItem);
-		addSettingsModel(moduleItem.getName(), sm);
-		return sm;
-	}
-
 	private void addSettingsModel(final String name, final SettingsModel sm) {
 		if (m_settingsModels.get() != null) {
 			m_settingsModels.get().put(name, sm);
 		}
-	}
-
-	@Override
-	public Collection<SettingsModel> createAndAddSettingsModels(
-			final Iterable<ModuleItem<?>> moduleItems) {
-		if (m_settingsModels.get() == null) {
-			return createSettingsModels(moduleItems);
-		}
-
-		final ArrayList<SettingsModel> settingsModels = new ArrayList<>();
-
-		for (final ModuleItem i : moduleItems) {
-			final SettingsModel sm = createAndAddSettingsModel(i);
-			m_settingsModels.get().put(i.getName(), sm);
-		}
-
-		return settingsModels;
 	}
 
 	@Override

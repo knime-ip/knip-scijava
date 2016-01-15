@@ -72,19 +72,6 @@ public interface NodeSettingsService extends Service {
 	Object getValue(ModuleItem<?> moduleItem);
 
 	/**
-	 * Create a new {@link SettingsModel} for a {@link ModuleItem}. This does
-	 * not add the created {@link SettingsModel} to the Map.
-	 *
-	 * @param moduleItem
-	 *            ModuleItem to create a SettingsModel for.
-	 * @return the created SettignsModel or null if no SettingsModel could be
-	 *         created for moduleItem.
-	 * @see #createAndAddSettingsModel(ModuleItem)
-	 * @see #createSettingsModels(Iterable)
-	 */
-	SettingsModel createSettingsModel(ModuleItem<?> moduleItem);
-
-	/**
 	 * Create a new {@link SettingsModel} for a {@link ModuleItem} and add it to
 	 * the {@link Map} of {@link SettingsModel}s set via
 	 * {@link #setSettingsModels(Map)}.
@@ -97,15 +84,6 @@ public interface NodeSettingsService extends Service {
 	 * @see #createSettingsModels(Iterable)
 	 */
 	SettingsModel createAndAddSettingsModel(ModuleItem<?> moduleItem);
-
-	/**
-	 * Create new {@link SettingsModel} for {@link ModuleItem}s.
-	 *
-	 * @param moduleItems
-	 * @return the created SettingsModels
-	 */
-	Collection<SettingsModel> createSettingsModels(
-			Iterable<ModuleItem<?>> moduleItems);
 
 	/**
 	 * Create new {@link SettingsModel}s for ModuleItems and add them to the
