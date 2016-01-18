@@ -30,9 +30,9 @@ import org.knime.scijava.commands.io.DefaultInputDataRowService;
 import org.knime.scijava.commands.io.DefaultOutputDataRowService;
 import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.io.OutputDataRowService;
+import org.knime.scijava.commands.mapping.ColumnInputMappingKnimePreprocessor;
 import org.knime.scijava.commands.mapping.ColumnModuleItemMappingService;
-import org.knime.scijava.commands.mapping.process.ColumnInputMappingKnimePreprocessor;
-import org.knime.scijava.commands.mapping.process.DefaultKnimePostprocessor;
+import org.knime.scijava.commands.process.DefaultKnimePostprocessor;
 import org.knime.scijava.core.ResourceAwareClassLoader;
 import org.scijava.Context;
 import org.scijava.ItemIO;
@@ -48,7 +48,7 @@ import org.scijava.service.Service;
 /**
  * Test for {@link ColumnInputMappingKnimePreprocessor} and
  * {@link DefaultKnimePostprocessor}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 public class KnimeProcessorTest {
@@ -140,7 +140,7 @@ public class KnimeProcessorTest {
 	 * Test command which verifies that inputs have been filled by the
 	 * preprocessor and feeds them directly back in the outputs which can then
 	 * be collected into a data row.
-	 * 
+	 *
 	 * @author Jonathan Hale
 	 */
 	public static class MyCommand implements Command {

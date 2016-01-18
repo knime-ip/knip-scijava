@@ -1,4 +1,4 @@
-package org.knime.scijava.commands.mapping.process;
+package org.knime.scijava.commands.process;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.knime.scijava.commands.adapter.OutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
 import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.io.OutputDataRowService;
+import org.knime.scijava.commands.process.KnimePostprocessor;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;

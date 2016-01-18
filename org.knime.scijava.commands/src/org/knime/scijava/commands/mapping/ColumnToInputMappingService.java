@@ -1,6 +1,5 @@
 package org.knime.scijava.commands.mapping;
 
-import org.knime.scijava.commands.mapping.process.ColumnInputMappingKnimePreprocessor;
 import org.scijava.module.Module;
 
 /**

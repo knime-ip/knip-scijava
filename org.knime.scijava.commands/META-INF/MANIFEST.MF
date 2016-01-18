@@ -27,6 +27,7 @@ Export-Package: org.knime.scijava.commands,
  org.knime.scijava.commands.io,
  org.knime.scijava.commands.mapping,
  org.knime.scijava.commands.mapping.process,
+ org.knime.scijava.commands.process,
  org.knime.scijava.commands.settings,
  org.knime.scijava.commands.settings.types,
  org.knime.scijava.commands.widget

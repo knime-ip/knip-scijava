@@ -10,6 +10,7 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
+import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Parameter;
 import org.scijava.service.AbstractService;
@@ -83,13 +84,22 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 		final SettingsModelType t = m_typeService
 				.getSettingsModelTypeFor(moduleItem.getType());
 		if (t != null) {
-			throw new IllegalArgumentException(
-					"Can't create a settingsModelType for moduleItem with the type: "
-							+ moduleItem.getType().getName());
+			sm = t.create(moduleItem.getName(), moduleItem.getMinimumValue());
+		} else {
+			sm = new SettingsModelColumnName(moduleItem.getName(), "");
 		}
+		return sm;
+	}
 
-		sm = t.create(moduleItem.getName(), moduleItem.getMinimumValue());
-
+	@Override
+	public SettingsModel createAndAddSettingsModel(
+			final ModuleItem<?> moduleItem) {
+		SettingsModel sm = getSafeSettingsModelsMap().get(moduleItem.getName());
+		if (sm != null) {
+			return sm; // already exists, do not overwrite.
+		}
+		sm = createSettingsModel(moduleItem);
+		addSettingsModel(moduleItem.getName(), sm);
 		return sm;
 	}
 
@@ -97,9 +107,8 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	public Collection<SettingsModel> createAndAddSettingsModels(
 			final Iterable<ModuleItem<?>> moduleItems) {
 		final ArrayList<SettingsModel> settingsModels = new ArrayList<>();
-		moduleItems.forEach(item -> {
-			settingsModels.add(createAndAddSettingsModel(item));
-		});
+		moduleItems.forEach(
+				item -> settingsModels.add(createAndAddSettingsModel(item)));
 		return settingsModels;
 	}
 

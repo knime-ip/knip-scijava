@@ -1,4 +1,4 @@
-package org.knime.scijava.commands.mapping.process;
+package org.knime.scijava.commands.mapping;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataRow;
@@ -7,7 +7,7 @@ import org.knime.core.data.DataTableSpec;
 import org.knime.scijava.commands.adapter.InputAdapter;
 import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.knime.scijava.commands.io.InputDataRowService;
-import org.knime.scijava.commands.mapping.ColumnToInputMappingService;
+import org.knime.scijava.commands.process.KnimePreprocessor;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
