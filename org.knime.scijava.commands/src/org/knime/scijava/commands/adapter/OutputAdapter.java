@@ -1,6 +1,7 @@
 package org.knime.scijava.commands.adapter;
 
 import org.knime.core.data.DataCell;
+import org.knime.core.data.DataValue;
 import org.scijava.convert.Converter;
 import org.scijava.plugin.SingletonPlugin;
 
@@ -16,7 +17,7 @@ import org.scijava.plugin.SingletonPlugin;
  * @author Christian Dietz, University of Konstanz
  *
  */
-public interface OutputAdapter<T, C extends DataCell>
+public interface OutputAdapter<T, C extends DataValue>
 		extends SingletonPlugin, Converter<T, C> {
 	// Marker interface
 }

@@ -1,6 +1,7 @@
 package org.knime.scijava.commands.adapter;
 
 import org.knime.core.data.DataCell;
+import org.knime.core.data.DataValue;
 import org.scijava.convert.AbstractConverter;
 
 /**
@@ -12,7 +13,7 @@ import org.scijava.convert.AbstractConverter;
  * @param <I>
  * @param <D>
  */
-public abstract class AbstractOutputAdapter<I, D extends DataCell>
+public abstract class AbstractOutputAdapter<I, D extends DataValue>
 		extends AbstractConverter<I, D> implements OutputAdapter<I, D> {
 
 	@SuppressWarnings("unchecked")
@@ -42,4 +43,5 @@ public abstract class AbstractOutputAdapter<I, D extends DataCell>
 	 * @return DataCell wrapping the incoming obj of type I
 	 */
 	protected abstract D createCell(final I obj);
+
 }

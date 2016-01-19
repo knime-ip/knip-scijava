@@ -1,5 +1,6 @@
 package org.knime.scijava.commands.adapter.basic;
 
+import org.knime.core.data.BooleanValue;
 import org.knime.core.data.def.BooleanCell;
 import org.knime.scijava.commands.adapter.AbstractOutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapter;
@@ -13,7 +14,7 @@ import org.scijava.plugin.Plugin;
  */
 @Plugin(type = OutputAdapter.class)
 public class BooleanOutputAdapter
-		extends AbstractOutputAdapter<Boolean, BooleanCell> {
+		extends AbstractOutputAdapter<Boolean, BooleanValue> {
 
 	@Override
 	public BooleanCell createCell(final Boolean o) {
@@ -21,8 +22,8 @@ public class BooleanOutputAdapter
 	}
 
 	@Override
-	public Class<BooleanCell> getOutputType() {
-		return BooleanCell.class;
+	public Class<BooleanValue> getOutputType() {
+		return BooleanValue.class;
 	}
 
 	@Override
