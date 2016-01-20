@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.knime.core.node.defaultnodesettings.SettingsModel;
+import org.knime.scijava.commands.settings.types.SettingsModelDoubleType;
 import org.scijava.plugin.AbstractSingletonService;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.plugin.PluginService;
 
 /**
  * Straight forward, rather ineffective default implementation of
@@ -22,8 +25,15 @@ public class DefaultSettingsModelTypeService
 		extends AbstractSingletonService<SettingsModelTypePlugin>
 		implements SettingsModelTypeService {
 
-	Map<Class<? extends SettingsModel>, SettingsModelTypePlugin> m_pluginsByModel = new HashMap<>();
-	Map<Class<?>, SettingsModelTypePlugin> m_pluginsByValue = new HashMap<>();
+	private final Map<Class<? extends SettingsModel>, SettingsModelTypePlugin> m_pluginsByModel = new HashMap<>();
+	private final Map<Class<?>, SettingsModelTypePlugin> m_pluginsByValue = new HashMap<>();
+	private static final Map<Class<?>, Class<?>> m_primitvePluginTypes = new HashMap<>();
+
+	static {
+		m_primitvePluginTypes.put(double.class, Double.class);
+		m_primitvePluginTypes.put(int.class, Integer.class);
+		m_primitvePluginTypes.put(long.class, Long.class);
+	}
 
 	@Override
 	public Class<SettingsModelTypePlugin> getPluginType() {
@@ -58,9 +68,17 @@ public class DefaultSettingsModelTypeService
 		if (plugin != null) {
 			return plugin;
 		}
+
+		// check primitive conversion cache
+		Class<?> checkValue = value;
+		Class<?> pluginType = m_primitvePluginTypes.get(value);
+		if (pluginType != null) {
+			checkValue = pluginType;
+		}
+
 		// search
 		for (final SettingsModelTypePlugin<?, ?> p : getInstances()) {
-			if (p.getValueClass().isAssignableFrom(value)) {
+			if (p.getValueClass().isAssignableFrom(checkValue)) {
 				m_pluginsByValue.put(value, p);
 				return p;
 			}
