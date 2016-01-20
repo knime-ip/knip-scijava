@@ -30,5 +30,6 @@ Export-Package: org.knime.scijava.commands,
  org.knime.scijava.commands.process,
  org.knime.scijava.commands.settings,
  org.knime.scijava.commands.settings.types,
+ org.knime.scijava.commands.simplemapping,
  org.knime.scijava.commands.widget
 Import-Package: org.slf4j
