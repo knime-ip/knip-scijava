@@ -386,7 +386,7 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			 * format is [0] column name [1] module input name [2] id of the
 			 * mapping [3] active, either "true" or "false"
 			 */
-			boolean active = names[3].equals("true");
+			boolean active = "true".equals(names[3]);
 
 			// recreate mapping with the deserialization constructor
 			final ColumnModuleItemMapping mapping = new DefaultColumnToModuleItemMapping(

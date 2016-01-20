@@ -20,12 +20,12 @@ import org.scijava.plugin.Plugin;
 /**
  * Preprocessor which fills unresolved {@link Module} inputs from KNIME
  * {@link DataTable}s using a {@link ColumnToInputMappingService}.
- * 
+ *
  *
  * @author Jonathan Hale (University of Konstanz)
  */
 // Low Priority ensures that this is run after the other preprocessors
-@Plugin(type = PreprocessorPlugin.class, priority = Priority.LOW_PRIORITY) 
+@Plugin(type = PreprocessorPlugin.class, priority = Priority.LOW_PRIORITY)
 public class ColumnInputMappingKnimePreprocessor
 		extends AbstractPreprocessorPlugin implements KnimePreprocessor {
 
@@ -47,7 +47,7 @@ public class ColumnInputMappingKnimePreprocessor
 		final DataTableSpec spec = m_inputTable.getInputDataTableSpec();
 
 		// some local variables set and used in the following loop
-		String inputName = "";
+		String inputName; 
 
 		// DataRow will remain the same while processing, this is a shortcut to
 		// it.

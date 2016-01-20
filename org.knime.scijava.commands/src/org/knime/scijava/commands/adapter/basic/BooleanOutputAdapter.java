@@ -18,7 +18,7 @@ public class BooleanOutputAdapter
 
 	@Override
 	public BooleanCell createCell(final Boolean o) {
-		return (o) ? BooleanCell.TRUE : BooleanCell.FALSE;
+		return o ? BooleanCell.TRUE : BooleanCell.FALSE;
 	}
 
 	@Override
