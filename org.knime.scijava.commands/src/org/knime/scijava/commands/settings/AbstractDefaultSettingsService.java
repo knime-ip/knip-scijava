@@ -161,4 +161,9 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	public void clear() {
 		getSafeSettingsModelsMap().clear();
 	}
+	
+	@Override
+	public void removeSettingsModel(ModuleItem<?> moduleItem) {
+		getSafeSettingsModelsMap().remove(moduleItem.getName());
+	}
 }

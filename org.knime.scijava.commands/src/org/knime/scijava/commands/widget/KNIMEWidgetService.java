@@ -33,6 +33,9 @@ package org.knime.scijava.commands.widget;
 
 import java.util.List;
 
+import org.knime.scijava.commands.KNIMESciJavaConstants;
+import org.knime.scijava.commands.settings.NodeSettingsService;
+import org.knime.scijava.commands.simplemapping.SimpleColumnMappingService;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
@@ -47,9 +50,10 @@ import org.scijava.widget.WidgetModel;
 import org.scijava.widget.WidgetService;
 
 /**
- * Default service for managing available {@link InputWidget}s.
+ * KNIME service for managing available {@link InputWidget}s.
  *
- * @author Curtis Rueden
+ * @author Gabriel Einsdorf
+ * @author Jonathan Hale
  */
 @Plugin(type = WidgetService.class, priority = Priority.HIGH_PRIORITY)
 public class KNIMEWidgetService
@@ -58,6 +62,11 @@ public class KNIMEWidgetService
 
 	@Parameter
 	private LogService log;
+
+	@Parameter
+	private SimpleColumnMappingService columnMapping;
+	@Parameter
+	private NodeSettingsService settings;
 
 	@Parameter
 	private DefaultWidgetService widgetService;
@@ -76,7 +85,30 @@ public class KNIMEWidgetService
 
 	@Override
 	public InputWidget<?, ?> create(final WidgetModel model) {
-		return widgetService.create(model);
+
+		// check if the creation of the column selection widget is forced.
+		boolean createColSelect = "true".equals(model.getItem().getInfo()
+				.get(KNIMESciJavaConstants.FORCE_COLUMN_SELECT));
+
+		if (!createColSelect) {
+			InputWidget<?, ?> widget = widgetService.create(model);
+			if (widget != null) { // widget creation successful
+				return widget;
+			}
+		}
+		// create column selection
+		return createColumnSelectionWidget(model);
+	}
+
+	private InputWidget<?, ?> createColumnSelectionWidget(WidgetModel model) {
+		InputWidget<?, ?> widget = new KNIMEColumSelectionWidget(model,
+				context());
+
+		// remove settingsmodel which might have been created for this input.
+		settings.removeSettingsModel(model.getItem());
+		// add to mapping service
+		columnMapping.setMappedColumn(model.getItem().getName(), "");
+		return widget;
 	}
 
 	// -- PTService methods --

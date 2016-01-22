@@ -130,4 +130,13 @@ public interface NodeSettingsService extends Service {
 	 * Removes all settings from the Service.
 	 */
 	void clear();
+
+	/**
+	 * Removes the settingsModel associated with the given module item (input).
+	 * 
+	 * @param item
+	 *            the item which settings model will be removed.
+	 */
+	void removeSettingsModel(ModuleItem<?> item);
+
 }
