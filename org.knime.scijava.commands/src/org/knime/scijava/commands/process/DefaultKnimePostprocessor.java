@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.knime.core.data.DataCell;
+import org.knime.core.data.DataValue;
 import org.knime.scijava.commands.adapter.OutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
 import org.knime.scijava.commands.io.InputDataRowService;
@@ -58,14 +59,13 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 					.getMatchingOutputAdapter(i.getType());
 
 			if (outputAdapter != null) {
-				cells.add(outputAdapter.convert(module.getOutput(i.getName()),
-						DataCell.class));
+				cells.add((DataCell)outputAdapter.convert(module.getOutput(i.getName()),
+						DataValue.class));
 			} else {
 				log.warn("Could not find a OutputAdapter for \"" + i.getName()
 						+ "\".");
 			}
 		}
-
 		dataRowOut.setOutputCells(cells);
 	}
 }
