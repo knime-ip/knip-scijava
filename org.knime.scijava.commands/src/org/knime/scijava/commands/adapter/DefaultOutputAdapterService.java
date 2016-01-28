@@ -1,5 +1,8 @@
 package org.knime.scijava.commands.adapter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.scijava.convert.ConvertService;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Parameter;
@@ -8,17 +11,23 @@ import org.scijava.plugin.Plugin;
 /**
  * Default implementation of OutputAdapterService.
  *
- * Rather inefficient since {@link #getMatchingOutputAdapter(Class)} searches
- * linearly through all existing implementations of OutputAdapterPlugin.
- *
  * @author Jonathan Hale (University of Konstanz)
- *
+ * @author Gabriel Einsdorf (University of Konstanz)
+ * 
  */
 @SuppressWarnings("rawtypes")
 @Plugin(type = OutputAdapterService.class)
-public class DefaultOutputAdapterService
-		extends AbstractSingletonService<OutputAdapter>
-		implements OutputAdapterService {
+public class DefaultOutputAdapterService extends
+		AbstractSingletonService<OutputAdapter>implements OutputAdapterService {
+
+	private final Map<Class<?>, OutputAdapter> m_adapterByValueClass = new HashMap<>();
+	private static final Map<Class<?>, Class<?>> m_primitvePluginTypes = new HashMap<>();
+
+	static {
+		m_primitvePluginTypes.put(double.class, Double.class);
+		m_primitvePluginTypes.put(int.class, Integer.class);
+		m_primitvePluginTypes.put(long.class, Long.class);
+	}
 
 	@Parameter
 	private ConvertService cs;
@@ -38,10 +47,23 @@ public class DefaultOutputAdapterService
 	@Override
 	public OutputAdapter getMatchingOutputAdapter(final Class<?> valueClass) {
 
-		// TODO we can potentially cache the detected converters in a HashMap
-		// here here...
+		// check adapter cache
+		OutputAdapter adapter = m_adapterByValueClass.get(valueClass);
+		if (adapter != null) {
+			return adapter;
+		}
+
+		// check primitive conversion cache
+		Class<?> checkValue = valueClass;
+		Class<?> pluginType = m_primitvePluginTypes.get(valueClass);
+		if (pluginType != null) {
+			checkValue = pluginType;
+		}
+
+		// search for output adapter
 		for (final OutputAdapter outputAdapter : this.getInstances()) {
-			if (outputAdapter.getInputType().isAssignableFrom(valueClass)) {
+			if (outputAdapter.getInputType().isAssignableFrom(checkValue)) {
+				m_adapterByValueClass.put(valueClass, outputAdapter);
 				return outputAdapter;
 			}
 		}
