@@ -87,8 +87,8 @@ public class KNIMEWidgetService
 	public InputWidget<?, ?> create(final WidgetModel model) {
 
 		// check if the creation of the column selection widget is forced.
-		boolean createColSelect = "true".equals(model.getItem().getInfo()
-				.get(KNIMESciJavaConstants.FORCE_COLUMN_SELECT));
+		boolean createColSelect = "true".equals(
+				model.getItem().get(KNIMESciJavaConstants.FORCE_COLUMN_SELECT));
 
 		if (!createColSelect) {
 			InputWidget<?, ?> widget = widgetService.create(model);
