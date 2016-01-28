@@ -12,7 +12,7 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  *
  */
-@Plugin(type = InputAdapter.class, priority=Priority.HIGH_PRIORITY)
+@Plugin(type = InputAdapter.class, priority = Priority.HIGH_PRIORITY)
 public class DoubleInputAdapter
 		extends AbstractInputAdapter<DoubleValue, Double> {
 

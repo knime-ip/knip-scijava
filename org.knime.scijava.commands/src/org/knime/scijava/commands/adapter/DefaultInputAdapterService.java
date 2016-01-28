@@ -26,7 +26,7 @@ import org.scijava.plugin.Plugin;
 @SuppressWarnings("rawtypes")
 @Plugin(type = InputAdapterService.class)
 public class DefaultInputAdapterService extends
-		AbstractSingletonService<InputAdapter> implements InputAdapterService {
+		AbstractSingletonService<InputAdapter>implements InputAdapterService {
 
 	private WeakHashMap<Class<? extends DataValue>, Set<InputAdapter>> m_pluginsByDataValue = null;
 
@@ -144,10 +144,8 @@ public class DefaultInputAdapterService extends
 			Set<InputAdapter> set = m_pluginsByDataValue.get(type);
 
 			if (set == null) {
-				set = new TreeSet<>(Comparator.naturalOrder()); // automatically
-																			// sorts
-																			// by
-																			// priority
+				// automatically sorts by priority
+				set = new TreeSet<>(Comparator.naturalOrder());
 				m_pluginsByDataValue.put(type, set);
 			}
 			set.add(p);

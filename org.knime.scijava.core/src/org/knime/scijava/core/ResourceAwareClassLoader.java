@@ -54,6 +54,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	 * @deprecated use {@link #ResourceAwareClassLoader(ClassLoader, Class)}
 	 *             instead.
 	 */
+	@Deprecated
 	public ResourceAwareClassLoader(final ClassLoader parent) {
 		this(parent, null);
 	}
@@ -97,7 +98,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 					final Bundle parent = FrameworkUtil.getBundle(clazz);
 					try {
 						final ManifestElement[] elements = ManifestElement.parseHeader("Eclipse-RegisterBuddy",
-								(String) child.getHeaders().get("Eclipse-RegisterBuddy"));
+								child.getHeaders().get("Eclipse-RegisterBuddy"));
 
 						if (elements != null) {
 							for (ManifestElement element : elements) {
@@ -116,7 +117,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	}
 
 	private void processBundle(final Bundle b, final boolean addRessources) {
-		final String requireBundle = (String) b.getHeaders().get(Constants.REQUIRE_BUNDLE);
+		final String requireBundle = b.getHeaders().get(Constants.REQUIRE_BUNDLE);
 		try {
 			final ManifestElement[] elements = ManifestElement.parseHeader(Constants.BUNDLE_CLASSPATH, requireBundle);
 			for (final ManifestElement manifestElement : elements) {

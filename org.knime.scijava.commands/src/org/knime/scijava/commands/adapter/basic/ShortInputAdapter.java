@@ -13,7 +13,7 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz, University of Konstanz
  *
  */
-@Plugin(type = InputAdapter.class, priority=Priority.LOW_PRIORITY)
+@Plugin(type = InputAdapter.class, priority = Priority.LOW_PRIORITY)
 public class ShortInputAdapter extends AbstractInputAdapter<IntValue, Short> {
 
 	@Override

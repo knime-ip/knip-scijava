@@ -4,11 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.knime.core.node.defaultnodesettings.SettingsModel;
-import org.knime.scijava.commands.settings.types.SettingsModelDoubleType;
 import org.scijava.plugin.AbstractSingletonService;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugin.PluginService;
 
 /**
  * Straight forward, rather ineffective default implementation of
@@ -64,14 +61,14 @@ public class DefaultSettingsModelTypeService
 	public SettingsModelType getSettingsModelTypeFor(final Class<?> value) {
 
 		// check cache
-		SettingsModelTypePlugin plugin = m_pluginsByValue.get(value);
+		final SettingsModelTypePlugin plugin = m_pluginsByValue.get(value);
 		if (plugin != null) {
 			return plugin;
 		}
 
 		// check primitive conversion cache
 		Class<?> checkValue = value;
-		Class<?> pluginType = m_primitvePluginTypes.get(value);
+		final Class<?> pluginType = m_primitvePluginTypes.get(value);
 		if (pluginType != null) {
 			checkValue = pluginType;
 		}

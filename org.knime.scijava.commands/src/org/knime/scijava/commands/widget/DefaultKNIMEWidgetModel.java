@@ -26,7 +26,7 @@ public class DefaultKNIMEWidgetModel extends DefaultWidgetModel
 	/**
 	 * Constructor for generic input items. The used SettingsModel will be
 	 * created by a {@link NodeSettingsService}.
-	 * 
+	 *
 	 * @see DialogInputWidgetModel
 	 * @param context
 	 *            Context for the model
@@ -52,7 +52,7 @@ public class DefaultKNIMEWidgetModel extends DefaultWidgetModel
 	 * Constructor for predefined SettingsModels, use when the SettingsModel is
 	 * known or not directly related to the type of the ModuleItem. (e.g.)
 	 * Column Selection Widget.
-	 * 
+	 *
 	 * @param context
 	 *            Context for the model
 	 * @param inputPanel
@@ -70,7 +70,7 @@ public class DefaultKNIMEWidgetModel extends DefaultWidgetModel
 	public DefaultKNIMEWidgetModel(final Context context,
 			final InputPanel<?, ?> inputPanel, final Module module,
 			final ModuleItem<?> item, final List<?> objectPool,
-			SettingsModel model) {
+			final SettingsModel model) {
 		super(context, inputPanel, module, item, objectPool);
 		m_model = model;
 		updateFromSettingsModel();

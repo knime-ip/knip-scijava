@@ -47,7 +47,7 @@ public class ColumnInputMappingKnimePreprocessor
 		final DataTableSpec spec = m_inputTable.getInputDataTableSpec();
 
 		// some local variables set and used in the following loop
-		String inputName; 
+		String inputName;
 
 		// DataRow will remain the same while processing, this is a shortcut to
 		// it.
@@ -64,13 +64,16 @@ public class ColumnInputMappingKnimePreprocessor
 
 				if (!m_cimService.isItemMapped(inputName)) {
 					cancel("Couldn't find an active column input mapping for input \""
-									+ inputName + "\".");
+							+ inputName + "\".");
 				}
 
 				// try to get the data cell matching the mapped column
 				DataCell cell = null;
-				String mappedColumn = m_cimService
+				final String mappedColumn = m_cimService
 						.getColumnNameForInput(inputName);
+				if (mappedColumn == null) {
+					return; // there is no mapping for this column
+				}
 				try {
 					cell = row.getCell(spec.findColumnIndex(mappedColumn));
 				} catch (final IndexOutOfBoundsException e) {

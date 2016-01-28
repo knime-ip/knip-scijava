@@ -68,8 +68,7 @@ public class OutputAdapterConverterTest {
 
 	public <T> void testOutputAdapterConversion(T o, Class<? extends OutputAdapter<?, ?>> oa,
 			Class<? extends DataCell> cellClass) {
-		assertNotNull("Plugin " + oa.getClass().getName() + " could not be found",
-				convertService.getInstance(oa));
+		assertNotNull("Plugin " + oa.getClass().getName() + " could not be found", convertService.getInstance(oa));
 
 		DataCell c = convertService.convert(o, cellClass);
 

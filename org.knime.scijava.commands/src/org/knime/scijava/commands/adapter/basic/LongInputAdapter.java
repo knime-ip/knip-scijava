@@ -12,7 +12,7 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  *
  */
-@Plugin(type = InputAdapter.class, priority=Priority.LOW_PRIORITY)
+@Plugin(type = InputAdapter.class, priority = Priority.LOW_PRIORITY)
 public class LongInputAdapter extends AbstractInputAdapter<LongValue, Long> {
 
 	@Override

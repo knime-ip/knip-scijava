@@ -51,8 +51,9 @@ public class DefaultKNIMEScijavaContext implements KNIMEScijavaContext {
 
 	@Override
 	public Context context() {
-		if (m_context == null)
+		if (m_context == null) {
 			throw new NullContextException();
+		}
 		return m_context;
 	}
 

@@ -13,7 +13,7 @@ import org.scijava.plugin.Plugin;
  *
  * @author Jonathan Hale (University of Konstanz)
  * @author Gabriel Einsdorf (University of Konstanz)
- * 
+ *
  */
 @SuppressWarnings("rawtypes")
 @Plugin(type = OutputAdapterService.class)
@@ -48,14 +48,14 @@ public class DefaultOutputAdapterService extends
 	public OutputAdapter getMatchingOutputAdapter(final Class<?> valueClass) {
 
 		// check adapter cache
-		OutputAdapter adapter = m_adapterByValueClass.get(valueClass);
+		final OutputAdapter adapter = m_adapterByValueClass.get(valueClass);
 		if (adapter != null) {
 			return adapter;
 		}
 
 		// check primitive conversion cache
 		Class<?> checkValue = valueClass;
-		Class<?> pluginType = m_primitvePluginTypes.get(valueClass);
+		final Class<?> pluginType = m_primitvePluginTypes.get(valueClass);
 		if (pluginType != null) {
 			checkValue = pluginType;
 		}

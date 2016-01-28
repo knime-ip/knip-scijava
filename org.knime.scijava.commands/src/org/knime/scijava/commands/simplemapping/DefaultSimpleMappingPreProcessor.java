@@ -27,17 +27,17 @@ public class DefaultSimpleMappingPreProcessor extends AbstractPreprocessorPlugin
 	InputAdapterService ias;
 
 	@Override
-	public void process(Module module) {
-		DataTableSpec spec = inrow.getInputDataTableSpec();
-		DataRow row = inrow.getInputDataRow();
+	public void process(final Module module) {
+		final DataTableSpec spec = inrow.getInputDataTableSpec();
+		final DataRow row = inrow.getInputDataRow();
 
-		for (String inputName : colMap.getMappedInputs()) {
-			if (module.isResolved(inputName)) {
-				return; // don't touch resolved inputs
-			}
+		for (final String inputName : colMap.getMappedInputs()) {
+			// if (module.isResolved(inputName)) {
+			// return; // don't touch resolved inputs
+			// }
 
-			String mappedColumn = colMap.getMappedColumn(inputName);
-			ModuleItem<?> input = module.getInfo().getInput(inputName);
+			final String mappedColumn = colMap.getMappedColumn(inputName);
+			final ModuleItem<?> input = module.getInfo().getInput(inputName);
 
 			DataCell cell = null;
 

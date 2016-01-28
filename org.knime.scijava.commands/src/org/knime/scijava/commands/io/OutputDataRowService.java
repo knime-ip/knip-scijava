@@ -34,7 +34,7 @@ public interface OutputDataRowService extends Service {
 
 	/**
 	 * Returns a reference to the contained list of DataCells.
-	 * 
+	 *
 	 * @return the output {@link DataCell}s or an empty array if no cells were
 	 *         set.
 	 */

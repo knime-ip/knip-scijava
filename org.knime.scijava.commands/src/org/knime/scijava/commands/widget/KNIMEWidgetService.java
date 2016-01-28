@@ -34,7 +34,6 @@ package org.knime.scijava.commands.widget;
 import java.util.List;
 
 import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.scijava.commands.KNIMESciJavaConstants;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.knime.scijava.commands.simplemapping.SimpleColumnMappingService;
@@ -95,11 +94,11 @@ public class KNIMEWidgetService
 	public InputWidget<?, ?> create(final WidgetModel model) {
 
 		// check if the creation of the column selection widget is forced.
-		boolean createColSelect = "true"
+		final boolean createColSelect = "true"
 				.equals(model.getItem().get(COLSELECT_KEY));
 
 		if (!createColSelect) {
-			InputWidget<?, ?> widget = widgetService.create(model);
+			final InputWidget<?, ?> widget = widgetService.create(model);
 			if (widget != null) { // widget creation successful
 				return widget;
 			}
@@ -108,8 +107,9 @@ public class KNIMEWidgetService
 		return createColumnSelectionWidget(model);
 	}
 
-	private InputWidget<?, ?> createColumnSelectionWidget(WidgetModel model) {
-		InputWidget<?, ?> widget = new KNIMEColumSelectionWidget(model,
+	private InputWidget<?, ?> createColumnSelectionWidget(
+			final WidgetModel model) {
+		final InputWidget<?, ?> widget = new KNIMEColumSelectionWidget(model,
 				context());
 
 		// remove settingsmodel which might have been created for this input.

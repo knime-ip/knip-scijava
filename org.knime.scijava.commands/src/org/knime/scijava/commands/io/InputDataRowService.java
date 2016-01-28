@@ -36,7 +36,7 @@ public interface InputDataRowService extends Service {
 
 	/**
 	 * Set the input table spec
-	 * 
+	 *
 	 * @param spec
 	 */
 	void setDataTableSpec(DataTableSpec spec);

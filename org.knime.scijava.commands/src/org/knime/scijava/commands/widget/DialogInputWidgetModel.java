@@ -16,7 +16,7 @@ public interface DialogInputWidgetModel extends WidgetModel {
 
 	/**
 	 * Get the underlying SettingsModel
-	 * 
+	 *
 	 * @return
 	 */
 	public SettingsModel getSettingsModel();

@@ -3,8 +3,7 @@ package org.knime.scijava.commands.mapping;
 import org.knime.scijava.commands.mapping.ColumnModuleItemMappingService.ColumnToModuleItemMappingChangeListener;
 
 /**
- * Interface for classes which fire ColumnToModuleItemMappingChangeEvent
- * events.
+ * Interface for classes which fire ColumnToModuleItemMappingChangeEvent events.
  *
  * @author Jonathan Hale (University of Konstanz)
  *
@@ -31,7 +30,7 @@ public interface ColumnModuleItemMappingChangeEventDispatcher {
 
 	/**
 	 * Notify all listener that the column mapping has changed.
-	 * 
+	 *
 	 * @param oldValue
 	 *            value which has been overwritten
 	 */

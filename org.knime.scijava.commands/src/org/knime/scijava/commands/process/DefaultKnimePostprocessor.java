@@ -9,7 +9,6 @@ import org.knime.scijava.commands.adapter.OutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
 import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.io.OutputDataRowService;
-import org.knime.scijava.commands.process.KnimePostprocessor;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
@@ -59,8 +58,8 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 					.getMatchingOutputAdapter(i.getType());
 
 			if (outputAdapter != null) {
-				cells.add((DataCell)outputAdapter.convert(module.getOutput(i.getName()),
-						DataValue.class));
+				cells.add((DataCell) outputAdapter.convert(
+						module.getOutput(i.getName()), DataValue.class));
 			} else {
 				log.warn("Could not find a OutputAdapter for \"" + i.getName()
 						+ "\".");

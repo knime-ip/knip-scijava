@@ -1,6 +1,5 @@
 package org.knime.scijava.commands.adapter;
 
-import org.knime.core.data.DataCell;
 import org.knime.core.data.DataValue;
 import org.scijava.convert.AbstractConverter;
 
@@ -14,7 +13,7 @@ import org.scijava.convert.AbstractConverter;
  * @param <D>
  */
 public abstract class AbstractOutputAdapter<I, D extends DataValue>
-		extends AbstractConverter<I, D> implements OutputAdapter<I, D> {
+		extends AbstractConverter<I, D>implements OutputAdapter<I, D> {
 
 	@SuppressWarnings("unchecked")
 	@Override

@@ -14,7 +14,7 @@ import org.scijava.convert.AbstractConverter;
  *            Output type
  */
 public abstract class AbstractInputAdapter<I extends DataValue, O>
-		extends AbstractConverter<I, O> implements InputAdapter<I, O> {
+		extends AbstractConverter<I, O>implements InputAdapter<I, O> {
 
 	@Override
 	public <T> T convert(final Object arg0, final Class<T> arg1) {

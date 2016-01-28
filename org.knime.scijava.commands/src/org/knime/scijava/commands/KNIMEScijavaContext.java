@@ -63,6 +63,7 @@ public interface KNIMEScijavaContext extends Contextual {
 	 * @return the {@link NodeModelSettingsService} in this {@link Context}
 	 */
 	public NodeModelSettingsService nodeModelSettings();
+
 	/**
 	 * @return the {@link KNIMEExecutionService} in this {@link Context}
 	 */

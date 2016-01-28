@@ -1,6 +1,5 @@
 package org.knime.scijava.commands.adapter;
 
-import org.knime.core.data.DataCell;
 import org.knime.core.data.DataValue;
 import org.scijava.convert.Converter;
 import org.scijava.plugin.SingletonPlugin;

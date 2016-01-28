@@ -50,24 +50,24 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			final AbstractColumnModuleItemMappingService.ColumnToModuleItemMappingChangeEvent e) {
 
 		// free previously mapped value
-		String prev = e.getPreviousValue();
-		if(!INACTIVE.equals(prev)){
+		final String prev = e.getPreviousValue();
+		if (!INACTIVE.equals(prev)) {
 			m_mappingIdsByItemName.remove(e.getPreviousValue());
 		}
 
 		final ColumnModuleItemMapping sourceMapping = e.getSourceMapping();
 
-		String itemName = sourceMapping.getItemName();
+		final String itemName = sourceMapping.getItemName();
 
-		if(INACTIVE.equals(itemName)){
+		if (INACTIVE.equals(itemName)) {
 			return;
 		}
 
 		// check if input was mapped before
-		String otherMappingID = m_mappingIdsByItemName.get(itemName);
+		final String otherMappingID = m_mappingIdsByItemName.get(itemName);
 		if (otherMappingID != null) {
 			// deactivate old mapping
-			ColumnModuleItemMapping otherMapping = m_mappings
+			final ColumnModuleItemMapping otherMapping = m_mappings
 					.get(otherMappingID);
 			otherMapping.setActive(false);
 			// unlink the mapping
@@ -96,19 +96,19 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 	}
 
 	@Override
-	public void addMapping(String columnName, String inputName,
-			boolean active) {
+	public void addMapping(final String columnName, final String inputName,
+			final boolean active) {
 		final ColumnModuleItemMapping mapping = new DefaultColumnToModuleItemMapping(
 				columnName, inputName);
 		setupMapping(active, mapping);
 	}
 
-	private void setupMapping(boolean active,
+	private void setupMapping(final boolean active,
 			final ColumnModuleItemMapping mapping) {
 		mapping.addMappingChangeListener(this);
 		mapping.setActive(active);
 
-		String id = mapping.getID();
+		final String id = mapping.getID();
 		m_mappings.put(id, mapping);
 		m_mappingIdsByItemName.put(mapping.getItemName(), id);
 		m_orderedMappingIds.add(id);
@@ -120,15 +120,15 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 	}
 
 	@Override
-	public void removeMappingsByPosition(int... rows) {
+	public void removeMappingsByPosition(final int... rows) {
 		// collect id's of maps to remove
-		List<String> removeList = new ArrayList<>(rows.length);
-		for (int i : rows) {
-			String id = m_orderedMappingIds.get(i);
+		final List<String> removeList = new ArrayList<>(rows.length);
+		for (final int i : rows) {
+			final String id = m_orderedMappingIds.get(i);
 			removeList.add(id);
 		}
 		// remove the elements
-		removeList.forEach((String id) -> removeMapping(id));
+		removeList.forEach(this::removeMapping);
 	}
 
 	/**
@@ -138,8 +138,8 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 	 *            the id of the mapping
 	 * @return
 	 */
-	private ColumnModuleItemMapping removeMapping(String id) {
-		ColumnModuleItemMapping mapping = m_mappings.remove(id);
+	private ColumnModuleItemMapping removeMapping(final String id) {
+		final ColumnModuleItemMapping mapping = m_mappings.remove(id);
 		if (mapping == null) {
 			// mapping was not found.
 			return null;
@@ -151,48 +151,47 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 	}
 
 	@Override
-	public void setColumnNameByPosition(int rowIndex, String value) {
+	public void setColumnNameByPosition(final int rowIndex,
+			final String value) {
 		m_mappings.get(m_orderedMappingIds.get(rowIndex)).setColumnName(value);
 	}
 
 	@Override
-	public void setActiveByPosition(int rowIndex, Boolean value) {
+	public void setActiveByPosition(final int rowIndex, final Boolean value) {
 		m_mappings.get(m_orderedMappingIds.get(rowIndex)).setActive(value);
 	}
 
 	@Override
-	public void setItemNameByPosition(int rowIndex, String value) {
+	public void setItemNameByPosition(final int rowIndex, final String value) {
 		m_mappings.get(m_orderedMappingIds.get(rowIndex)).setItemName(value);
 	}
 
 	@Override
-	public String getColumnNameByPosition(int rowIndex) {
+	public String getColumnNameByPosition(final int rowIndex) {
 		return m_mappings.get(m_orderedMappingIds.get(rowIndex))
 				.getColumnName();
 	}
 
 	@Override
-	public boolean isActiveByPosition(int rowIndex) {
+	public boolean isActiveByPosition(final int rowIndex) {
 		return m_mappings.get(m_orderedMappingIds.get(rowIndex)).isActive();
 	}
 
 	@Override
-	public String getItemNameByPosition(int rowIndex) {
+	public String getItemNameByPosition(final int rowIndex) {
 		return m_mappings.get(m_orderedMappingIds.get(rowIndex)).getItemName();
 	}
 
 	@Override
-	public boolean isItemMapped(String itemName) {
-		String id = m_mappingIdsByItemName.get(itemName);
-
-		boolean out = id != null && m_mappings.get(id).isActive();
-		return out;
+	public boolean isItemMapped(final String itemName) {
+		final String id = m_mappingIdsByItemName.get(itemName);
+		return id != null && m_mappings.get(id).isActive();
 	}
 
 	@Override
-	public String getColumnNameForInput(String inputName) {
-		return m_mappings.get(m_mappingIdsByItemName.get(inputName))
-				.getColumnName();
+	public String getColumnNameForInput(final String inputName) {
+		final String key = m_mappingIdsByItemName.get(inputName);
+		return key != null ? m_mappings.get(key).getColumnName() : null;
 	}
 
 	/**
@@ -207,7 +206,7 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 		protected String m_itemName;
 		protected boolean m_active;
 		protected ArrayList<ColumnToModuleItemMappingChangeListener> m_listeners;
-		private String m_uuID;
+		private final String m_uuID;
 
 		public DefaultColumnToModuleItemMapping(final String columnName,
 				final String itemName) {
@@ -218,8 +217,8 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			m_uuID = UUID.randomUUID().toString();
 		}
 
-		public DefaultColumnToModuleItemMapping(String columnName,
-				String inputName, String id) {
+		public DefaultColumnToModuleItemMapping(final String columnName,
+				final String inputName, final String id) {
 			m_columnName = columnName;
 			m_itemName = inputName;
 			m_active = true;
@@ -361,10 +360,10 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 
 	@Override
 	public String[] serialize() {
-		List<String> out = new ArrayList<>();
+		final List<String> out = new ArrayList<>();
 
-		for (String id : m_orderedMappingIds) {
-			ColumnModuleItemMapping m = m_mappings.get(id);
+		for (final String id : m_orderedMappingIds) {
+			final ColumnModuleItemMapping m = m_mappings.get(id);
 			out.add(m.getColumnName() + "\n" + m.getItemName() + "\n"
 					+ m.getID() + "\n" + (m.isActive() ? "true" : "false"));
 		}
@@ -372,7 +371,7 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 	}
 
 	@Override
-	public void deserialize(String[] serializedMappings) {
+	public void deserialize(final String[] serializedMappings) {
 		for (final String s : serializedMappings) {
 			final String[] names = s.split("\n");
 
@@ -386,7 +385,7 @@ abstract class AbstractColumnModuleItemMappingService extends AbstractService
 			 * format is [0] column name [1] module input name [2] id of the
 			 * mapping [3] active, either "true" or "false"
 			 */
-			boolean active = "true".equals(names[3]);
+			final boolean active = "true".equals(names[3]);
 
 			// recreate mapping with the deserialization constructor
 			final ColumnModuleItemMapping mapping = new DefaultColumnToModuleItemMapping(

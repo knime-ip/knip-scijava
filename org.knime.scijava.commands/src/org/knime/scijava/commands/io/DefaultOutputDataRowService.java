@@ -27,11 +27,11 @@ public class DefaultOutputDataRowService extends AbstractService
 	 * Priority of this {@link Plugin}
 	 */
 	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
-	
+
 	private WeakReference<List<DataCell>> m_cells = new WeakReference<>(null);
 
 	@Override
-	public void setOutputCells(List<DataCell> cells) {
+	public void setOutputCells(final List<DataCell> cells) {
 		m_cells = new WeakReference<>(cells);
 	}
 
@@ -40,17 +40,16 @@ public class DefaultOutputDataRowService extends AbstractService
 		if (m_cells.get() == null) {
 			return null;
 		}
-		
 		return new DefaultRow(key, m_cells.get());
 	}
 
 	@Override
 	public DataCell[] getOutputDataCells() {
 		if (m_cells.get() == null) {
-			return new DataCell[]{};
+			return new DataCell[] {};
 		}
-		
-		return m_cells.get().toArray(new DataCell[]{});
+
+		return m_cells.get().toArray(new DataCell[] {});
 	}
 
 	@Override

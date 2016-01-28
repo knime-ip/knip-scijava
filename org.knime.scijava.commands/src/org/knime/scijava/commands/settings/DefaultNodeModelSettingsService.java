@@ -4,7 +4,7 @@ import org.scijava.plugin.Plugin;
 
 /**
  * Marker class
- * 
+ *
  * @author gabriel
  *
  */

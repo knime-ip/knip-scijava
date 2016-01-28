@@ -2,22 +2,20 @@ package org.knime.scijava.commands.simplemapping;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
-import org.knime.scijava.commands.mapping.ColumnModuleItemMappingService;
 import org.scijava.service.Service;
 
 /**
  * A simple service that stores a mapping between a modules input items and a
  * columns of a table.
- * 
+ *
  * @author Gabriel Einsdorf
  */
 public interface SimpleColumnMappingService extends Service {
 
 	/**
 	 * Returns the column mapped to the input with the given name.
-	 * 
+	 *
 	 * @param input
 	 *            the name of the input
 	 * @return the column mapped to the input or <code>null</code> if no column

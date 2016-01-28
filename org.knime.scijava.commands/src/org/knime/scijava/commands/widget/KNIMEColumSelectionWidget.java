@@ -1,14 +1,10 @@
 package org.knime.scijava.commands.widget;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
 import javax.swing.JPanel;
 
 import org.knime.core.data.DataValue;
 import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.util.ColumnSelectionComboxBox;
 import org.knime.scijava.commands.adapter.OutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
@@ -25,10 +21,10 @@ public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
 
 	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
 
-	private JPanel box;
-	private DefaultKNIMEWidgetModel kModel;
-	private SettingsModelColumnName settingsModel;
-	private String inputName;
+	private final JPanel box;
+	private final DefaultKNIMEWidgetModel kModel;
+	private final SettingsModelColumnName settingsModel;
+	private final String inputName;
 	private String selected;
 
 	@Parameter
@@ -40,7 +36,8 @@ public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
 	@Parameter
 	private SimpleColumnMappingService colMapping;
 
-	public KNIMEColumSelectionWidget(WidgetModel model, Context context) {
+	public KNIMEColumSelectionWidget(final WidgetModel model,
+			final Context context) {
 		context.inject(this);
 
 		set(model);
@@ -49,26 +46,22 @@ public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
 		inputName = model.getItem().getName();
 
 		// find columns that can be converted into the target value
-		Class<? extends DataValue> input = ((OutputAdapter<?, ?>) oas
+		final Class<? extends DataValue> input = ((OutputAdapter<?, ?>) oas
 				.getMatchingOutputAdapter(kModel.getItem().getType()))
 						.getOutputType();
 
 		@SuppressWarnings("unchecked")
-		ColumnSelectionComboxBox colbox = new ColumnSelectionComboxBox("",
+		final ColumnSelectionComboxBox colbox = new ColumnSelectionComboxBox("",
 				input);
 		try {
 			colbox.update(irs.getInputDataTableSpec(), null);
-		} catch (NotConfigurableException e) {
+		} catch (final NotConfigurableException e) {
 			log.warn(e);
 		}
 
-		colbox.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				selected = colbox.getSelectedColumn();
-				colMapping.setMappedColumn(inputName,
-						colbox.getSelectedColumn());
-			}
+		colbox.addItemListener(e -> {
+			selected = colbox.getSelectedColumn();
+			colMapping.setMappedColumn(inputName, colbox.getSelectedColumn());
 		});
 
 		box = new JPanel();
@@ -86,7 +79,7 @@ public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
 	}
 
 	@Override
-	public boolean supports(WidgetModel model) {
+	public boolean supports(final WidgetModel model) {
 		return true;
 	};
 

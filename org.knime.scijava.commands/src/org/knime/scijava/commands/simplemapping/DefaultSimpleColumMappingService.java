@@ -17,13 +17,14 @@ public class DefaultSimpleColumMappingService extends AbstractService
 	private final Map<String, String> m_mappings = new HashMap<>();
 
 	@Override
-	public String getMappedColumn(String input) {
+	public String getMappedColumn(final String input) {
 		return m_mappings.get(input);
 	}
 
 	@Override
-	public String mappedColumn(String input) throws NoSuchElementException {
-		String column = m_mappings.get(input);
+	public String mappedColumn(final String input)
+			throws NoSuchElementException {
+		final String column = m_mappings.get(input);
 		if (column == null) {
 			throw new NoSuchElementException(
 					"Can't locate a mapping for input: " + input);
@@ -32,14 +33,14 @@ public class DefaultSimpleColumMappingService extends AbstractService
 	}
 
 	@Override
-	public void setMappedColumn(String input, String column) {
+	public void setMappedColumn(final String input, final String column) {
 		m_mappings.put(input, column);
 	}
 
 	@Override
 	public List<String> getMappedInputs() {
-		List<String> mappedInputs = new ArrayList<>();
-		for (Entry<String, String> item : m_mappings.entrySet()) {
+		final List<String> mappedInputs = new ArrayList<>();
+		for (final Entry<String, String> item : m_mappings.entrySet()) {
 			if (item.getValue() != null) {
 				mappedInputs.add(item.getKey());
 			}
@@ -54,16 +55,16 @@ public class DefaultSimpleColumMappingService extends AbstractService
 
 	@Override
 	public String[] serialize() {
-		List<String> out = new ArrayList<>();
+		final List<String> out = new ArrayList<>();
 		// TODO Guard against null ?
-		for (Entry<String, String> item : m_mappings.entrySet()) {
+		for (final Entry<String, String> item : m_mappings.entrySet()) {
 			out.add(item.getKey() + "\n" + item.getValue());
 		}
 		return out.toArray(new String[out.size()]);
 	}
 
 	@Override
-	public void deserialize(String[] serializedMappings) {
+	public void deserialize(final String[] serializedMappings) {
 		m_mappings.clear();
 		for (final String s : serializedMappings) {
 			final String[] names = s.split("\n");
