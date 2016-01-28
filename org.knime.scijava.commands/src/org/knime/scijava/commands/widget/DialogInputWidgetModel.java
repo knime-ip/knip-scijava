@@ -15,11 +15,6 @@ import org.scijava.widget.WidgetModel;
 public interface DialogInputWidgetModel extends WidgetModel {
 
 	/**
-	 * Update the SettingsModel to reflect changes in the component.
-	 */
-	public void updateSettingsModel();
-
-	/**
 	 * Get the underlying SettingsModel
 	 * 
 	 * @return
@@ -29,6 +24,5 @@ public interface DialogInputWidgetModel extends WidgetModel {
 	/**
 	 * Update to reflect changes in SettingsModel.
 	 */
-	public void updateToSettingsModel();
-
+	public void updateFromSettingsModel();
 }

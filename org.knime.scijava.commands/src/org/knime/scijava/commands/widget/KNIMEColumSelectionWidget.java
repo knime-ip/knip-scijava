@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import org.knime.core.data.DataValue;
 import org.knime.core.node.NotConfigurableException;
+import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.util.ColumnSelectionComboxBox;
 import org.knime.scijava.commands.adapter.OutputAdapter;
@@ -26,7 +27,7 @@ public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
 
 	private JPanel box;
 	private DefaultKNIMEWidgetModel kModel;
-	private SettingsModelString settingsModel;
+	private SettingsModelColumnName settingsModel;
 	private String inputName;
 	private String selected;
 
@@ -44,7 +45,7 @@ public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
 
 		set(model);
 		kModel = (DefaultKNIMEWidgetModel) model;
-		settingsModel = (SettingsModelString) kModel.getSettingsModel();
+		settingsModel = (SettingsModelColumnName) kModel.getSettingsModel();
 		inputName = model.getItem().getName();
 
 		// find columns that can be converted into the target value

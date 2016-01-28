@@ -38,7 +38,7 @@ public class WidgetDialogComponent extends DialogComponent {
 
 	@Override
 	protected void updateComponent() {
-		m_model.updateToSettingsModel();
+		m_model.updateFromSettingsModel();
 	}
 
 	@Override

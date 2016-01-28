@@ -86,6 +86,8 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 		if (t != null) {
 			sm = t.create(moduleItem.getName(), moduleItem.getMinimumValue());
 		} else {
+			// can't create a SettingsModel for this type, we will try to create
+			// a column selection Widget.
 			sm = new SettingsModelColumnName(moduleItem.getName(), "");
 		}
 		return sm;

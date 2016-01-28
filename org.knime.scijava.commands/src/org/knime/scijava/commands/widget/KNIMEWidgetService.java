@@ -33,6 +33,8 @@ package org.knime.scijava.commands.widget;
 
 import java.util.List;
 
+import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.scijava.commands.KNIMESciJavaConstants;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.knime.scijava.commands.simplemapping.SimpleColumnMappingService;
@@ -60,14 +62,14 @@ public class KNIMEWidgetService
 		extends AbstractWrapperService<WidgetModel, InputWidget<?, ?>>
 		implements WidgetService {
 
+	private static final String COLSELECT_KEY = KNIMESciJavaConstants.FORCE_COLUMN_SELECT;
+
 	@Parameter
 	private LogService log;
-
 	@Parameter
 	private SimpleColumnMappingService columnMapping;
 	@Parameter
 	private NodeSettingsService settings;
-
 	@Parameter
 	private DefaultWidgetService widgetService;
 
@@ -77,6 +79,12 @@ public class KNIMEWidgetService
 	public WidgetModel createModel(final InputPanel<?, ?> inputPanel,
 			final Module module, final ModuleItem<?> item,
 			final List<?> objectPool) {
+		if ("true".equals(item.get(COLSELECT_KEY))) {
+			return new DefaultKNIMEWidgetModel(getContext(), inputPanel, module,
+					item, objectPool,
+					new SettingsModelColumnName(item.getName(), ""));
+		}
+
 		return new DefaultKNIMEWidgetModel(getContext(), inputPanel, module,
 				item, objectPool);
 	}
@@ -87,8 +95,8 @@ public class KNIMEWidgetService
 	public InputWidget<?, ?> create(final WidgetModel model) {
 
 		// check if the creation of the column selection widget is forced.
-		boolean createColSelect = "true".equals(
-				model.getItem().get(KNIMESciJavaConstants.FORCE_COLUMN_SELECT));
+		boolean createColSelect = "true"
+				.equals(model.getItem().get(COLSELECT_KEY));
 
 		if (!createColSelect) {
 			InputWidget<?, ?> widget = widgetService.create(model);
@@ -116,7 +124,7 @@ public class KNIMEWidgetService
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Class<InputWidget<?, ?>> getPluginType() {
-		return (Class) InputWidget.class;
+		return (Class) InputWidget.class; // NOSONAR Cast is needed
 	}
 
 	// -- Typed methods --
