@@ -109,7 +109,7 @@ public class KNIMEWidgetService
 
 	private InputWidget<?, ?> createColumnSelectionWidget(
 			final WidgetModel model) {
-		final InputWidget<?, ?> widget = new KNIMEColumSelectionWidget(model,
+		final InputWidget<?, ?> widget = new KnimeColumnSelectionWidget(model,
 				context());
 
 		// remove settingsmodel which might have been created for this input.

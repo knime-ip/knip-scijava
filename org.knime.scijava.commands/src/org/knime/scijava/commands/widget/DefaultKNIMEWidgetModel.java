@@ -78,8 +78,6 @@ public class DefaultKNIMEWidgetModel extends DefaultWidgetModel
 
 	@Override
 	public void setValue(final Object value) {
-		super.setValue(value);
-
 		// keep track of the values, update settings model
 		m_settingsService.setValue(getItem(), value);
 	}

@@ -17,7 +17,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.ui.swing.widget.SwingInputWidget;
 import org.scijava.widget.WidgetModel;
 
-public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
+public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 
 	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
 
@@ -36,7 +36,9 @@ public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
 	@Parameter
 	private SimpleColumnMappingService colMapping;
 
-	public KNIMEColumSelectionWidget(final WidgetModel model,
+	private ColumnSelectionComboxBox colbox;
+
+	public KnimeColumnSelectionWidget(final WidgetModel model,
 			final Context context) {
 		context.inject(this);
 
@@ -50,9 +52,7 @@ public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
 				.getMatchingOutputAdapter(kModel.getItem().getType()))
 						.getOutputType();
 
-		@SuppressWarnings("unchecked")
-		final ColumnSelectionComboxBox colbox = new ColumnSelectionComboxBox("",
-				input);
+		colbox = new ColumnSelectionComboxBox("", input);
 		try {
 			colbox.update(irs.getInputDataTableSpec(), null);
 		} catch (final NotConfigurableException e) {
@@ -90,6 +90,11 @@ public class KNIMEColumSelectionWidget extends SwingInputWidget<String> {
 
 	@Override
 	protected void doRefresh() {
+		try {
+			colbox.update(irs.getInputDataTableSpec(), getValue());
+		} catch (NotConfigurableException e) {
+			log.warn(e);
+		}
 		box.revalidate(); // TODO is this a good idea?
 	}
 }
