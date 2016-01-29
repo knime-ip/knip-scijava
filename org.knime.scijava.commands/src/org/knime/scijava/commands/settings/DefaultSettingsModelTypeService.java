@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.knime.core.node.defaultnodesettings.SettingsModel;
+import org.knime.scijava.commands.util.PrimitiveTypeUtils;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Plugin;
 
@@ -24,13 +25,6 @@ public class DefaultSettingsModelTypeService
 
 	private final Map<Class<? extends SettingsModel>, SettingsModelTypePlugin> m_pluginsByModel = new HashMap<>();
 	private final Map<Class<?>, SettingsModelTypePlugin> m_pluginsByValue = new HashMap<>();
-	private static final Map<Class<?>, Class<?>> m_primitvePluginTypes = new HashMap<>();
-
-	static {
-		m_primitvePluginTypes.put(double.class, Double.class);
-		m_primitvePluginTypes.put(int.class, Integer.class);
-		m_primitvePluginTypes.put(long.class, Long.class);
-	}
 
 	@Override
 	public Class<SettingsModelTypePlugin> getPluginType() {
@@ -67,11 +61,7 @@ public class DefaultSettingsModelTypeService
 		}
 
 		// check primitive conversion cache
-		Class<?> checkValue = value;
-		final Class<?> pluginType = m_primitvePluginTypes.get(value);
-		if (pluginType != null) {
-			checkValue = pluginType;
-		}
+		Class<?> checkValue = PrimitiveTypeUtils.convertIfPrimitive(value);
 
 		// search
 		for (final SettingsModelTypePlugin<?, ?> p : getInstances()) {

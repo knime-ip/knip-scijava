@@ -3,6 +3,7 @@ package org.knime.scijava.commands.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.knime.scijava.commands.util.PrimitiveTypeUtils;
 import org.scijava.convert.ConvertService;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Parameter;
@@ -21,13 +22,6 @@ public class DefaultOutputAdapterService extends
 		AbstractSingletonService<OutputAdapter>implements OutputAdapterService {
 
 	private final Map<Class<?>, OutputAdapter> m_adapterByValueClass = new HashMap<>();
-	private static final Map<Class<?>, Class<?>> m_primitvePluginTypes = new HashMap<>();
-
-	static {
-		m_primitvePluginTypes.put(double.class, Double.class);
-		m_primitvePluginTypes.put(int.class, Integer.class);
-		m_primitvePluginTypes.put(long.class, Long.class);
-	}
 
 	@Parameter
 	private ConvertService cs;
@@ -54,11 +48,7 @@ public class DefaultOutputAdapterService extends
 		}
 
 		// check primitive conversion cache
-		Class<?> checkValue = valueClass;
-		final Class<?> pluginType = m_primitvePluginTypes.get(valueClass);
-		if (pluginType != null) {
-			checkValue = pluginType;
-		}
+		Class<?> checkValue = PrimitiveTypeUtils.convertIfPrimitive(valueClass);
 
 		// search for output adapter
 		for (final OutputAdapter outputAdapter : this.getInstances()) {

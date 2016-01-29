@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import java.util.WeakHashMap;
 
 import org.knime.core.data.DataValue;
+import org.knime.scijava.commands.util.PrimitiveTypeUtils;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Plugin;
 
@@ -57,8 +58,10 @@ public class DefaultInputAdapterService extends
 			return null;
 		}
 
+		Class<?> checkValue = PrimitiveTypeUtils.convertIfPrimitive(valueClass);
+
 		for (final InputAdapter p : plugins) {
-			if (valueClass.isAssignableFrom(p.getOutputType())) {
+			if (checkValue.isAssignableFrom(p.getOutputType())) {
 				// found a matching plugin
 				return p;
 			}
