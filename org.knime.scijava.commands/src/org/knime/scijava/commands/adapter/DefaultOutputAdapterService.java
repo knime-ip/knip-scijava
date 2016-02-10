@@ -23,9 +23,6 @@ public class DefaultOutputAdapterService extends
 
 	private final Map<Class<?>, OutputAdapter> m_adapterByValueClass = new HashMap<>();
 
-	@Parameter
-	private ConvertService cs;
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -47,11 +44,11 @@ public class DefaultOutputAdapterService extends
 			return adapter;
 		}
 
-		// check primitive conversion cache
+		// check primitive conversion
 		Class<?> checkValue = PrimitiveTypeUtils.convertIfPrimitive(valueClass);
 
 		// search for output adapter
-		for (final OutputAdapter outputAdapter : this.getInstances()) {
+		for (final OutputAdapter outputAdapter : getInstances()) {
 			if (outputAdapter.getInputType().isAssignableFrom(checkValue)) {
 				m_adapterByValueClass.put(valueClass, outputAdapter);
 				return outputAdapter;

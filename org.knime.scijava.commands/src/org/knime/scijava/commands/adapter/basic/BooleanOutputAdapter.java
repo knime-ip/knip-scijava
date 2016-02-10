@@ -14,7 +14,7 @@ import org.scijava.plugin.Plugin;
  */
 @Plugin(type = OutputAdapter.class)
 public class BooleanOutputAdapter
-		extends AbstractOutputAdapter<Boolean, BooleanValue> {
+		extends AbstractOutputAdapter<Boolean, BooleanCell> {
 
 	@Override
 	public BooleanCell createCell(final Boolean o) {
@@ -22,8 +22,8 @@ public class BooleanOutputAdapter
 	}
 
 	@Override
-	public Class<BooleanValue> getOutputType() {
-		return BooleanValue.class;
+	public Class<BooleanCell> getOutputType() {
+		return BooleanCell.class;
 	}
 
 	@Override

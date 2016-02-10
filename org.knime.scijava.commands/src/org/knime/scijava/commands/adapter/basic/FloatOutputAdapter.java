@@ -1,6 +1,5 @@
 package org.knime.scijava.commands.adapter.basic;
 
-import org.knime.core.data.DoubleValue;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.scijava.commands.adapter.AbstractOutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapter;
@@ -14,7 +13,7 @@ import org.scijava.plugin.Plugin;
  */
 @Plugin(type = OutputAdapter.class)
 public class FloatOutputAdapter
-		extends AbstractOutputAdapter<Float, DoubleValue> {
+		extends AbstractOutputAdapter<Float, DoubleCell> {
 
 	@Override
 	public DoubleCell createCell(final Float o) {
@@ -22,8 +21,8 @@ public class FloatOutputAdapter
 	}
 
 	@Override
-	public Class<DoubleValue> getOutputType() {
-		return DoubleValue.class;
+	public Class<DoubleCell> getOutputType() {
+		return DoubleCell.class;
 	}
 
 	@Override
