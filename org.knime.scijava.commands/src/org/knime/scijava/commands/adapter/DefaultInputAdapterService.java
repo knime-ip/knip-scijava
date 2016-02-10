@@ -3,7 +3,10 @@ package org.knime.scijava.commands.adapter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.WeakHashMap;
@@ -30,6 +33,7 @@ public class DefaultInputAdapterService extends
 		AbstractSingletonService<InputAdapter>implements InputAdapterService {
 
 	private WeakHashMap<Class<? extends DataValue>, Set<InputAdapter>> m_pluginsByDataValue = null;
+	private Map<Class<?>, Class<? extends DataValue>> m_typeMap;
 
 	/**
 	 * {@inheritDoc}
@@ -50,7 +54,7 @@ public class DefaultInputAdapterService extends
 		}
 
 		// go through all the plugins the the Set matching the dataValueClass
-		final Collection<InputAdapter> plugins = getMatchingInputAdapters(
+		final Set<InputAdapter> plugins = getMatchingInputAdapters(
 				dataValueClass);
 
 		if (plugins == null) {
@@ -140,9 +144,13 @@ public class DefaultInputAdapterService extends
 	 */
 	private void processInstances() {
 		m_pluginsByDataValue = new WeakHashMap<>();
+		m_typeMap = new HashMap<>();
 
-		for (final InputAdapter<?, ?> p : this.getInstances()) {
+		for (final InputAdapter<?, ?> p : getInstances()) {
 			final Class<? extends DataValue> type = p.getInputType();
+
+			// setup type conversion
+			m_typeMap.put(p.getOutputType(), p.getInputType());
 
 			Set<InputAdapter> set = m_pluginsByDataValue.get(type);
 
@@ -153,5 +161,20 @@ public class DefaultInputAdapterService extends
 			}
 			set.add(p);
 		}
+	}
+
+	@Override
+	public Class<? extends DataValue> getMatchingInputValueClass(
+			Class<?> type) {
+
+		if (m_typeMap == null) {
+			processInstances();
+		}
+		Class<?> checkType = PrimitiveTypeUtils.convertIfPrimitive(type);
+		Class<? extends DataValue> out = m_typeMap.get(checkType);
+		if (out == null) {
+			throw new NoSuchElementException(type.getName());
+		}
+		return out;
 	}
 }

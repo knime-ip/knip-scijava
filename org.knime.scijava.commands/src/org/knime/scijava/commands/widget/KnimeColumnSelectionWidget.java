@@ -6,8 +6,7 @@ import org.knime.core.data.DataValue;
 import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
 import org.knime.core.node.util.ColumnSelectionComboxBox;
-import org.knime.scijava.commands.adapter.OutputAdapter;
-import org.knime.scijava.commands.adapter.OutputAdapterService;
+import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.simplemapping.SimpleColumnMappingService;
 import org.scijava.Context;
@@ -28,7 +27,7 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 	private String selected;
 
 	@Parameter
-	private OutputAdapterService oas;
+	private InputAdapterService ias;
 	@Parameter
 	private InputDataRowService irs;
 	@Parameter
@@ -48,11 +47,9 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 		inputName = model.getItem().getName();
 
 		// find columns that can be converted into the target value
-		final Class<? extends DataValue> input = ((OutputAdapter<?, ?>) oas
-				.getMatchingOutputAdapter(kModel.getItem().getType()))
-						.getOutputType();
-
-		colbox = new ColumnSelectionComboxBox("", input);
+		Class<? extends DataValue> inputClass = ias.getMatchingInputValueClass(kModel.getItem().getType());
+		
+		colbox = new ColumnSelectionComboxBox("", inputClass);
 		try {
 			colbox.update(irs.getInputDataTableSpec(), null);
 		} catch (final NotConfigurableException e) {
