@@ -31,6 +31,7 @@
 package org.knime.scijava.commands.widget;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.knime.core.node.defaultnodesettings.DialogComponent;
@@ -51,7 +52,7 @@ public class KnimeSwingInputPanel extends SwingInputPanel {
 	/**
 	 * @return SettingsModels of the {@link InputWidget}s in this panel
 	 */
-	public Collection<SettingsModel> getSettingsModels() {
+	public List<SettingsModel> getSettingsModels() {
 		return widgets.values().stream()
 				.filter((widget) -> widget
 						.get() instanceof DefaultKNIMEWidgetModel)
@@ -64,7 +65,7 @@ public class KnimeSwingInputPanel extends SwingInputPanel {
 	 * @return Wrappers around the {@link SwingInputWidget}s with
 	 *         {@link DefaultKNIMEWidgetModel} in this InputPanel.
 	 */
-	public Collection<DialogComponent> createDialogComponents() {
+	public List<DialogComponent> createDialogComponents() {
 		return widgets.values().stream()
 				.filter((widget) -> widget
 						.get() instanceof DefaultKNIMEWidgetModel)

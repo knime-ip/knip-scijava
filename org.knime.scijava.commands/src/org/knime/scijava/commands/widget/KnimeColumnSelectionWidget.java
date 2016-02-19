@@ -1,13 +1,15 @@
 package org.knime.scijava.commands.widget;
 
+import java.awt.event.ItemEvent;
+
 import javax.swing.JPanel;
 
 import org.knime.core.data.DataValue;
 import org.knime.core.node.NotConfigurableException;
-import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
 import org.knime.core.node.util.ColumnSelectionComboxBox;
 import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.knime.scijava.commands.io.InputDataRowService;
+import org.knime.scijava.commands.settings.NodeDialogSettingsService;
 import org.knime.scijava.commands.simplemapping.SimpleColumnMappingService;
 import org.scijava.Context;
 import org.scijava.Priority;
@@ -22,7 +24,6 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 
 	private final JPanel box;
 	private final DefaultKNIMEWidgetModel kModel;
-	private final SettingsModelColumnName settingsModel;
 	private final String inputName;
 	private String selected;
 
@@ -34,8 +35,10 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 	private LogService log;
 	@Parameter
 	private SimpleColumnMappingService colMapping;
+	@Parameter
+	private NodeDialogSettingsService settings;
 
-	private ColumnSelectionComboxBox colbox;
+	private final ColumnSelectionComboxBox colbox;
 
 	public KnimeColumnSelectionWidget(final WidgetModel model,
 			final Context context) {
@@ -43,22 +46,27 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 
 		set(model);
 		kModel = (DefaultKNIMEWidgetModel) model;
-		settingsModel = (SettingsModelColumnName) kModel.getSettingsModel();
 		inputName = model.getItem().getName();
 
 		// find columns that can be converted into the target value
-		Class<? extends DataValue> inputClass = ias.getMatchingInputValueClass(kModel.getItem().getType());
-		
+		final Class<? extends DataValue> inputClass = ias
+				.getMatchingInputValueClass(kModel.getItem().getType());
+
 		colbox = new ColumnSelectionComboxBox("", inputClass);
+		String mappedColumn = colMapping.getMappedColumn(inputName);
 		try {
-			colbox.update(irs.getInputDataTableSpec(), null);
+			colbox.update(irs.getInputDataTableSpec(), mappedColumn);
 		} catch (final NotConfigurableException e) {
 			log.warn(e);
 		}
-
+		selected = colbox.getSelectedColumn();
+		
 		colbox.addItemListener(e -> {
-			selected = colbox.getSelectedColumn();
-			colMapping.setMappedColumn(inputName, colbox.getSelectedColumn());
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				selected = colbox.getSelectedColumn();
+				colMapping.setMappedColumn(inputName, selected);
+				settings.setValue(model.getItem(), selected);
+			}
 		});
 
 		box = new JPanel();
@@ -89,7 +97,7 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 	protected void doRefresh() {
 		try {
 			colbox.update(irs.getInputDataTableSpec(), getValue());
-		} catch (NotConfigurableException e) {
+		} catch (final NotConfigurableException e) {
 			log.warn(e);
 		}
 		box.revalidate(); // TODO is this a good idea?

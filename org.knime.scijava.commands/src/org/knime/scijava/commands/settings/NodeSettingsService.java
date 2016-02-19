@@ -1,7 +1,7 @@
 package org.knime.scijava.commands.settings;
 
 import java.lang.ref.WeakReference;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.knime.core.node.InvalidSettingsException;
@@ -38,7 +38,7 @@ public interface NodeSettingsService extends Service {
 	 * added and read from.
 	 *
 	 * Since this service holds the {@link Map} in a {@link WeakReference}, the
-	 * instance must be enured to stay valid <i>outside</i> of this service
+	 * instance must be ensured to stay valid <i>outside</i> of this service
 	 * since may be garbage collected otherwise.
 	 *
 	 * @param settingsModels
@@ -46,11 +46,11 @@ public interface NodeSettingsService extends Service {
 	 */
 	void setSettingsModels(Map<String, SettingsModel> settingsModels);
 
-	/**
-	 * @return SettingsModels set via {@link #setSettingsModels(Map)} or
-	 *         <code>null</code> if none has been set yet.
-	 */
-	Map<String, SettingsModel> getSettingsModels();
+	// /**
+	// * @return SettingsModels set via {@link #setSettingsModels(Map)} or
+	// * <code>null</code> if none has been set yet.
+	// */
+	// Map<String, SettingsModel> getSettingsModels();
 
 	/**
 	 * Set the value of the SettingsModel for a ModuleItem. Prints a warning if
@@ -83,7 +83,8 @@ public interface NodeSettingsService extends Service {
 	 * @see #createSettingsModel(ModuleItem)
 	 * @see #createSettingsModels(Iterable)
 	 */
-	SettingsModel createAndAddSettingsModel(ModuleItem<?> moduleItem);
+	SettingsModel createAndAddSettingsModel(ModuleItem<?> moduleItem,
+			boolean forceColumnSelection);
 
 	/**
 	 * Create new {@link SettingsModel}s for ModuleItems and add them to the
@@ -92,8 +93,8 @@ public interface NodeSettingsService extends Service {
 	 * @param moduleItems
 	 * @return the created SettingsModels
 	 */
-	Collection<SettingsModel> createAndAddSettingsModels(
-			Iterable<ModuleItem<?>> moduleItems);
+	List<SettingsModel> createAndAddSettingsModels(
+			Iterable<ModuleItem<?>> moduleItems, boolean forceColumnSelection);
 
 	/**
 	 * Validate all settingsModels in this service.

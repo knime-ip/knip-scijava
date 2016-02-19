@@ -44,7 +44,7 @@ public class DefaultKNIMEWidgetModel extends DefaultWidgetModel
 			final ModuleItem<?> item, final List<?> objectPool) {
 		super(context, inputPanel, module, item, objectPool);
 
-		m_model = m_settingsService.createAndAddSettingsModel(item);
+		m_model = m_settingsService.createAndAddSettingsModel(item, false);
 		updateFromSettingsModel();
 	}
 

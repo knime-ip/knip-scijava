@@ -4,6 +4,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.knime.core.node.InvalidSettingsException;
@@ -11,6 +13,7 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Parameter;
 import org.scijava.service.AbstractService;
@@ -42,7 +45,7 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	 */
 	private Map<String, SettingsModel> getSafeSettingsModelsMap() {
 		if (m_settingsModels.get() == null) {
-			return Collections.emptyMap();
+			m_settingsModels = new WeakReference<>(new HashMap<>());
 		}
 
 		return m_settingsModels.get();
@@ -78,39 +81,52 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 		return null;
 	}
 
-	private SettingsModel createSettingsModel(final ModuleItem<?> moduleItem) {
+	private SettingsModel createSettingsModel(final ModuleItem<?> moduleItem,
+			boolean forceColSelec) {
 		SettingsModel sm;
 
-		final SettingsModelType t = m_typeService
-				.getSettingsModelTypeFor(moduleItem.getType());
-		if (t != null) {
-			sm = t.create(moduleItem.getName(), moduleItem.getMinimumValue());
+		// check for if columnselection is forced
+		if (forceColSelec) {
+			sm = createColSelectModel(moduleItem);
 		} else {
-			// can't create a SettingsModel for this type, we will try to create
-			// a column selection Widget.
-			sm = new SettingsModelColumnName(moduleItem.getName(), "");
+			final SettingsModelType t = m_typeService
+					.getSettingsModelTypeFor(moduleItem.getType());
+			if (t != null) {
+				sm = t.create(moduleItem.getName(),
+						moduleItem.getMinimumValue());
+			} else {
+				// can't create a SettingsModel for this type, we will try to
+				// create a column selection Widget.
+				sm = createColSelectModel(moduleItem);
+			}
 		}
 		return sm;
+	}
+
+	private SettingsModel createColSelectModel(ModuleItem<?> moduleItem) {
+		return new SettingsModelString(moduleItem.getName(), "");
 	}
 
 	@Override
 	public SettingsModel createAndAddSettingsModel(
-			final ModuleItem<?> moduleItem) {
+			final ModuleItem<?> moduleItem, boolean forceColumnSelection) {
 		SettingsModel sm = getSafeSettingsModelsMap().get(moduleItem.getName());
 		if (sm != null) {
 			return sm; // already exists, do not overwrite.
 		}
-		sm = createSettingsModel(moduleItem);
-		addSettingsModel(moduleItem.getName(), sm);
+		sm = createSettingsModel(moduleItem, forceColumnSelection);
+		getSafeSettingsModelsMap().put(moduleItem.getName(), sm);
 		return sm;
 	}
 
 	@Override
-	public Collection<SettingsModel> createAndAddSettingsModels(
-			final Iterable<ModuleItem<?>> moduleItems) {
+	public List<SettingsModel> createAndAddSettingsModels(
+			final Iterable<ModuleItem<?>> moduleItems,
+			boolean forceColumnSelection) {
 		final ArrayList<SettingsModel> settingsModels = new ArrayList<>();
-		moduleItems.forEach(
-				item -> settingsModels.add(createAndAddSettingsModel(item)));
+		moduleItems.forEach(item -> settingsModels
+				.add(createAndAddSettingsModel(item, forceColumnSelection)));
+
 		return settingsModels;
 	}
 
@@ -127,7 +143,8 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	@Override
 	public boolean loadSettingsFrom(final NodeSettingsRO settings,
 			final boolean tolerant) throws InvalidSettingsException {
-		for (final SettingsModel sm : getSafeSettingsModelsMap().values()) {
+		Collection<SettingsModel> values = getSafeSettingsModelsMap().values();
+		for (final SettingsModel sm : values) {
 			try {
 				sm.loadSettingsFrom(settings);
 			} catch (final InvalidSettingsException e) {
@@ -142,21 +159,11 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 
 	@Override
 	public boolean saveSettingsTo(final NodeSettingsWO settings) {
-		for (final SettingsModel sm : getSafeSettingsModelsMap().values()) {
+		Collection<SettingsModel> values = getSafeSettingsModelsMap().values();
+		for (final SettingsModel sm : values) {
 			sm.saveSettingsTo(settings);
 		}
 		return true;
-	}
-
-	@Override
-	public Map<String, SettingsModel> getSettingsModels() {
-		return m_settingsModels.get();
-	}
-
-	private void addSettingsModel(final String name, final SettingsModel sm) {
-		if (m_settingsModels.get() != null) {
-			m_settingsModels.get().put(name, sm);
-		}
 	}
 
 	@Override

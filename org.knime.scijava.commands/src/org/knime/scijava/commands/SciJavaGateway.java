@@ -13,6 +13,7 @@ import org.knime.scijava.commands.mapping.OutputToColumnMappingService;
 import org.knime.scijava.commands.settings.NodeModelSettingsService;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.knime.scijava.commands.settings.SettingsModelTypeService;
+import org.knime.scijava.commands.simplemapping.SimpleColumnMappingService;
 import org.knime.scijava.commands.widget.KNIMEWidgetService;
 import org.knime.scijava.core.ResourceAwareClassLoader;
 import org.knime.scijava.core.SubContext;
@@ -53,23 +54,23 @@ public class SciJavaGateway {
 
 	/** a list of services which need to be present in newly created contexts */
 	protected static List<Class<? extends Service>> requiredServices = Arrays
-			.<Class<? extends Service>> asList( InputDataRowService.class,
+			.<Class<? extends Service>> asList(InputDataRowService.class,
 					OutputDataRowService.class, PrefService.class,
 					KNIMEExecutionService.class, NodeSettingsService.class,
 					ObjectService.class, WidgetService.class,
 					KNIMEWidgetService.class, InputAdapterService.class,
 					UIService.class, OutputAdapterService.class,
-					CommandService.class,
-					ColumnModuleItemMappingService.class,
+					CommandService.class, ColumnModuleItemMappingService.class,
 					ColumnToInputMappingService.class,
 					OutputToColumnMappingService.class,
-					NodeModelSettingsService.class, InputAdapterService.class,
-					SettingsModelTypeService.class);
+					NodeModelSettingsService.class,
+					SettingsModelTypeService.class,
+					SimpleColumnMappingService.class);
 
 	/**
 	 * Constructor. Only to be called from {@link #get()}.
 	 */
-	protected SciJavaGateway() {
+	private SciJavaGateway() {
 		m_classLoader = new ResourceAwareClassLoader(
 				getClass().getClassLoader(), getClass());
 
@@ -86,7 +87,6 @@ public class SciJavaGateway {
 		if (m_instance == null) {
 			m_instance = new SciJavaGateway();
 		}
-
 		return m_instance;
 	}
 
@@ -124,6 +124,5 @@ public class SciJavaGateway {
 	public ResourceAwareClassLoader getClassLoader() {
 		return m_classLoader;
 	}
-
 
 }

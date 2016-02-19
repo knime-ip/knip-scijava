@@ -34,6 +34,7 @@ package org.knime.scijava.commands.widget;
 import java.util.List;
 
 import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.scijava.commands.KNIMESciJavaConstants;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.knime.scijava.commands.simplemapping.SimpleColumnMappingService;
@@ -81,9 +82,8 @@ public class KNIMEWidgetService
 		if ("true".equals(item.get(COLSELECT_KEY))) {
 			return new DefaultKNIMEWidgetModel(getContext(), inputPanel, module,
 					item, objectPool,
-					new SettingsModelColumnName(item.getName(), ""));
+					new SettingsModelString(item.getName(), ""));
 		}
-
 		return new DefaultKNIMEWidgetModel(getContext(), inputPanel, module,
 				item, objectPool);
 	}
@@ -112,10 +112,18 @@ public class KNIMEWidgetService
 		final InputWidget<?, ?> widget = new KnimeColumnSelectionWidget(model,
 				context());
 
-		// remove settingsmodel which might have been created for this input.
+		// replace settingsmodel which might have been created for this input.
 		settings.removeSettingsModel(model.getItem());
+		settings.createAndAddSettingsModel(model.getItem(), true);
+		
 		// add to mapping service
-		columnMapping.setMappedColumn(model.getItem().getName(), "");
+		String mapping = columnMapping
+				.getMappedColumn(model.getItem().getName());
+		if (mapping != null) {
+			model.setValue(mapping);
+		} else {
+			columnMapping.setMappedColumn(model.getItem().getName(), "");
+		}
 		return widget;
 	}
 
@@ -124,7 +132,7 @@ public class KNIMEWidgetService
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Class<InputWidget<?, ?>> getPluginType() {
-		return (Class) InputWidget.class; // NOSONAR Cast is needed
+		return (Class) InputWidget.class;
 	}
 
 	// -- Typed methods --
