@@ -1,6 +1,5 @@
 package org.knime.scijava.commands.adapter.basic;
 
-import org.knime.core.data.BooleanValue;
 import org.knime.core.data.def.BooleanCell;
 import org.knime.scijava.commands.adapter.AbstractOutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapter;

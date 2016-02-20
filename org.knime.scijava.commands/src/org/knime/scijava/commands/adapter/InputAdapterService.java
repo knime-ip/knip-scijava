@@ -56,7 +56,7 @@ public interface InputAdapterService extends SingletonService<InputAdapter> {
 	/**
 	 * Get the DataValue that is compatible with the given type. This method
 	 * will only return DataValues for which an InputAdapter exists.
-	 * 
+	 *
 	 * @param type
 	 *            the type of the input
 	 * @return a compatible DataValue

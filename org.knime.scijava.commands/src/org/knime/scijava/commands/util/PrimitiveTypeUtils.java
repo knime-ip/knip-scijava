@@ -20,13 +20,13 @@ public final class PrimitiveTypeUtils {
 
 	/**
 	 * Checks if the given type is primitive, iff it is it will return the
-	 * 
+	 *
 	 * @param type
 	 *            the type to check if it is primitive
 	 * @return the converted type iff it was primitive, otherwise the input type
 	 */
-	public static Class<?> convertIfPrimitive(Class<?> type) {
-		Class<?> out = m_primitvePluginTypes.get(type);
+	public static Class<?> convertIfPrimitive(final Class<?> type) {
+		final Class<?> out = m_primitvePluginTypes.get(type);
 		return out != null ? out : type;
 	}
 }

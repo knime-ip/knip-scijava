@@ -33,7 +33,6 @@ package org.knime.scijava.commands.widget;
 
 import java.util.List;
 
-import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.scijava.commands.KNIMESciJavaConstants;
 import org.knime.scijava.commands.settings.NodeSettingsService;
@@ -115,9 +114,9 @@ public class KNIMEWidgetService
 		// replace settingsmodel which might have been created for this input.
 		settings.removeSettingsModel(model.getItem());
 		settings.createAndAddSettingsModel(model.getItem(), true);
-		
+
 		// add to mapping service
-		String mapping = columnMapping
+		final String mapping = columnMapping
 				.getMappedColumn(model.getItem().getName());
 		if (mapping != null) {
 			model.setValue(mapping);

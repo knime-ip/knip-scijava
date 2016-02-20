@@ -1,6 +1,5 @@
 package org.knime.scijava.commands.adapter;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -62,7 +61,8 @@ public class DefaultInputAdapterService extends
 			return null;
 		}
 
-		Class<?> checkValue = PrimitiveTypeUtils.convertIfPrimitive(valueClass);
+		final Class<?> checkValue = PrimitiveTypeUtils
+				.convertIfPrimitive(valueClass);
 
 		for (final InputAdapter p : plugins) {
 			if (checkValue.isAssignableFrom(p.getOutputType())) {
@@ -165,13 +165,13 @@ public class DefaultInputAdapterService extends
 
 	@Override
 	public Class<? extends DataValue> getMatchingInputValueClass(
-			Class<?> type) {
+			final Class<?> type) {
 
 		if (m_typeMap == null) {
 			processInstances();
 		}
-		Class<?> checkType = PrimitiveTypeUtils.convertIfPrimitive(type);
-		Class<? extends DataValue> out = m_typeMap.get(checkType);
+		final Class<?> checkType = PrimitiveTypeUtils.convertIfPrimitive(type);
+		final Class<? extends DataValue> out = m_typeMap.get(checkType);
 		if (out == null) {
 			throw new NoSuchElementException(type.getName());
 		}

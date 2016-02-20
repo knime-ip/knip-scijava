@@ -53,14 +53,14 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 				.getMatchingInputValueClass(kModel.getItem().getType());
 
 		colbox = new ColumnSelectionComboxBox("", inputClass);
-		String mappedColumn = colMapping.getMappedColumn(inputName);
+		final String mappedColumn = colMapping.getMappedColumn(inputName);
 		try {
 			colbox.update(irs.getInputDataTableSpec(), mappedColumn);
 		} catch (final NotConfigurableException e) {
 			log.warn(e);
 		}
 		selected = colbox.getSelectedColumn();
-		
+
 		colbox.addItemListener(e -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				selected = colbox.getSelectedColumn();

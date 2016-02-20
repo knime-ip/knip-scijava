@@ -32,9 +32,6 @@ public class DefaultSimpleMappingPreProcessor extends AbstractPreprocessorPlugin
 		final DataRow row = inrow.getInputDataRow();
 
 		for (final String inputName : colMap.getMappedInputs()) {
-			// if (module.isResolved(inputName)) {
-			// return; // don't touch resolved inputs
-			// }
 
 			final String mappedColumn = colMap.getMappedColumn(inputName);
 			final ModuleItem<?> input = module.getInfo().getInput(inputName);
@@ -65,7 +62,6 @@ public class DefaultSimpleMappingPreProcessor extends AbstractPreprocessorPlugin
 			// set the input and mark resolved
 			module.setInput(inputName, ia.convert(cell, input.getType()));
 			module.setResolved(inputName, true);
-
 		}
 	}
 

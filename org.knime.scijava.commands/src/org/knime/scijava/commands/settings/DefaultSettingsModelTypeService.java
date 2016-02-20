@@ -61,7 +61,8 @@ public class DefaultSettingsModelTypeService
 		}
 
 		// check primitive conversion cache
-		Class<?> checkValue = PrimitiveTypeUtils.convertIfPrimitive(value);
+		final Class<?> checkValue = PrimitiveTypeUtils
+				.convertIfPrimitive(value);
 
 		// search
 		for (final SettingsModelTypePlugin<?, ?> p : getInstances()) {

@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.knime.scijava.commands.util.PrimitiveTypeUtils;
-import org.scijava.convert.ConvertService;
 import org.scijava.plugin.AbstractSingletonService;
-import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -45,7 +43,8 @@ public class DefaultOutputAdapterService extends
 		}
 
 		// check primitive conversion
-		Class<?> checkValue = PrimitiveTypeUtils.convertIfPrimitive(valueClass);
+		final Class<?> checkValue = PrimitiveTypeUtils
+				.convertIfPrimitive(valueClass);
 
 		// search for output adapter
 		for (final OutputAdapter outputAdapter : getInstances()) {
