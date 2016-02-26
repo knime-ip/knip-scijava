@@ -33,26 +33,6 @@ import org.scijava.service.Service;
 public interface NodeSettingsService extends Service {
 
 	/**
-	 * Set a {@link Map} of {@link String} to {@link SettingsModel}, which is
-	 * kept in a {@link WeakReference} and to which {@link SettingsModel}s are
-	 * added and read from.
-	 *
-	 * Since this service holds the {@link Map} in a {@link WeakReference}, the
-	 * instance must be ensured to stay valid <i>outside</i> of this service
-	 * since may be garbage collected otherwise.
-	 *
-	 * @param settingsModels
-	 *            Map of {@link SettingsModel} managed outside of this Service.
-	 */
-	void setSettingsModels(Map<String, SettingsModel> settingsModels);
-
-	// /**
-	// * @return SettingsModels set via {@link #setSettingsModels(Map)} or
-	// * <code>null</code> if none has been set yet.
-	// */
-	// Map<String, SettingsModel> getSettingsModels();
-
-	/**
 	 * Set the value of the SettingsModel for a ModuleItem. Prints a warning if
 	 * no SettingsModel exists for the passed <code>moduleItem</code>.
 	 *

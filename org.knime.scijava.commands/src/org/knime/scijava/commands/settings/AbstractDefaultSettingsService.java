@@ -31,11 +31,6 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	@Parameter
 	SettingsModelTypeService m_typeService;
 
-	@Override
-	public void setSettingsModels(
-			final Map<String, SettingsModel> settingsModels) {
-		m_settingsModels = new WeakReference<>(settingsModels);
-	}
 
 	/*
 	 * @return Map referenced by m_settingsModels or empty Map. Never
