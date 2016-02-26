@@ -7,9 +7,6 @@ import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
 import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.io.OutputDataRowService;
-import org.knime.scijava.commands.mapping.ColumnModuleItemMappingService;
-import org.knime.scijava.commands.mapping.ColumnToInputMappingService;
-import org.knime.scijava.commands.mapping.OutputToColumnMappingService;
 import org.knime.scijava.commands.settings.NodeModelSettingsService;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.knime.scijava.commands.settings.SettingsModelTypeService;
@@ -60,10 +57,7 @@ public class SciJavaGateway {
 					ObjectService.class, WidgetService.class,
 					KNIMEWidgetService.class, InputAdapterService.class,
 					UIService.class, OutputAdapterService.class,
-					CommandService.class, ColumnModuleItemMappingService.class,
-					ColumnToInputMappingService.class,
-					OutputToColumnMappingService.class,
-					NodeModelSettingsService.class,
+					CommandService.class, NodeModelSettingsService.class,
 					SettingsModelTypeService.class,
 					SimpleColumnMappingService.class);
 
