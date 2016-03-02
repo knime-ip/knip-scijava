@@ -79,8 +79,8 @@ public class KNIMEWidgetService
 			final Module module, final ModuleItem<?> item,
 			final List<?> objectPool) {
 		if ("true".equals(item.get(COLSELECT_KEY))) {
-			return new DefaultKNIMEWidgetModel(getContext(), inputPanel, module,
-					item, objectPool,
+			return new ColumnSelectKNIMEWidgetModel(getContext(), inputPanel,
+					module, item, objectPool,
 					new SettingsModelString(item.getName(), ""));
 		}
 		return new DefaultKNIMEWidgetModel(getContext(), inputPanel, module,
@@ -102,7 +102,7 @@ public class KNIMEWidgetService
 				return widget;
 			}
 		}
-		// create column selection
+		// create column selection if selected or as fallback
 		return createColumnSelectionWidget(model);
 	}
 
@@ -110,10 +110,6 @@ public class KNIMEWidgetService
 			final WidgetModel model) {
 		final InputWidget<?, ?> widget = new KnimeColumnSelectionWidget(model,
 				context());
-
-		// replace settingsmodel which might have been created for this input.
-		settings.removeSettingsModel(model.getItem());
-		settings.createAndAddSettingsModel(model.getItem(), true);
 
 		// add to mapping service
 		final String mapping = columnMapping

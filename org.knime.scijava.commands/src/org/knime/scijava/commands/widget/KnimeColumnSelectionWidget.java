@@ -23,7 +23,6 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
 
 	private final JPanel box;
-	private final DefaultKNIMEWidgetModel kModel;
 	private final String inputName;
 	private String selected;
 
@@ -45,19 +44,18 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 		context.inject(this);
 
 		set(model);
-		kModel = (DefaultKNIMEWidgetModel) model;
 		inputName = model.getItem().getName();
 
 		// find columns that can be converted into the target value
 		final Class<? extends DataValue> inputClass = ias
-				.getMatchingInputValueClass(kModel.getItem().getType());
+				.getMatchingInputValueClass(model.getItem().getType());
 
 		colbox = new ColumnSelectionComboxBox("", inputClass);
 		final String mappedColumn = colMapping.getMappedColumn(inputName);
 		try {
 			colbox.update(irs.getInputDataTableSpec(), mappedColumn);
 		} catch (final NotConfigurableException e) {
-			log.warn(e);
+			log.warn(e); // TODO: Fail harder?
 		}
 		selected = colbox.getSelectedColumn();
 
@@ -100,6 +98,6 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 		} catch (final NotConfigurableException e) {
 			log.warn(e);
 		}
-		box.revalidate(); // TODO is this a good idea?
+		box.revalidate();
 	}
 }

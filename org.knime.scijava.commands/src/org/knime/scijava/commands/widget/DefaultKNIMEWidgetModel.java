@@ -3,6 +3,7 @@ package org.knime.scijava.commands.widget;
 import java.util.List;
 
 import org.knime.core.node.defaultnodesettings.SettingsModel;
+import org.knime.scijava.commands.settings.NodeDialogSettingsService;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.scijava.Context;
 import org.scijava.module.Module;
@@ -20,7 +21,7 @@ public class DefaultKNIMEWidgetModel extends DefaultWidgetModel
 		implements DialogInputWidgetModel {
 
 	@Parameter
-	private NodeSettingsService m_settingsService;
+	private NodeDialogSettingsService m_settingsService;
 	private final SettingsModel m_model;
 
 	/**
@@ -45,34 +46,6 @@ public class DefaultKNIMEWidgetModel extends DefaultWidgetModel
 		super(context, inputPanel, module, item, objectPool);
 
 		m_model = m_settingsService.createAndAddSettingsModel(item, false);
-		updateFromSettingsModel();
-	}
-
-	/**
-	 * Constructor for predefined SettingsModels, use when the SettingsModel is
-	 * known or not directly related to the type of the ModuleItem. (e.g.)
-	 * Column Selection Widget.
-	 *
-	 * @param context
-	 *            Context for the model
-	 * @param inputPanel
-	 *            the panel
-	 * @param module
-	 *            the module
-	 * @param item
-	 *            the module item
-	 * @param objectPool
-	 *            the ObejctPool
-	 * @param model
-	 *            the SettingsModel to use for this ModuleItem
-	 */
-
-	public DefaultKNIMEWidgetModel(final Context context,
-			final InputPanel<?, ?> inputPanel, final Module module,
-			final ModuleItem<?> item, final List<?> objectPool,
-			final SettingsModel model) {
-		super(context, inputPanel, module, item, objectPool);
-		m_model = model;
 		updateFromSettingsModel();
 	}
 

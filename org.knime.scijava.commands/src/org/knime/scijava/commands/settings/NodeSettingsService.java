@@ -74,7 +74,7 @@ public interface NodeSettingsService extends Service {
 	 * @return the created SettingsModels
 	 */
 	List<SettingsModel> createAndAddSettingsModels(
-			Iterable<ModuleItem<?>> moduleItems, boolean forceColumnSelection);
+			Iterable<ModuleItem<?>> moduleItems);
 
 	/**
 	 * Validate all settingsModels in this service.

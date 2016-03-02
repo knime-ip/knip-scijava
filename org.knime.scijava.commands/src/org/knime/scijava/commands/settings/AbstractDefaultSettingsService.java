@@ -12,6 +12,7 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
+import org.knime.scijava.commands.KNIMESciJavaConstants;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Parameter;
 import org.scijava.service.AbstractService;
@@ -31,12 +32,11 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	@Parameter
 	SettingsModelTypeService m_typeService;
 
-
 	/*
 	 * @return Map referenced by m_settingsModels or empty Map. Never
 	 * <code>null</code>
 	 */
-	private Map<String, SettingsModel> getSafeSettingsModelsMap() {
+	protected Map<String, SettingsModel> getSafeSettingsModelsMap() {
 		if (m_settingsModels.get() == null) {
 			m_settingsModels = new WeakReference<>(new HashMap<>());
 		}
@@ -108,6 +108,7 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 		if (sm != null) {
 			return sm; // already exists, do not overwrite.
 		}
+
 		sm = createSettingsModel(moduleItem, forceColumnSelection);
 		getSafeSettingsModelsMap().put(moduleItem.getName(), sm);
 		return sm;
@@ -115,11 +116,13 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 
 	@Override
 	public List<SettingsModel> createAndAddSettingsModels(
-			final Iterable<ModuleItem<?>> moduleItems,
-			final boolean forceColumnSelection) {
+			final Iterable<ModuleItem<?>> moduleItems) {
 		final ArrayList<SettingsModel> settingsModels = new ArrayList<>();
-		moduleItems.forEach(item -> settingsModels
-				.add(createAndAddSettingsModel(item, forceColumnSelection)));
+		moduleItems.forEach(item -> {
+			final boolean force = "true".equals(
+					item.get(KNIMESciJavaConstants.FORCE_COLUMN_SELECT));
+			settingsModels.add(createAndAddSettingsModel(item, force));
+		});
 
 		return settingsModels;
 	}

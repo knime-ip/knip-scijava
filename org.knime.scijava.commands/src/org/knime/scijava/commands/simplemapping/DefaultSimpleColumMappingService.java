@@ -56,7 +56,7 @@ public class DefaultSimpleColumMappingService extends AbstractService
 	@Override
 	public String[] serialize() {
 		final List<String> out = new ArrayList<>();
-		// TODO Guard against null ?
+
 		for (final Entry<String, String> item : m_mappings.entrySet()) {
 			out.add(item.getKey() + "\n" + item.getValue());
 		}
