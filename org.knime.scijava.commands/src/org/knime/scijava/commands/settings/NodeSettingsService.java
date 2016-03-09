@@ -10,6 +10,7 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
+import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.Service;
@@ -58,13 +59,15 @@ public interface NodeSettingsService extends Service {
 	 *
 	 * @param moduleItem
 	 *            ModuleItem to create a SettingsModel for.
+	 * @param module
+	 *            the module, the moduleItem is from.
 	 * @return the created SettignsModel or null if no SettingsModel could be
 	 *         created for moduleItem.
 	 * @see #createSettingsModel(ModuleItem)
 	 * @see #createSettingsModels(Iterable)
 	 */
 	SettingsModel createAndAddSettingsModel(ModuleItem<?> moduleItem,
-			boolean forceColumnSelection);
+			Module module, boolean forceColumnSelection);
 
 	/**
 	 * Create new {@link SettingsModel}s for ModuleItems and add them to the
@@ -74,7 +77,7 @@ public interface NodeSettingsService extends Service {
 	 * @return the created SettingsModels
 	 */
 	List<SettingsModel> createAndAddSettingsModels(
-			Iterable<ModuleItem<?>> moduleItems);
+			Iterable<ModuleItem<?>> moduleItems, Module module);
 
 	/**
 	 * Validate all settingsModels in this service.

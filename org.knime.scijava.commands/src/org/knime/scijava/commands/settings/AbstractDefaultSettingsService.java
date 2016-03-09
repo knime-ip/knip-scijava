@@ -13,6 +13,7 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.scijava.commands.KNIMESciJavaConstants;
+import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Parameter;
 import org.scijava.service.AbstractService;
@@ -75,7 +76,7 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 	}
 
 	private SettingsModel createSettingsModel(final ModuleItem<?> moduleItem,
-			final boolean forceColSelec) {
+			Module module, final boolean forceColSelec) {
 		SettingsModel sm;
 
 		// check for if columnselection is forced
@@ -87,6 +88,7 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 			if (t != null) {
 				sm = t.create(moduleItem.getName(),
 						moduleItem.getMinimumValue());
+				t.setValue(sm, moduleItem.getValue(module));
 			} else {
 				// can't create a SettingsModel for this type, we will try to
 				// create a column selection Widget.
@@ -102,26 +104,26 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 
 	@Override
 	public SettingsModel createAndAddSettingsModel(
-			final ModuleItem<?> moduleItem,
+			final ModuleItem<?> moduleItem, Module module,
 			final boolean forceColumnSelection) {
 		SettingsModel sm = getSafeSettingsModelsMap().get(moduleItem.getName());
 		if (sm != null) {
 			return sm; // already exists, do not overwrite.
 		}
 
-		sm = createSettingsModel(moduleItem, forceColumnSelection);
+		sm = createSettingsModel(moduleItem, module, forceColumnSelection);
 		getSafeSettingsModelsMap().put(moduleItem.getName(), sm);
 		return sm;
 	}
 
 	@Override
 	public List<SettingsModel> createAndAddSettingsModels(
-			final Iterable<ModuleItem<?>> moduleItems) {
+			final Iterable<ModuleItem<?>> moduleItems, Module module) {
 		final ArrayList<SettingsModel> settingsModels = new ArrayList<>();
 		moduleItems.forEach(item -> {
 			final boolean force = "true".equals(
 					item.get(KNIMESciJavaConstants.FORCE_COLUMN_SELECT));
-			settingsModels.add(createAndAddSettingsModel(item, force));
+			settingsModels.add(createAndAddSettingsModel(item, module, force));
 		});
 
 		return settingsModels;
