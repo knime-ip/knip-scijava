@@ -6,7 +6,8 @@ import javax.swing.JPanel;
 
 import org.knime.core.data.DataValue;
 import org.knime.core.node.NotConfigurableException;
-import org.knime.core.node.util.ColumnSelectionComboxBox;
+import org.knime.core.node.util.ColumnSelectionPanel;
+import org.knime.core.node.util.DataValueColumnFilter;
 import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.settings.NodeDialogSettingsService;
@@ -22,9 +23,9 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 
 	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
 
-	private final JPanel box;
 	private final String inputName;
 	private String selected;
+	private final ColumnSelectionPanel colbox;
 
 	@Parameter
 	private InputAdapterService ias;
@@ -37,8 +38,6 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 	@Parameter
 	private NodeDialogSettingsService settings;
 
-	private final ColumnSelectionComboxBox colbox;
-
 	public KnimeColumnSelectionWidget(final WidgetModel model,
 			final Context context) {
 		context.inject(this);
@@ -50,7 +49,11 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 		final Class<? extends DataValue> inputClass = ias
 				.getMatchingInputValueClass(model.getItem().getType());
 
-		colbox = new ColumnSelectionComboxBox("", inputClass);
+		// optional columns get the option to select <none>
+		boolean isOptional = !model.getItem().isRequired();
+
+		colbox = new ColumnSelectionPanel(null,
+				new DataValueColumnFilter(inputClass), isOptional);
 		final String mappedColumn = colMapping.getMappedColumn(inputName);
 		try {
 			colbox.update(irs.getInputDataTableSpec(), mappedColumn);
@@ -66,9 +69,6 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 				settings.setValue(model.getItem(), selected);
 			}
 		});
-
-		box = new JPanel();
-		box.add(colbox);
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 
 	@Override
 	public JPanel getComponent() {
-		return box;
+		return colbox;
 	}
 
 	@Override
@@ -98,6 +98,6 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 		} catch (final NotConfigurableException e) {
 			log.warn(e);
 		}
-		box.revalidate();
+		colbox.revalidate(); // TODO is this needed?
 	}
 }

@@ -36,6 +36,18 @@ public class DefaultSimpleMappingPreProcessor extends AbstractPreprocessorPlugin
 			final String mappedColumn = colMap.getMappedColumn(inputName);
 			final ModuleItem<?> input = module.getInfo().getInput(inputName);
 
+			if (mappedColumn == null) { // Error or optional column
+				if (input.isRequired()) {
+					cancel("Couldn't find mapping for input \"" + inputName
+							+ "\"! Mapping is invalid.");
+				} else {
+					// Input is optional and can be null
+					module.setInput(inputName, null);
+					module.setResolved(inputName, true);
+					return;
+				}
+			}
+
 			DataCell cell = null;
 
 			try {
