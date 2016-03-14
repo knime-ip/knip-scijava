@@ -86,9 +86,16 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 			final SettingsModelType t = m_typeService
 					.getSettingsModelTypeFor(moduleItem.getType());
 			if (t != null) {
-				sm = t.create(moduleItem.getName(),
-						moduleItem.getMinimumValue());
-				t.setValue(sm, moduleItem.getValue(module));
+				// get default value
+				Object value = moduleItem.getValue(module);
+				if (value != null) {
+					sm = t.create(moduleItem.getName(), value);
+					// set to default value
+					t.setValue(sm, moduleItem.getValue(module));
+				} else {
+					sm = t.create(moduleItem.getName(),
+							moduleItem.getMinimumValue());
+				}
 			} else {
 				// can't create a SettingsModel for this type, we will try to
 				// create a column selection Widget.
