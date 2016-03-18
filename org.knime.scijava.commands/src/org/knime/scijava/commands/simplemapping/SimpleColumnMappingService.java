@@ -68,7 +68,6 @@ public interface SimpleColumnMappingService extends Service {
 	 *
 	 * @param serializedMappings
 	 *            mappings serialized with {@link #serialize()}.
-	 * @return if the serialization was successful.
 	 */
 	public void deserialize(String[] serializedMappings);
 

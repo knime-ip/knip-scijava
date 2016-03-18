@@ -30,7 +30,7 @@ public class ColumnSelectKNIMEWidgetModel extends DefaultWidgetModel
 	@Override
 	public void setValue(final Object value) {
 		m_model.setStringValue((String) value);
-	};
+	}
 
 	@Override
 	public SettingsModel getSettingsModel() {

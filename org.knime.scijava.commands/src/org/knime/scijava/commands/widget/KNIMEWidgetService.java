@@ -64,13 +64,13 @@ public class KNIMEWidgetService
 	private static final String COLSELECT_KEY = KNIMESciJavaConstants.FORCE_COLUMN_SELECT;
 
 	@Parameter
-	private LogService log;
+	private LogService m_log;
 	@Parameter
-	private SimpleColumnMappingService columnMapping;
+	private SimpleColumnMappingService m_columnMapping;
 	@Parameter
-	private NodeSettingsService settings;
+	private NodeSettingsService m_settings;
 	@Parameter
-	private DefaultWidgetService widgetService;
+	private DefaultWidgetService m_widgetService;
 
 	// -- WidgetService methods --
 
@@ -78,6 +78,7 @@ public class KNIMEWidgetService
 	public WidgetModel createModel(final InputPanel<?, ?> inputPanel,
 			final Module module, final ModuleItem<?> item,
 			final List<?> objectPool) {
+
 		if ("true".equals(item.get(COLSELECT_KEY))) {
 			return new ColumnSelectKNIMEWidgetModel(getContext(), inputPanel,
 					module, item, objectPool,
@@ -96,14 +97,16 @@ public class KNIMEWidgetService
 		final boolean createColSelect = "true"
 				.equals(model.getItem().get(COLSELECT_KEY));
 
+		InputWidget<?, ?> widget = null;
 		if (!createColSelect) {
-			final InputWidget<?, ?> widget = widgetService.create(model);
-			if (widget != null) { // widget creation successful
-				return widget;
-			}
+			widget = m_widgetService.create(model);
 		}
-		// create column selection if selected or as fallback
-		return createColumnSelectionWidget(model);
+		if (widget == null) {
+			// create column selection if selected or as fallback
+			widget = createColumnSelectionWidget(model);
+		}
+
+		return widget;
 	}
 
 	private InputWidget<?, ?> createColumnSelectionWidget(
@@ -112,12 +115,12 @@ public class KNIMEWidgetService
 				context());
 
 		// add to mapping service
-		final String mapping = columnMapping
+		final String mapping = m_columnMapping
 				.getMappedColumn(model.getItem().getName());
 		if (mapping != null) {
 			model.setValue(mapping);
 		} else {
-			columnMapping.setMappedColumn(model.getItem().getName(), "");
+			m_columnMapping.setMappedColumn(model.getItem().getName(), "");
 		}
 		return widget;
 	}

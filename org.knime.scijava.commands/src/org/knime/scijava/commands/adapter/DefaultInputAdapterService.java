@@ -173,7 +173,7 @@ public class DefaultInputAdapterService extends
 		final Class<?> checkType = PrimitiveTypeUtils.convertIfPrimitive(type);
 		final Class<? extends DataValue> out = m_typeMap.get(checkType);
 		if (out == null) {
-			throw new NoSuchElementException(type.getName());
+			throw new IllegalArgumentException(type.getName());
 		}
 		return out;
 	}
