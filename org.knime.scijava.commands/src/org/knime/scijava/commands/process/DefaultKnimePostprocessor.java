@@ -7,6 +7,7 @@ import org.knime.core.data.DataCell;
 import org.knime.core.data.DataValue;
 import org.knime.scijava.commands.adapter.OutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
+import org.knime.scijava.commands.adapter.basic.MissingCellOutputAdapter;
 import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.io.OutputDataRowService;
 import org.scijava.Priority;
@@ -56,6 +57,10 @@ public class DefaultKnimePostprocessor extends AbstractPostprocessorPlugin
 		for (final ModuleItem i : module.getInfo().outputs()) {
 			final OutputAdapter<?, DataCell> outputAdapter = adapterService
 					.getMatchingOutputAdapter(i.getType());
+
+			if (MissingCellOutputAdapter.class.isInstance(outputAdapter)) {
+				log.warn("Missing Cell created for Output: " + i.getName());
+			}
 
 			if (outputAdapter != null) {
 				cells.add((DataCell) outputAdapter.convert(
