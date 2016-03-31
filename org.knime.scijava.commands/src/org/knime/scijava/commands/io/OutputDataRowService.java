@@ -27,13 +27,13 @@ public interface OutputDataRowService extends Service {
 	/**
 	 * @param key
 	 *            RowKey for the created row
-	 * @returns a DataRow from contained DataCells or <code>null</code> if no
+	 * @return a DataRow from contained DataCells or <code>null</code> if no
 	 *          cells were set.
 	 */
 	DataRow createOutputDataRow(RowKey key);
 
 	/**
-	 * Returns a reference to the contained list of DataCells.
+	 * return a reference to the contained list of DataCells.
 	 *
 	 * @return the output {@link DataCell}s or an empty array if no cells were
 	 *         set.

@@ -23,68 +23,73 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 
 	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
 
-	private final String inputName;
-	private String selected;
-	private final ColumnSelectionPanel colbox;
+	private final String m_inputName;
+	private String m_selected;
+	private final ColumnSelectionPanel m_colbox;
 
 	@Parameter
-	private InputAdapterService ias;
+	private InputAdapterService m_ias;
 	@Parameter
-	private InputDataRowService irs;
+	private InputDataRowService m_irs;
 	@Parameter
-	private LogService log;
+	private LogService m_log;
 	@Parameter
-	private SimpleColumnMappingService colMapping;
+	private SimpleColumnMappingService m_colMapping;
 	@Parameter
-	private NodeDialogSettingsService settings;
+	private NodeDialogSettingsService m_settings;
 
 	public KnimeColumnSelectionWidget(final WidgetModel model,
 			final Context context) {
 		context.inject(this);
 
 		set(model);
-		inputName = model.getItem().getName();
+		m_inputName = model.getItem().getName();
 
 		// find columns that can be converted into the target value
-		final Class<? extends DataValue> inputClass = ias
+		final Class<? extends DataValue> inputClass = m_ias
 				.getMatchingInputValueClass(model.getItem().getType());
 
 		// optional columns get the option to select <none>
 		boolean isOptional = !model.getItem().isRequired();
 
-		colbox = new ColumnSelectionPanel(null,
+		m_colbox = new ColumnSelectionPanel(null,
 				new DataValueColumnFilter(inputClass), isOptional);
-		final String mappedColumn = colMapping.getMappedColumn(inputName);
+		final String mappedColumn = m_colMapping.getMappedColumn(m_inputName);
 		try {
-			colbox.update(irs.getInputDataTableSpec(), mappedColumn);
+			m_colbox.update(m_irs.getInputDataTableSpec(), mappedColumn);
 		} catch (final NotConfigurableException e) {
-			log.warn(e); // TODO: Fail harder?
+			m_log.warn(e); // TODO: Fail harder?
 		}
-		selected = colbox.getSelectedColumn();
-
-		colbox.addItemListener(e -> {
+		m_colbox.addItemListener(e -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
-				selected = colbox.getSelectedColumn();
-				colMapping.setMappedColumn(inputName, selected);
-				settings.setValue(model.getItem(), selected);
+				updateState(model);
 			}
 		});
+
+		// set initial selection
+		updateState(model);
+	}
+
+	private void updateState(final WidgetModel model) {
+		m_selected = m_colbox.getSelectedColumn();
+		m_colMapping.setMappedColumn(m_inputName, m_selected);
+		m_settings.setValue(model.getItem(), m_selected);
 	}
 
 	@Override
 	public String getValue() {
-		return selected;
+		return m_selected;
 	}
 
 	@Override
 	public JPanel getComponent() {
-		return colbox;
+		return m_colbox;
 	}
 
 	@Override
 	public boolean supports(final WidgetModel model) {
 		return true;
-	};
+	}
 
 	@Override
 	public Class<JPanel> getComponentType() {
@@ -94,10 +99,11 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 	@Override
 	protected void doRefresh() {
 		try {
-			colbox.update(irs.getInputDataTableSpec(), getValue());
+			m_colbox.update(m_irs.getInputDataTableSpec(), getValue());
 		} catch (final NotConfigurableException e) {
-			log.warn(e);
+			m_log.warn(e);
 		}
-		colbox.revalidate(); // TODO is this needed?
+		m_colbox.revalidate();
+		m_colbox.repaint();
 	}
 }

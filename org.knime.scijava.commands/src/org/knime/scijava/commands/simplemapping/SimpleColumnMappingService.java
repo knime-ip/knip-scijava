@@ -14,7 +14,7 @@ import org.scijava.service.Service;
 public interface SimpleColumnMappingService extends Service {
 
 	/**
-	 * Returns the column mapped to the input with the given name.
+	 * return the column mapped to the input with the given name.
 	 *
 	 * @param input
 	 *            the name of the input
