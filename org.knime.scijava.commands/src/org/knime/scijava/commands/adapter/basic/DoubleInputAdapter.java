@@ -18,6 +18,9 @@ public class DoubleInputAdapter
 
 	@Override
 	public Double getValue(final DoubleValue v) {
+		if (Double.isNaN(v.getDoubleValue())) {
+			throw new IllegalArgumentException("Double.NaN values are not supported!");
+		}
 		return v.getDoubleValue();
 	}
 
