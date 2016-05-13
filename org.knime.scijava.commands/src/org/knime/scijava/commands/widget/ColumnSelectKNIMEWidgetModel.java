@@ -29,7 +29,13 @@ public class ColumnSelectKNIMEWidgetModel extends DefaultWidgetModel
 
 	@Override
 	public void setValue(final Object value) {
-		m_model.setStringValue((String) value);
+		// NB: SciJava will try to set the default value of the input as value
+		// during the constructor call of DefaultWidgetModel, we need to ignore
+		// this.
+
+		if (value instanceof String) {
+			m_model.setStringValue((String) value);
+		}
 	}
 
 	@Override
