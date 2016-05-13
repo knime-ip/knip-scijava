@@ -129,7 +129,7 @@ public abstract class AbstractDefaultSettingsService extends AbstractService
 		final ArrayList<SettingsModel> settingsModels = new ArrayList<>();
 		moduleItems.forEach(item -> {
 			final boolean force = "true".equals(
-					item.get(KNIMESciJavaConstants.FORCE_COLUMN_SELECT));
+					item.get(KNIMESciJavaConstants.COLUMN_SELECT_KEY));
 			settingsModels.add(createAndAddSettingsModel(item, module, force));
 		});
 

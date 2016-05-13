@@ -61,7 +61,7 @@ public class KNIMEWidgetService
 		extends AbstractWrapperService<WidgetModel, InputWidget<?, ?>>
 		implements WidgetService {
 
-	private static final String COLSELECT_KEY = KNIMESciJavaConstants.FORCE_COLUMN_SELECT;
+	private static final String COLSELECT_KEY = KNIMESciJavaConstants.COLUMN_SELECT_KEY;
 
 	@Parameter
 	private LogService m_log;
