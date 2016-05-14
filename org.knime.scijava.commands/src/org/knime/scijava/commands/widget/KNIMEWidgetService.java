@@ -63,6 +63,8 @@ public class KNIMEWidgetService
 
 	private static final String COLSELECT_KEY = KNIMESciJavaConstants.COLUMN_SELECT_KEY;
 
+	private static final String DEFAULT_COL_KEY = KNIMESciJavaConstants.DEFAULT_COLUMN_KEY;
+
 	@Parameter
 	private LogService m_log;
 	@Parameter
@@ -111,17 +113,20 @@ public class KNIMEWidgetService
 
 	private InputWidget<?, ?> createColumnSelectionWidget(
 			final WidgetModel model) {
+		// check for default column
+		final String defaultCol = model.getItem().get(DEFAULT_COL_KEY);
 		final InputWidget<?, ?> widget = new KnimeColumnSelectionWidget(model,
-				context());
+				context(), defaultCol);
 
-		// add to mapping service
-		final String mapping = m_columnMapping
-				.getMappedColumn(model.getItem().getName());
-		if (mapping != null) {
-			model.setValue(mapping);
-		} else {
-			m_columnMapping.setMappedColumn(model.getItem().getName(), "");
-		}
+		// // add to mapping service
+		// final String mapping = m_columnMapping
+		// .getMappedColumn(model.getItem().getName());
+		//
+		// if (mapping != null) {
+		// model.setValue(mapping); // when recreating a model
+		// } else {
+		// m_columnMapping.setMappedColumn(model.getItem().getName(), "");
+		// }
 		return widget;
 	}
 

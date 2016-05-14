@@ -39,7 +39,7 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 	private NodeDialogSettingsService m_settings;
 
 	public KnimeColumnSelectionWidget(final WidgetModel model,
-			final Context context) {
+			final Context context, String defaultColumn) {
 		context.inject(this);
 
 		set(model);
@@ -54,12 +54,8 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 
 		m_colbox = new ColumnSelectionPanel(null,
 				new DataValueColumnFilter(inputClass), isOptional);
-		final String mappedColumn = m_colMapping.getMappedColumn(m_inputName);
-		try {
-			m_colbox.update(m_irs.getInputDataTableSpec(), mappedColumn);
-		} catch (final NotConfigurableException e) {
-			m_log.warn(e); // TODO: Fail harder?
-		}
+
+		// set listener
 		m_colbox.addItemListener(e -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				updateState(model);
@@ -67,7 +63,25 @@ public class KnimeColumnSelectionWidget extends SwingInputWidget<String> {
 		});
 
 		// set initial selection
-		updateState(model);
+		if (defaultColumn == null || "".equals(defaultColumn)) {
+			try {
+				m_colbox.update(m_irs.getInputDataTableSpec(), null);
+			} catch (NotConfigurableException e) {
+				m_log.warn(e);
+			}
+			updateState(model); // no default value set to first applicable
+		} else {
+			try {
+				m_colbox.update(m_irs.getInputDataTableSpec(), defaultColumn);
+				m_selected = defaultColumn;
+				m_colMapping.setMappedColumn(m_inputName, m_selected);
+				m_settings.setValue(model.getItem(), m_selected);
+			} catch (final NotConfigurableException e) {
+				m_log.warn("Could not select the column" + defaultColumn + e);
+				// TODO: Fail harder?
+				updateState(model);
+			}
+		}
 	}
 
 	private void updateState(final WidgetModel model) {
