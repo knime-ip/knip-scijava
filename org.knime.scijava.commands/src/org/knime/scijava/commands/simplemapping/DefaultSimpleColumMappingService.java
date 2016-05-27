@@ -15,7 +15,7 @@ public class DefaultSimpleColumMappingService extends AbstractService
 		implements SimpleColumnMappingService {
 
 	private final Map<String, String> m_mappings = new HashMap<>();
-
+	
 	@Override
 	public String getMappedColumn(final String input) {
 		return m_mappings.get(input);

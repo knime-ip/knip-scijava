@@ -117,16 +117,6 @@ public class KNIMEWidgetService
 		final String defaultCol = model.getItem().get(DEFAULT_COL_KEY);
 		final InputWidget<?, ?> widget = new KnimeColumnSelectionWidget(model,
 				context(), defaultCol);
-
-		// // add to mapping service
-		// final String mapping = m_columnMapping
-		// .getMappedColumn(model.getItem().getName());
-		//
-		// if (mapping != null) {
-		// model.setValue(mapping); // when recreating a model
-		// } else {
-		// m_columnMapping.setMappedColumn(model.getItem().getName(), "");
-		// }
 		return widget;
 	}
 
