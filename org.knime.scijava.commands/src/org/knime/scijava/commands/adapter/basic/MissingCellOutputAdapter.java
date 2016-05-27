@@ -18,6 +18,14 @@ import org.scijava.plugin.Plugin;
 public class MissingCellOutputAdapter
 		extends AbstractOutputAdapter<Object, MissingCell> {
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T convert(final Object src, final Class<T> dest) {
+
+		// NB We always return missing value, even for null inputs.
+		return (T) createCell(src);
+	}
+
 	@Override
 	public Class<MissingCell> getOutputType() {
 		return MissingCell.class;
