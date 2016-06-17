@@ -1,10 +1,14 @@
 package org.knime.scijava.commands.simplemapping;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.scijava.commands.adapter.InputAdapter;
-import org.knime.scijava.commands.adapter.InputAdapterService;
+import org.knime.core.data.convert.java.DataCellToJavaConverter;
+import org.knime.core.data.convert.java.DataCellToJavaConverterRegistry;
+import org.knime.scijava.commands.converter.ConverterCache;
 import org.knime.scijava.commands.io.InputDataRowService;
 import org.knime.scijava.commands.process.KnimePreprocessor;
 import org.scijava.Priority;
@@ -21,13 +25,15 @@ public class DefaultSimpleMappingPreProcessor extends AbstractPreprocessorPlugin
 		implements KnimePreprocessor {
 
 	@Parameter
-	SimpleColumnMappingService m_colMap;
+	private SimpleColumnMappingService m_colMap;
 	@Parameter
-	InputDataRowService m_inrow;
+	private InputDataRowService m_inrow;
 	@Parameter
-	InputAdapterService m_ias;
-	@Parameter
-	LogService m_log;
+	private LogService m_log;
+
+	DataCellToJavaConverterRegistry m_conRegister = DataCellToJavaConverterRegistry
+			.getInstance();
+	Map<String, DataCellToJavaConverter<DataCell, ?>> m_converters = new HashMap<>();
 
 	@Override
 	public void process(final Module module) {
@@ -60,27 +66,16 @@ public class DefaultSimpleMappingPreProcessor extends AbstractPreprocessorPlugin
 				// column count
 				String errortext = "Couldn't find column \"" + mappedColumn
 						+ "\" which is mapped to input " + inputName + ".";
-				m_log.error(errortext);
+				m_log.error(errortext, e);
 				cancel(errortext);
 			}
 
-			// find a input adapter which can convert the cells value to the
-			// a type required by the input
-			@SuppressWarnings("unchecked")
-			final InputAdapter<DataCell, ?> ia = m_ias
-					.getMatchingInputAdapter(cell.getClass(), input.getType());
-
-			if (ia == null) {
-				cancel("No InputAdapter for: " + cell.getClass() + " > "
-						+ input.getType().getCanonicalName());
-				return;
-			}
-
 			// set the input and mark resolved
-			Object converted = null;
+			Object converted;
 			try {
-				converted = ia.convert(cell, input.getType());
-			} catch (IllegalArgumentException e) {
+				converted = ConverterCache.getInstance().convert(cell,
+						input.getType());
+			} catch (Exception e) {
 				throw new IllegalArgumentException(
 						"Could not process value for input: " + inputName
 								+ ", the mapped column: \"" + mappedColumn
