@@ -32,7 +32,7 @@ public interface InputAdapterService extends SingletonService<InputAdapter> {
 	 * @param <D>
 	 *            Type of the DataValue, usually automatically deduced from the
 	 *            parameters
-	 * @param <D>
+	 * @param <T>
 	 *            Type of the value, usually automatically deduced from the
 	 *            parameters
 	 * @return an InputAdapter which adapts dataValueClass instances to
@@ -53,4 +53,13 @@ public interface InputAdapterService extends SingletonService<InputAdapter> {
 	Collection<InputAdapter> getMatchingInputAdapters(
 			Class<? extends DataValue> dataValueClass);
 
+	/**
+	 * Get the DataValue that is compatible with the given type. This method
+	 * will only return DataValues for which an InputAdapter exists.
+	 *
+	 * @param type
+	 *            the type of the input
+	 * @return a compatible DataValue
+	 */
+	Class<? extends DataValue> getMatchingInputValueClass(Class<?> type);
 }

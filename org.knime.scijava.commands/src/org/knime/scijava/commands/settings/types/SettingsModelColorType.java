@@ -18,6 +18,9 @@ public class SettingsModelColorType
 	@Override
 	public SettingsModelColor create(final String name,
 			final Color defaultValue) {
+		if (defaultValue == null) {
+			return new SettingsModelColor(name, Color.RED);
+		}
 		return new SettingsModelColor(name, defaultValue);
 	}
 

@@ -16,21 +16,21 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataRow;
+import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DataType;
 import org.knime.core.data.RowKey;
 import org.knime.core.data.def.BooleanCell;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
-import org.knime.scijava.commands.DefaultInputDataRowService;
-import org.knime.scijava.commands.DefaultKnimePostprocessor;
-import org.knime.scijava.commands.DefaultOutputDataRowService;
-import org.knime.scijava.commands.InputDataRowService;
-import org.knime.scijava.commands.OutputCellsService;
 import org.knime.scijava.commands.adapter.InputAdapterService;
 import org.knime.scijava.commands.adapter.OutputAdapterService;
-import org.knime.scijava.commands.mapping.ColumnInputMappingKnimePreprocessor;
-import org.knime.scijava.commands.mapping.ColumnModuleItemMappingService;
+import org.knime.scijava.commands.io.DefaultInputDataRowService;
+import org.knime.scijava.commands.io.DefaultOutputDataRowService;
+import org.knime.scijava.commands.io.InputDataRowService;
+import org.knime.scijava.commands.io.OutputDataRowService;
+import org.knime.scijava.commands.process.DefaultKnimePostprocessor;
 import org.knime.scijava.core.ResourceAwareClassLoader;
 import org.scijava.Context;
 import org.scijava.ItemIO;
@@ -40,13 +40,12 @@ import org.scijava.command.CommandService;
 import org.scijava.plugin.DefaultPluginFinder;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.PluginIndex;
-import org.scijava.plugin.PluginService;
 import org.scijava.service.Service;
 
 /**
  * Test for {@link ColumnInputMappingKnimePreprocessor} and
  * {@link DefaultKnimePostprocessor}.
- * 
+ *
  * @author Jonathan Hale (University of Konstanz)
  */
 public class KnimeProcessorTest {
@@ -58,21 +57,19 @@ public class KnimeProcessorTest {
 	@Parameter
 	InputDataRowService m_inputRowService;
 	@Parameter
-	OutputCellsService m_outputCellsService;
-	@Parameter
-	ColumnModuleItemMappingService m_cimService;
+	OutputDataRowService m_outputCellsService;
 
 	protected static List<Class<? extends Service>> requiredServices = Arrays.<Class<? extends Service>> asList(
 			DefaultInputDataRowService.class, DefaultOutputDataRowService.class, CommandService.class,
-			ColumnModuleItemMappingService.class, InputAdapterService.class, OutputAdapterService.class);
+			InputAdapterService.class, OutputAdapterService.class);
 
-	private static final DataRow m_testRow;
+	// Create the test table
+	private static final DataRow m_testRow = new DefaultRow(new RowKey("TestRow001"), BooleanCell.TRUE, new IntCell(42),
+			new IntCell(420), new IntCell(42000), new LongCell(4200000), new StringCell("KNIME"), new StringCell(" "));
 
-	static {
-		// Create the test table
-		m_testRow = new DefaultRow(new RowKey("TestRow001"), BooleanCell.TRUE, new IntCell(42), new IntCell(420),
-				new IntCell(42000), new LongCell(4200000), new StringCell("KNIME"), new StringCell(" "));
-	}
+	private static final DataTableSpec m_spec = new DataTableSpec(new String[] { "b", "by", "s", "i", "l", "str", "c" },
+			new DataType[] { BooleanCell.TYPE, IntCell.TYPE, IntCell.TYPE, IntCell.TYPE, LongCell.TYPE, StringCell.TYPE,
+					StringCell.TYPE });
 
 	@BeforeClass
 	public static void setUpOnce() {
@@ -90,29 +87,15 @@ public class KnimeProcessorTest {
 	@Before
 	public void setUp() {
 		context.inject(this);
-
-		// add test mapping
-		m_cimService.addMapping("b", "b");
-		m_cimService.addMapping("by", "by");
-		m_cimService.addMapping("s", "s");
-		m_cimService.addMapping("i", "i");
-		m_cimService.addMapping("l", "l");
-		m_cimService.addMapping("str", "str");
-		m_cimService.addMapping("c", "c");
 	}
 
 	@Test
 	public void testModuleProcessing() throws InterruptedException, ExecutionException {
-		// check if the ColumnInputMappingPreprocessor plugin was found:
-		assertNotNull("ColumnInputMappingPreprocessor was not found.",
-				context.getService(PluginService.class).getPlugin(ColumnInputMappingKnimePreprocessor.class));
-		assertNotNull("DefaultKnimePostprocessor was not found.",
-				context.getService(PluginService.class).getPlugin(DefaultKnimePostprocessor.class));
-
 		assertNotNull(m_inputRowService);
 		assertNotNull(m_outputCellsService);
 		assertNotNull(m_commandService);
 		m_inputRowService.setInputDataRow(m_testRow);
+		m_inputRowService.setDataTableSpec(m_spec);
 
 		Future<CommandModule> command = m_commandService.run(MyCommand.class, true);
 		assertNotNull(command);
@@ -137,7 +120,7 @@ public class KnimeProcessorTest {
 	 * Test command which verifies that inputs have been filled by the
 	 * preprocessor and feeds them directly back in the outputs which can then
 	 * be collected into a data row.
-	 * 
+	 *
 	 * @author Jonathan Hale
 	 */
 	public static class MyCommand implements Command {

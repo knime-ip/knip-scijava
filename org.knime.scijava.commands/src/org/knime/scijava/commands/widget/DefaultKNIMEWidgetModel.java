@@ -3,6 +3,7 @@ package org.knime.scijava.commands.widget;
 import java.util.List;
 
 import org.knime.core.node.defaultnodesettings.SettingsModel;
+import org.knime.scijava.commands.settings.NodeDialogSettingsService;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.scijava.Context;
 import org.scijava.module.Module;
@@ -20,48 +21,48 @@ public class DefaultKNIMEWidgetModel extends DefaultWidgetModel
 		implements DialogInputWidgetModel {
 
 	@Parameter
-	private NodeSettingsService settingsService;
-	private final SettingsModel model;
+	private NodeDialogSettingsService m_settingsService;
+	private final SettingsModel m_model;
 
 	/**
-	 * Constructor
-	 * 
+	 * Constructor for generic input items. The used SettingsModel will be
+	 * created by a {@link NodeSettingsService}.
+	 *
+	 * @see DialogInputWidgetModel
 	 * @param context
 	 *            Context for the model
 	 * @param inputPanel
+	 *            the panel
 	 * @param module
+	 *            the module
 	 * @param item
+	 *            the module item
 	 * @param objectPool
+	 *            the ObejctPool
 	 */
 	public DefaultKNIMEWidgetModel(final Context context,
 			final InputPanel<?, ?> inputPanel, final Module module,
 			final ModuleItem<?> item, final List<?> objectPool) {
 		super(context, inputPanel, module, item, objectPool);
 
-		model = settingsService.createAndAddSettingsModel(item);
-		updateToSettingsModel();
-	}
-
-	@Override
-	public void updateSettingsModel() {
+		m_model = m_settingsService.createAndAddSettingsModel(item, module,
+				false);
+		updateFromSettingsModel();
 	}
 
 	@Override
 	public void setValue(final Object value) {
-		super.setValue(value);
-
 		// keep track of the values, update settings model
-		settingsService.setValue(getItem(), value);
+		m_settingsService.setValue(getItem(), value);
 	}
 
 	@Override
 	public SettingsModel getSettingsModel() {
-		return model;
+		return m_model;
 	}
 
 	@Override
-	public void updateToSettingsModel() {
-		super.setValue(settingsService.getValue(getItem()));
+	public void updateFromSettingsModel() {
+		super.setValue(m_settingsService.getValue(getItem()));
 	}
-
 }

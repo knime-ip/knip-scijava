@@ -15,7 +15,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModel;
  *            Type of the SettingsModel.
  * @param <V>
  *            Type of the Value to be set/get.
- * 
+ *
  *            TODO: This sadly doesn't do the job. Sometimes it is not possible
  *            to set set value just from Object.
  */
@@ -24,7 +24,7 @@ public interface SettingsModelType<T extends SettingsModel, V> {
 	/**
 	 * Create a new SettingsModel instance with type described by this
 	 * SettingsModelType.
-	 * 
+	 *
 	 * @param name
 	 *            Name of the SettingsModel.
 	 * @param defaultValue

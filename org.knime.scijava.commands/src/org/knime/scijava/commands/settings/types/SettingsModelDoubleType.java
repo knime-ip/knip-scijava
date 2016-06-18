@@ -16,6 +16,9 @@ public class SettingsModelDoubleType
 	@Override
 	public SettingsModelDouble create(final String name,
 			final Double defaultValue) {
+		if (defaultValue == null) {
+			return new SettingsModelDouble(name, 0.0d);
+		}
 		return new SettingsModelDouble(name, defaultValue);
 	}
 

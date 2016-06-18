@@ -1,7 +1,7 @@
 package org.knime.scijava.commands.adapter.basic;
 
 import org.knime.core.data.def.BooleanCell;
-import org.knime.scijava.commands.AbstractOutputAdapter;
+import org.knime.scijava.commands.adapter.AbstractOutputAdapter;
 import org.knime.scijava.commands.adapter.OutputAdapter;
 import org.scijava.plugin.Plugin;
 
@@ -17,7 +17,7 @@ public class BooleanOutputAdapter
 
 	@Override
 	public BooleanCell createCell(final Boolean o) {
-		return (o) ? BooleanCell.TRUE : BooleanCell.FALSE;
+		return o ? BooleanCell.TRUE : BooleanCell.FALSE;
 	}
 
 	@Override

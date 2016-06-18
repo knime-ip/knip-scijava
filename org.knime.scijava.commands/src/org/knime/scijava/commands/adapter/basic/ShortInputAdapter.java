@@ -1,7 +1,7 @@
 package org.knime.scijava.commands.adapter.basic;
 
 import org.knime.core.data.IntValue;
-import org.knime.scijava.commands.AbstractInputAdapter;
+import org.knime.scijava.commands.adapter.AbstractInputAdapter;
 import org.knime.scijava.commands.adapter.InputAdapter;
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
@@ -13,7 +13,7 @@ import org.scijava.plugin.Plugin;
  * @author Christian Dietz, University of Konstanz
  *
  */
-@Plugin(type = InputAdapter.class, priority=Priority.LOW_PRIORITY)
+@Plugin(type = InputAdapter.class, priority = Priority.LOW_PRIORITY)
 public class ShortInputAdapter extends AbstractInputAdapter<IntValue, Short> {
 
 	@Override

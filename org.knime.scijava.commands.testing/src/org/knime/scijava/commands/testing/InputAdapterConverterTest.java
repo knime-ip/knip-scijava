@@ -67,8 +67,7 @@ public class InputAdapterConverterTest {
 
 	public <T extends DataValue> void testInputAdapterConversion(T dataValue, Class<? extends InputAdapter<?, ?>> ia,
 			Class<?> valueClass) {
-		assertNotNull("Plugin " + ia.getClass().getName() + " could not be found",
-				convertService.getInstance(ia));
+		assertNotNull("Plugin " + ia.getClass().getName() + " could not be found", convertService.getInstance(ia));
 
 		Object o = convertService.convert(dataValue, valueClass);
 

@@ -16,6 +16,9 @@ public class SettingsModelBooleanType
 	@Override
 	public SettingsModelBoolean create(final String name,
 			final Boolean defaultValue) {
+		if (defaultValue == null) {
+			return new SettingsModelBoolean(name, false);
+		}
 		return new SettingsModelBoolean(name, defaultValue);
 	}
 

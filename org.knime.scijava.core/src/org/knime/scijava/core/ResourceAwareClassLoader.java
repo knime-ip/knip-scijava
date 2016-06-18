@@ -2,7 +2,6 @@ package org.knime.scijava.core;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -11,15 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.internal.preferences.EclipsePreferences;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.equinox.internal.app.EclipseAppContainer;
 import org.eclipse.osgi.container.ModuleWire;
-import org.eclipse.osgi.container.ModuleWiring;
-import org.eclipse.osgi.container.namespaces.EclipsePlatformNamespace;
 import org.eclipse.osgi.internal.loader.EquinoxClassLoader;
 import org.eclipse.osgi.util.ManifestElement;
-import org.knime.core.util.EclipseUtil;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -46,8 +40,8 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	private final String[] RESOURCES = new String[] { "META-INF/json/org.scijava.plugin.Plugin",
 			"META-INF/services/javax.script.ScriptEngineFactory" };
 
-	private final Map<String, Set<URL>> urls = new HashMap<String, Set<URL>>();
-	private final Set<URL> bundleUrls = new HashSet<URL>();
+	private final Map<String, Set<URL>> urls = new HashMap<>();
+	private final Set<URL> bundleUrls = new HashSet<>();
 
 	/**
 	 * Constructor.
@@ -60,6 +54,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	 * @deprecated use {@link #ResourceAwareClassLoader(ClassLoader, Class)}
 	 *             instead.
 	 */
+	@Deprecated
 	public ResourceAwareClassLoader(final ClassLoader parent) {
 		this(parent, null);
 	}
@@ -103,7 +98,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 					final Bundle parent = FrameworkUtil.getBundle(clazz);
 					try {
 						final ManifestElement[] elements = ManifestElement.parseHeader("Eclipse-RegisterBuddy",
-								(String) child.getHeaders().get("Eclipse-RegisterBuddy"));
+								child.getHeaders().get("Eclipse-RegisterBuddy"));
 
 						if (elements != null) {
 							for (ManifestElement element : elements) {
@@ -122,7 +117,7 @@ public class ResourceAwareClassLoader extends ClassLoader {
 	}
 
 	private void processBundle(final Bundle b, final boolean addRessources) {
-		final String requireBundle = (String) b.getHeaders().get(Constants.REQUIRE_BUNDLE);
+		final String requireBundle = b.getHeaders().get(Constants.REQUIRE_BUNDLE);
 		try {
 			final ManifestElement[] elements = ManifestElement.parseHeader(Constants.BUNDLE_CLASSPATH, requireBundle);
 			for (final ManifestElement manifestElement : elements) {

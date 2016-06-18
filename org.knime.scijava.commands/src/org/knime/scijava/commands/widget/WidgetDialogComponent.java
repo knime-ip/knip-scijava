@@ -15,7 +15,7 @@ public class WidgetDialogComponent extends DialogComponent {
 
 	/* the wrapped InputWidget */
 	private final SwingInputWidget<?> m_widget;
-	private final DefaultKNIMEWidgetModel m_model;
+	private final DialogInputWidgetModel m_model;
 
 	/**
 	 * Constructor.
@@ -27,7 +27,7 @@ public class WidgetDialogComponent extends DialogComponent {
 	 *            InputWidget.
 	 */
 	public WidgetDialogComponent(final SwingInputWidget<?> widget,
-			final DefaultKNIMEWidgetModel model) {
+			final DialogInputWidgetModel model) {
 		super(model.getSettingsModel());
 
 		m_widget = widget;
@@ -38,7 +38,8 @@ public class WidgetDialogComponent extends DialogComponent {
 
 	@Override
 	protected void updateComponent() {
-		m_model.updateToSettingsModel();
+		m_widget.refreshWidget();
+		m_model.updateFromSettingsModel();
 	}
 
 	@Override

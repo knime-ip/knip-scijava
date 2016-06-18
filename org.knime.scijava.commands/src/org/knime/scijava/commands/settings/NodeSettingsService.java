@@ -1,7 +1,7 @@
 package org.knime.scijava.commands.settings;
 
 import java.lang.ref.WeakReference;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.knime.core.node.InvalidSettingsException;
@@ -10,6 +10,7 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
+import org.scijava.module.Module;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.Service;
@@ -33,26 +34,6 @@ import org.scijava.service.Service;
 public interface NodeSettingsService extends Service {
 
 	/**
-	 * Set a {@link Map} of {@link String} to {@link SettingsModel}, which is
-	 * kept in a {@link WeakReference} and to which {@link SettingsModel}s are
-	 * added and read from.
-	 *
-	 * Since this service holds the {@link Map} in a {@link WeakReference}, the
-	 * instance must be enured to stay valid <i>outside</i> of this service
-	 * since may be garbage collected otherwise.
-	 *
-	 * @param settingsModels
-	 *            Map of {@link SettingsModel} managed outside of this Service.
-	 */
-	void setSettingsModels(Map<String, SettingsModel> settingsModels);
-
-	/**
-	 * @return SettingsModels set via {@link #setSettingsModels(Map)} or
-	 *         <code>null</code> if none has been set yet.
-	 */
-	Map<String, SettingsModel> getSettingsModels();
-
-	/**
 	 * Set the value of the SettingsModel for a ModuleItem. Prints a warning if
 	 * no SettingsModel exists for the passed <code>moduleItem</code>.
 	 *
@@ -72,40 +53,21 @@ public interface NodeSettingsService extends Service {
 	Object getValue(ModuleItem<?> moduleItem);
 
 	/**
-	 * Create a new {@link SettingsModel} for a {@link ModuleItem}. This does
-	 * not add the created {@link SettingsModel} to the Map.
-	 *
-	 * @param moduleItem
-	 *            ModuleItem to create a SettingsModel for.
-	 * @return the created SettignsModel or null if no SettingsModel could be
-	 *         created for moduleItem.
-	 * @see #createAndAddSettingsModel(ModuleItem)
-	 * @see #createSettingsModels(Iterable)
-	 */
-	SettingsModel createSettingsModel(ModuleItem<?> moduleItem);
-
-	/**
 	 * Create a new {@link SettingsModel} for a {@link ModuleItem} and add it to
 	 * the {@link Map} of {@link SettingsModel}s set via
 	 * {@link #setSettingsModels(Map)}.
 	 *
 	 * @param moduleItem
 	 *            ModuleItem to create a SettingsModel for.
+	 * @param module
+	 *            the module, the moduleItem is from.
 	 * @return the created SettignsModel or null if no SettingsModel could be
 	 *         created for moduleItem.
 	 * @see #createSettingsModel(ModuleItem)
 	 * @see #createSettingsModels(Iterable)
 	 */
-	SettingsModel createAndAddSettingsModel(ModuleItem<?> moduleItem);
-
-	/**
-	 * Create new {@link SettingsModel} for {@link ModuleItem}s.
-	 *
-	 * @param moduleItems
-	 * @return the created SettingsModels
-	 */
-	Collection<SettingsModel> createSettingsModels(
-			Iterable<ModuleItem<?>> moduleItems);
+	SettingsModel createAndAddSettingsModel(ModuleItem<?> moduleItem,
+			Module module, boolean forceColumnSelection);
 
 	/**
 	 * Create new {@link SettingsModel}s for ModuleItems and add them to the
@@ -114,8 +76,8 @@ public interface NodeSettingsService extends Service {
 	 * @param moduleItems
 	 * @return the created SettingsModels
 	 */
-	Collection<SettingsModel> createAndAddSettingsModels(
-			Iterable<ModuleItem<?>> moduleItems);
+	List<SettingsModel> createAndAddSettingsModels(
+			Iterable<ModuleItem<?>> moduleItems, Module module);
 
 	/**
 	 * Validate all settingsModels in this service.
@@ -148,4 +110,16 @@ public interface NodeSettingsService extends Service {
 	 */
 	boolean saveSettingsTo(NodeSettingsWO settings);
 
+	/**
+	 * Removes all settings from the Service.
+	 */
+	void clear();
+
+	/**
+	 * Removes the settingsModel associated with the given module item (input).
+	 *
+	 * @param item
+	 *            the item which settings model will be removed.
+	 */
+	void removeSettingsModel(ModuleItem<?> item);
 }

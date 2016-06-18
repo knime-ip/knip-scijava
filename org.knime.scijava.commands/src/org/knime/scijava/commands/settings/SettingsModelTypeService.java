@@ -32,7 +32,8 @@ public interface SettingsModelTypeService
 	SettingsModelType getSettingsModelTypeFor(SettingsModel settingsModel);
 
 	/**
-	 * Get a SettingsModel type which can assign value to a SettingsModel.
+	 * Get a SettingsModelType which can assign the given value to a
+	 * SettingsModel.
 	 *
 	 * @param value
 	 *            the value which to store in a SettingsModel.

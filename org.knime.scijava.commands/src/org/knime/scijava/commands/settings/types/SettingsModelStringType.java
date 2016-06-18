@@ -16,6 +16,9 @@ public class SettingsModelStringType
 	@Override
 	public SettingsModelString create(final String name,
 			final String defaultValue) {
+		if (defaultValue == null) {
+			return new SettingsModelString(name, "");
+		}
 		return new SettingsModelString(name, defaultValue);
 	}
 

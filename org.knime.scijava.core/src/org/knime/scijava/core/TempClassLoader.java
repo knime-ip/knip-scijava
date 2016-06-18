@@ -40,7 +40,9 @@ public class TempClassLoader implements AutoCloseable {
 
 	/**
 	 * Constructor
-	 * @param cl ClassLoader to use until {@link #close()} is called.
+	 * 
+	 * @param cl
+	 *            ClassLoader to use until {@link #close()} is called.
 	 */
 	public TempClassLoader(ClassLoader cl) {
 		m_previousClassLoader = Thread.currentThread().getContextClassLoader();

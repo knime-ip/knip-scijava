@@ -33,6 +33,10 @@ package org.knime.scijava.commands.widget;
 
 import java.util.List;
 
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
+import org.knime.scijava.commands.KNIMESciJavaConstants;
+import org.knime.scijava.commands.settings.NodeSettingsService;
+import org.knime.scijava.commands.simplemapping.SimpleColumnMappingService;
 import org.scijava.Priority;
 import org.scijava.log.LogService;
 import org.scijava.module.Module;
@@ -47,20 +51,28 @@ import org.scijava.widget.WidgetModel;
 import org.scijava.widget.WidgetService;
 
 /**
- * Default service for managing available {@link InputWidget}s.
+ * KNIME service for managing available {@link InputWidget}s.
  *
- * @author Curtis Rueden
+ * @author Gabriel Einsdorf
+ * @author Jonathan Hale
  */
 @Plugin(type = WidgetService.class, priority = Priority.HIGH_PRIORITY)
 public class KNIMEWidgetService
 		extends AbstractWrapperService<WidgetModel, InputWidget<?, ?>>
 		implements WidgetService {
 
-	@Parameter
-	private LogService log;
+	private static final String COLSELECT_KEY = KNIMESciJavaConstants.COLUMN_SELECT_KEY;
+
+	private static final String DEFAULT_COL_KEY = KNIMESciJavaConstants.DEFAULT_COLUMN_KEY;
 
 	@Parameter
-	private DefaultWidgetService widgetService;
+	private LogService m_log;
+	@Parameter
+	private SimpleColumnMappingService m_columnMapping;
+	@Parameter
+	private NodeSettingsService m_settings;
+	@Parameter
+	private DefaultWidgetService m_widgetService;
 
 	// -- WidgetService methods --
 
@@ -68,6 +80,12 @@ public class KNIMEWidgetService
 	public WidgetModel createModel(final InputPanel<?, ?> inputPanel,
 			final Module module, final ModuleItem<?> item,
 			final List<?> objectPool) {
+
+		if ("true".equals(item.get(COLSELECT_KEY))) {
+			return new ColumnSelectKNIMEWidgetModel(getContext(), inputPanel,
+					module, item, objectPool,
+					new SettingsModelString(item.getName(), ""));
+		}
 		return new DefaultKNIMEWidgetModel(getContext(), inputPanel, module,
 				item, objectPool);
 	}
@@ -76,7 +94,30 @@ public class KNIMEWidgetService
 
 	@Override
 	public InputWidget<?, ?> create(final WidgetModel model) {
-		return widgetService.create(model);
+
+		// check if the creation of the column selection widget is forced.
+		final boolean createColSelect = "true"
+				.equals(model.getItem().get(COLSELECT_KEY));
+
+		InputWidget<?, ?> widget = null;
+		if (!createColSelect) {
+			widget = m_widgetService.create(model);
+		}
+		if (widget == null) {
+			// create column selection if selected or as fallback
+			widget = createColumnSelectionWidget(model);
+		}
+
+		return widget;
+	}
+
+	private InputWidget<?, ?> createColumnSelectionWidget(
+			final WidgetModel model) {
+		// check for default column
+		final String defaultCol = model.getItem().get(DEFAULT_COL_KEY);
+		final InputWidget<?, ?> widget = new KnimeColumnSelectionWidget(model,
+				context(), defaultCol);
+		return widget;
 	}
 
 	// -- PTService methods --

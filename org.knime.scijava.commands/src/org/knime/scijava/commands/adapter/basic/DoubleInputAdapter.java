@@ -1,7 +1,7 @@
 package org.knime.scijava.commands.adapter.basic;
 
 import org.knime.core.data.DoubleValue;
-import org.knime.scijava.commands.AbstractInputAdapter;
+import org.knime.scijava.commands.adapter.AbstractInputAdapter;
 import org.knime.scijava.commands.adapter.InputAdapter;
 import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
@@ -12,12 +12,15 @@ import org.scijava.plugin.Plugin;
  * @author Jonathan Hale (University of Konstanz)
  *
  */
-@Plugin(type = InputAdapter.class, priority=Priority.HIGH_PRIORITY)
+@Plugin(type = InputAdapter.class, priority = Priority.HIGH_PRIORITY)
 public class DoubleInputAdapter
 		extends AbstractInputAdapter<DoubleValue, Double> {
 
 	@Override
 	public Double getValue(final DoubleValue v) {
+		if (Double.isNaN(v.getDoubleValue())) {
+			throw new IllegalArgumentException("Double.NaN values are not supported!");
+		}
 		return v.getDoubleValue();
 	}
 
