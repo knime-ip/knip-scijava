@@ -17,42 +17,42 @@ import org.scijava.service.AbstractService;
  */
 @Plugin(type = InputDataRowService.class, priority = DefaultInputDataRowService.PRIORITY)
 public class DefaultInputDataRowService extends AbstractService
-		implements InputDataRowService {
+        implements InputDataRowService {
 
-	/**
-	 * Priority of this {@link Plugin}
-	 */
-	public static final double PRIORITY = Priority.NORMAL_PRIORITY;
+    /**
+     * Priority of this {@link Plugin}
+     */
+    public static final double PRIORITY = Priority.NORMAL_PRIORITY;
 
-	private WeakReference<DataRow> m_row = new WeakReference<>(null);
-	private WeakReference<DataTableSpec> m_spec = new WeakReference<>(null);
+    private WeakReference<DataRow> m_row = new WeakReference<>(null);
+    private WeakReference<DataTableSpec> m_spec = new WeakReference<>(null);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public DataRow getInputDataRow() {
-		return m_row.get();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DataRow getInputDataRow() {
+        return m_row.get();
+    }
 
-	/**
-	 * Set the contained DataRow;
-	 *
-	 * @param dataRow
-	 */
-	@Override
-	public void setInputDataRow(final DataRow dataRow) {
-		m_row = new WeakReference<>(dataRow);
-	}
+    /**
+     * Set the contained DataRow;
+     *
+     * @param dataRow
+     */
+    @Override
+    public void setInputDataRow(final DataRow dataRow) {
+        m_row = new WeakReference<>(dataRow);
+    }
 
-	@Override
-	public DataTableSpec getInputDataTableSpec() {
-		return m_spec.get();
-	}
+    @Override
+    public DataTableSpec getInputDataTableSpec() {
+        return m_spec.get();
+    }
 
-	@Override
-	public void setDataTableSpec(final DataTableSpec spec) {
-		m_spec = new WeakReference<>(spec);
-	}
+    @Override
+    public void setDataTableSpec(final DataTableSpec spec) {
+        m_spec = new WeakReference<>(spec);
+    }
 
 }

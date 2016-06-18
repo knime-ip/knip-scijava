@@ -24,6 +24,7 @@ Bundle-ClassPath: scijava_commands.jar
 Export-Package: org.knime.scijava.commands,
  org.knime.scijava.commands.adapter,
  org.knime.scijava.commands.adapter.basic,
+ org.knime.scijava.commands.converter,
  org.knime.scijava.commands.io,
  org.knime.scijava.commands.mapping,
  org.knime.scijava.commands.mapping.process,
