@@ -70,16 +70,15 @@ public class DefaultConverterCacheService extends AbstractService
     public DataCell convertToKnime(final Object in, final Class<?> inType)
             throws Exception {
 
-        // final String key = createOutputKey(inType);
+        final String key = createOutputKey(inType);
 
-        // final JavaToDataCellConverter converter = m_outConverters
-        // .getOrDefault(key, addNewOutputConverter(inType));
-        final JavaToDataCellConverter converter = addNewOutputConverter(inType);
+        final JavaToDataCellConverter converter = m_outConverters
+                .getOrDefault(key, addNewOutputConverter(inType));
         return converter.convert(in);
     }
 
-    private String createOutputKey(final Object in) {
-        return in.getClass().getName();
+    private String createOutputKey(final Class<?> inType) {
+        return inType.getName();
     }
 
     private <I> JavaToDataCellConverter<?> addNewOutputConverter(
@@ -96,8 +95,8 @@ public class DefaultConverterCacheService extends AbstractService
 
         final JavaToDataCellConverter<?> factory = factoriesIt.next()
                 .create(m_execService.getExecutionContext());
-        // final String key = createOutputKey(outputType);
-        // m_outConverters.put(key, factory);
+         final String key = createOutputKey(outputType);
+         m_outConverters.put(key, factory);
 
         return factory;
     }
