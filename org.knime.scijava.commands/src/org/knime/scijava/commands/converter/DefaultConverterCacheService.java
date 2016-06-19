@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataType;
+import org.knime.core.data.DataValue;
 import org.knime.core.data.convert.datacell.JavaToDataCellConverter;
 import org.knime.core.data.convert.datacell.JavaToDataCellConverterFactory;
 import org.knime.core.data.convert.datacell.JavaToDataCellConverterRegistry;
@@ -19,7 +20,7 @@ import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 
 /**
- * Caches the converters used in a Node
+ * Caches the converters used in a Node.
  *
  * @author Gabriel Einsdorf (University of Konstanz)
  *
@@ -37,15 +38,8 @@ public class DefaultConverterCacheService extends AbstractService
     private final Map<String, JavaToDataCellConverter<?>> m_outConverters = new HashMap<>();
 
     @Parameter
-    KNIMEExecutionService m_execService;
+    private KNIMEExecutionService m_execService;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.knime.scijava.commands.converter.ConverterCacheServiceI#convert(org.
-     * knime.core.data.DataCell, java.lang.Class)
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <O> O convertToJava(final DataCell cell, final Class<O> outputType)
@@ -59,12 +53,6 @@ public class DefaultConverterCacheService extends AbstractService
         return (O) converter.convert(cell);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.knime.scijava.commands.converter.ConverterCacheServiceI#
-     * convertToKnime(java.lang.Object, java.lang.Class)
-     */
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public DataCell convertToKnime(final Object in, final Class<?> inType)
@@ -95,8 +83,8 @@ public class DefaultConverterCacheService extends AbstractService
 
         final JavaToDataCellConverter<?> factory = factoriesIt.next()
                 .create(m_execService.getExecutionContext());
-         final String key = createOutputKey(outputType);
-         m_outConverters.put(key, factory);
+        final String key = createOutputKey(outputType);
+        m_outConverters.put(key, factory);
 
         return factory;
     }
@@ -127,4 +115,52 @@ public class DefaultConverterCacheService extends AbstractService
             final Class<?> outputType) {
         return dataType.getName() + ":" + outputType.getName();
     }
+
+    @Override
+    public Optional<DataType> getConvertedType(final Class<?> type) {
+
+        final Iterator<JavaToDataCellConverterFactory<?>> it = m_outRegistry
+                .getFactoriesForSourceType(type).iterator();
+
+        if (it.hasNext()) {
+            final JavaToDataCellConverterFactory<?> o = it.next();
+            return Optional.of(o.getDestinationType());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public void flushCaches() {
+        m_outConverters.clear();
+        m_inConverters.clear();
+    }
+
+    @Override
+    public Optional<Class<DataValue>> getMatchingInputValueClass(
+            final Class<?> type) {
+        final Iterator<DataCellToJavaConverterFactory<?, ?>> factories = m_inRegister
+                .getFactoriesForDestinationType(type).iterator();
+
+        if (factories.hasNext()) {
+            @SuppressWarnings("unchecked")
+            final Optional<Class<DataValue>> o = Optional
+                    .of(((Class<DataValue>) factories.next().getSourceType()));
+            return o;
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Class<?>> getMatchingJavaType(final DataType dataType) {
+
+        // FIXME Will this always work with the MissingValue <-> Object
+        // Converter?
+        final Optional<DataCellToJavaConverterFactory<?, ?>> o = m_inRegister
+                .getFactoriesForSourceType(dataType).stream().findFirst();
+        if (o.isPresent()) {
+            return Optional.of(o.get().getDestinationType());
+        }
+        return Optional.empty();
+    }
+
 }
