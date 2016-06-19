@@ -24,8 +24,6 @@ import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
-import org.knime.scijava.commands.adapter.InputAdapterService;
-import org.knime.scijava.commands.adapter.OutputAdapterService;
 import org.knime.scijava.commands.converter.ConverterCacheService;
 import org.knime.scijava.commands.io.DefaultInputDataRowService;
 import org.knime.scijava.commands.io.DefaultOutputDataRowService;
@@ -74,8 +72,7 @@ public class KnimeProcessorTest {
 
 	@BeforeClass
 	public static void setUpOnce() {
-		ResourceAwareClassLoader cl = new ResourceAwareClassLoader(InputAdapterConverterTest.class.getClassLoader(),
-				InputAdapterConverterTest.class);
+		ResourceAwareClassLoader cl = new ResourceAwareClassLoader(Thread.currentThread().getContextClassLoader());
 
 		context = new Context(requiredServices, new PluginIndex(new DefaultPluginFinder(cl)));
 	}
