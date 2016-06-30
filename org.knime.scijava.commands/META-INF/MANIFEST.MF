@@ -16,7 +16,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  scijava-plugins-text-plain;bundle-version="0.1.2",
  scijava-ui-awt;bundle-version="0.1.4",
  scijava-ui-swing;bundle-version="0.8.0",
- miglayout-swing;bundle-version="4.2.0",
  org.knime.scijava.core;bundle-version="0.2.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
