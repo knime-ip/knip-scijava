@@ -1,7 +1,7 @@
 package org.knime.scijava.commands.settings.types;
 
 import org.knime.core.node.defaultnodesettings.SettingsModelDouble;
-import org.knime.scijava.commands.settings.SettingsModelTypePlugin;
+import org.knime.scijava.commands.settings.SettingsModelType;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -9,9 +9,9 @@ import org.scijava.plugin.Plugin;
  *
  * @author Jonathan Hale (University of Konstanz)
  */
-@Plugin(type = SettingsModelTypePlugin.class)
+@Plugin(type = SettingsModelType.class)
 public class SettingsModelDoubleType
-		implements SettingsModelTypePlugin<SettingsModelDouble, Double> {
+		implements SettingsModelType<SettingsModelDouble, Double> {
 
 	@Override
 	public SettingsModelDouble create(final String name,

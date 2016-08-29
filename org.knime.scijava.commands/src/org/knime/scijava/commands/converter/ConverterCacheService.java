@@ -1,12 +1,19 @@
 package org.knime.scijava.commands.converter;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataType;
 import org.knime.core.data.DataValue;
+import org.knime.core.data.convert.datacell.JavaToDataCellConverterFactory;
+import org.knime.core.data.convert.java.DataCellToJavaConverterFactory;
+import org.knime.core.node.ExecutionContext;
 import org.scijava.service.Service;
 
+// FIXME NAMING (KNIPConverterCache?!)
+// FIXME CACHING (isn't implemented everywhere, yet)
+// FIXME can we always delegate to Jonathans implementations?
 public interface ConverterCacheService extends Service {
 
     /**
@@ -35,7 +42,8 @@ public interface ConverterCacheService extends Service {
      * @throws Exception
      *             When the conversion fails
      */
-    DataCell convertToKnime(Object in, Class<?> inType) throws Exception;
+    DataCell convertToKnime(Object in, Class<?> inType, DataType type,
+            ExecutionContext es) throws Exception;
 
     /**
      * Flush all caches.
@@ -67,7 +75,22 @@ public interface ConverterCacheService extends Service {
      *            the preferred value class
      * @return the matching java type
      */
-    Optional<Class<?>> getMatchingJavaType(
-            DataType dataType);
+    Optional<Class<?>> getMatchingJavaType(DataType dataType);
+
+    /**
+     * @FIXME
+     *
+     * @return
+     */
+    Collection<DataCellToJavaConverterFactory<?, ?>> getMatchingJavaTypes(
+            ClassLoader loader, DataType dataType);
+
+    /**
+     * FIXME
+     *
+     * @return
+     */
+    Collection<JavaToDataCellConverterFactory<?>> getMatchingFactories(
+            Class<?> javaType);
 
 }

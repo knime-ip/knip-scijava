@@ -3,9 +3,14 @@ package org.knime.scijava.commands.settings;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.knime.core.data.convert.util.ClassUtil;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
-import org.knime.scijava.commands.util.PrimitiveTypeUtils;
+import org.knime.scijava.commands.StyleHook;
+import org.knime.scijava.commands.converter.ConverterCacheService;
+import org.knime.scijava.commands.settings.types.SettingsModelColumnSelectionType;
+import org.scijava.module.ModuleItem;
 import org.scijava.plugin.AbstractSingletonService;
+import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -20,60 +25,85 @@ import org.scijava.plugin.Plugin;
 @SuppressWarnings("rawtypes")
 @Plugin(type = SettingsModelTypeService.class)
 public class DefaultSettingsModelTypeService
-		extends AbstractSingletonService<SettingsModelTypePlugin>
-		implements SettingsModelTypeService {
+        extends AbstractSingletonService<SettingsModelType>
+        implements SettingsModelTypeService {
 
-	private final Map<Class<? extends SettingsModel>, SettingsModelTypePlugin> m_pluginsByModel = new HashMap<>();
-	private final Map<Class<?>, SettingsModelTypePlugin> m_pluginsByValue = new HashMap<>();
+    @Parameter
+    private ConverterCacheService cs;
 
-	@Override
-	public Class<SettingsModelTypePlugin> getPluginType() {
-		return SettingsModelTypePlugin.class;
-	}
+    private final Map<Class<? extends SettingsModel>, SettingsModelType> m_pluginsByModel = new HashMap<>();
+    private final Map<Class<?>, SettingsModelType> m_pluginsByValue = new HashMap<>();
 
-	@Override
-	public SettingsModelType getSettingsModelTypeFor(
-			final SettingsModel settingsModel) {
+    @Override
+    public SettingsModelType getSettingsModelTypeFor(
+            final SettingsModel settingsModel) {
 
-		final SettingsModelTypePlugin plugin = m_pluginsByModel
-				.get(settingsModel.getClass());
-		if (plugin != null) {
-			return plugin;
-		}
+        final SettingsModelType plugin = m_pluginsByModel
+                .get(settingsModel.getClass());
+        if (plugin != null) {
+            return plugin;
+        }
 
-		for (final SettingsModelTypePlugin p : getInstances()) {
-			if (p.getSettingsModelClass().isInstance(settingsModel)) {
-				m_pluginsByModel.put(settingsModel.getClass(), p);
-				return p;
-			}
-		}
-		// nothing found
-		return null;
-	}
+        for (final SettingsModelType p : getInstances()) {
+            if (p.getSettingsModelClass().isInstance(settingsModel)) {
+                m_pluginsByModel.put(settingsModel.getClass(), p);
+                return p;
+            }
+        }
+        // nothing found
+        return null;
+    }
 
-	@Override
-	public SettingsModelType getSettingsModelTypeFor(final Class<?> value) {
+    @Override
+    public SettingsModelType getSettingsModelTypeFor(final ModuleItem<?> item) {
 
-		// check cache
-		final SettingsModelTypePlugin plugin = m_pluginsByValue.get(value);
-		if (plugin != null) {
-			return plugin;
-		}
+        // FIXME why do I need this check in case of scripts?
+        if (item.getWidgetStyle() != null
+                && item.getWidgetStyle().equals(StyleHook.COLUMNSELECTION)) {
+            return new SettingsModelColumnSelectionType();
+        } else {
 
-		// check primitive conversion cache
-		final Class<?> checkValue = PrimitiveTypeUtils
-				.convertIfPrimitive(value);
+            // check cache
+            final SettingsModelType plugin = m_pluginsByValue
+                    .get(item.getType());
+            if (plugin != null) {
+                return plugin;
+            }
 
-		// search
-		for (final SettingsModelTypePlugin<?, ?> p : getInstances()) {
-			if (p.getValueClass().isAssignableFrom(checkValue)) {
-				m_pluginsByValue.put(value, p);
-				return p;
-			}
-		}
+            // check primitive conversion cache
 
-		// nothing found
-		return null;
-	}
+            // search
+            for (final SettingsModelType<?, ?> p : getInstances()) {
+                if (p instanceof SettingsModelColumnSelectionType) {
+                    continue;
+                }
+                if (p.getValueClass().isAssignableFrom(
+                        ClassUtil.ensureObjectType(item.getType()))) {
+                    m_pluginsByValue.put(item.getType(), p);
+                    return p;
+                }
+            }
+
+            // check for column selection
+            if (cs.getMatchingInputValueClass(item.getType()).isPresent()) {
+                return new SettingsModelColumnSelectionType();
+            }
+
+        }
+
+        // nothing found
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Object getValueFrom(final SettingsModel model) {
+        return getSettingsModelTypeFor(model).getValue(model);
+    }
+
+    @Override
+    public Class<SettingsModelType> getPluginType() {
+        return SettingsModelType.class;
+    }
 
 }

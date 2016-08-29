@@ -3,7 +3,7 @@ package org.knime.scijava.commands.settings.types;
 import java.awt.Color;
 
 import org.knime.core.node.defaultnodesettings.SettingsModelColor;
-import org.knime.scijava.commands.settings.SettingsModelTypePlugin;
+import org.knime.scijava.commands.settings.SettingsModelType;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -11,9 +11,9 @@ import org.scijava.plugin.Plugin;
  *
  * @author Jonathan Hale (University of Konstanz)
  */
-@Plugin(type = SettingsModelTypePlugin.class)
+@Plugin(type = SettingsModelType.class)
 public class SettingsModelColorType
-		implements SettingsModelTypePlugin<SettingsModelColor, Color> {
+		implements SettingsModelType<SettingsModelColor, Color> {
 
 	@Override
 	public SettingsModelColor create(final String name,

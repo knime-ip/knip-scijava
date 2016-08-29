@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
+   <extension
+         point="org.knime.workbench.repository.nodes">
+   </extension>
+   <extension
+         point="org.knime.workbench.repository.nodesets">
+      <nodeset
+            default-category-icon="org.knime.scijava.commands.nodes.SciJavaNodeSetFactory"
+            deprecated="false"
+            factory-class="org.knime.scijava.commands.nodes.SciJavaNodeSetFactory"
+            id="SciJavaNodeSet (TMP)">
+      </nodeset>
+   </extension>
 </plugin>
