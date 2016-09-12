@@ -56,14 +56,9 @@ public class DefaultSettingsModelTypeService
 
     @Override
     public SettingsModelType getSettingsModelTypeFor(final ModuleItem<?> item) {
-
-        // FIXME why do I need this check in case of scripts?... Why should you
-        // not?
-        if (item.getWidgetStyle() != null
-                && item.getWidgetStyle().equals(StyleHook.COLUMNSELECTION)) {
+        if (StyleHook.COLUMNSELECTION.equals(item.getWidgetStyle())) {
             return new SettingsModelColumnSelectionType();
         } else {
-
             // check cache
             final SettingsModelType plugin = m_pluginsByValue
                     .get(item.getType());
