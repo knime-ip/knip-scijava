@@ -45,7 +45,7 @@ class DefaultNodeModule implements NodeModule {
 
     private final Map<ModuleItem<?>, DataType> outputMapping;
 
-    private NodeModuleOutputChangedListener outputListener;
+    private final NodeModuleOutputChangedListener outputListener;
 
     /**
      * Constructor.
@@ -89,20 +89,19 @@ class DefaultNodeModule implements NodeModule {
             }
         }
 
+        outputListener = new NodeModuleOutputChangedListener();
         for (final ModuleItem<?> item : info.inputs()) {
             if (MultiOutputListener.class.isAssignableFrom(item.getType())) {
-                module.setInput(item.getName(),
-                        outputListener = new NodeModuleOutputChangedListener());
+                module.setInput(name, outputListener);
+                outputListener.enableManualPush(true);
             }
         }
     }
 
     /*
-     * Pre process inputs
-     *
-     * @param input the input row
+     * Set module input values from the input row.
      */
-    private void preProcess(final DataRow input) throws Exception {
+    private void setModuleInput(final DataRow input) throws Exception {
         // input can be null if source node
         if (input != null) {
             for (final Entry<Integer, ModuleItem<?>> entry : inputMapping
@@ -115,71 +114,92 @@ class DefaultNodeModule implements NodeModule {
         }
     }
 
-    /*
-     * Post process output of the module
-     */
-    private void postProcess(final CellOutput output,
-            final ExecutionContext ctx) throws Exception {
-        // output can be null if sink node
-        if (output != null) {
-            final List<DataCell> cells = new ArrayList<DataCell>();
-            for (final ModuleItem<?> entry : module.getInfo().outputs()) {
-                // FIXME hack because e.g. python script contains
-                // result log
-                if (!entry.getName().equals("result")) {
-                    cells.add(cs.convertToKnime(
-                            module.getOutput(entry.getName()), entry.getType(),
-                            outputMapping.get(entry), ctx));
-                }
-            }
-            output.push(cells.toArray(new DataCell[cells.size()]));
-        }
-    }
-
     @Override
     public void run(final DataRow input, final CellOutput output,
             final ExecutionContext ctx) throws Exception {
-        // FIXME: Nicer logic possible here?
-        preProcess(input);
+        setModuleInput(input);
 
-        if (outputListener != null) {
-            outputListener.setCellOutput(output);
-            outputListener.setExecutionContext(ctx);
-        }
+        outputListener.setCellOutput(output);
+        outputListener.setExecutionContext(ctx);
 
         module.run();
 
-        if (outputListener == null) {
-            postProcess(output, ctx);
-        }
+        outputListener.flush();
     }
 
-    // internal usage only
-    class NodeModuleOutputChangedListener implements MultiOutputListener {
-
+    private class NodeModuleOutputChangedListener
+            implements MultiOutputListener {
         private ExecutionContext ctx;
 
         private CellOutput output;
 
-        public NodeModuleOutputChangedListener() {
-        }
+        /* true if the modules handles pushes itself, false otherwise */
+        private boolean manualPush = false;
 
         @Override
         public void notifyListener() {
             try {
-                postProcess(output, ctx);
+                // output can be null if sink node
+                if (output != null) {
+                    final List<DataCell> cells = new ArrayList<DataCell>();
+
+                    final ModuleItem<?> result = module.getInfo()
+                            .getOutput("result");
+                    if (result != null) {
+                        // FIXME hack because e.g. python script contains
+                        // result log
+                        cells.add(cs.convertToKnime(
+                                module.getOutput(result.getName()),
+                                result.getType(), outputMapping.get(result),
+                                ctx));
+                    }
+                    output.push(cells.toArray(new DataCell[cells.size()]));
+                }
             } catch (final Exception e) {
                 // FIXME
                 e.printStackTrace();
             }
         }
 
+        /**
+         * Set KNIME Execution Context
+         *
+         * @param ctx
+         *            execution context
+         */
         public void setExecutionContext(final ExecutionContext ctx) {
             this.ctx = ctx;
         }
 
+        /**
+         * Set CellOutput to push rows to.
+         *
+         * @param output
+         *            cell output
+         */
         public void setCellOutput(final CellOutput output) {
             this.output = output;
+        }
+
+        /**
+         * Final flush. Will push a row in case module does not handle pushing
+         * output rows.
+         */
+        public void flush() {
+            if (!manualPush) {
+                notifyListener();
+            }
+        }
+
+        /**
+         * Enable/Disable manual push.
+         *
+         * @param b
+         *            if <code>true</code>, signals that the module handles
+         *            pushing rows.
+         */
+        public void enableManualPush(final boolean b) {
+            manualPush = b;
         }
     }
 }
