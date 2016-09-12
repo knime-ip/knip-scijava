@@ -90,7 +90,10 @@ class DefaultNodeModule implements NodeModule {
         outputListener = new NodeModuleOutputChangedListener();
         for (final ModuleItem<?> item : info.inputs()) {
             if (MultiOutputListener.class.isAssignableFrom(item.getType())) {
+                final String name = item.getName();
+
                 module.setInput(name, outputListener);
+                module.resolveInput(name);
                 outputListener.enableManualPush(true);
             }
         }

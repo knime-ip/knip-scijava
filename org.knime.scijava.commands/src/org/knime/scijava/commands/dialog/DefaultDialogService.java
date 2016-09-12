@@ -5,7 +5,6 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.knime.core.util.Pair;
-import org.knime.scijava.commands.MultiOutputListener;
 import org.knime.scijava.commands.widget.SettingsModelWidgetModel;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleException;
@@ -45,15 +44,6 @@ public class DefaultDialogService extends AbstractService
             @Override
             public void buildPanel(final InputPanel<JPanel, JPanel> inputPanel,
                     final Module module) throws ModuleException {
-
-                // automatically resolve special fields
-                // FIXME can be extended using plugin mechanism?
-                for (final ModuleItem<?> item : module.getInfo().inputs()) {
-                    if (MultiOutputListener.class
-                            .isAssignableFrom(item.getType())) {
-                        module.setResolved(item.getName(), true);
-                    }
-                }
 
                 // build input panel
                 super.buildPanel(inputPanel, module);
