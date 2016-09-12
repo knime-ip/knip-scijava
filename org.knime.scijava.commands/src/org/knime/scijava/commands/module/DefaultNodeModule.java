@@ -48,7 +48,7 @@ class DefaultNodeModule implements NodeModule {
 
     private final Map<ModuleItem<?>, DataType> outputMapping;
 
-    private final NodeModuleOutputChangedListener outputListener;
+    private NodeModuleOutputChangedListener outputListener;
 
     private final LogService logService;
 
@@ -78,7 +78,7 @@ class DefaultNodeModule implements NodeModule {
         this.inputMapping = inputMapping;
         this.outputMapping = outputMapping;
         this.module = ms.createModule(info);
-        this.outputListener = new NodeModuleOutputChangedListener();
+        this.outputListener = new NodeModuleOutputChangedListener(false);
         this.logService = new KNIMELogService(logger);
 
         preProcess(params);
@@ -109,9 +109,9 @@ class DefaultNodeModule implements NodeModule {
                 /* MultiOutputListener */
                 final String name = item.getName();
 
+                outputListener = new NodeModuleOutputChangedListener(true);
                 module.setInput(name, outputListener);
                 module.resolveInput(name);
-                outputListener.enableManualPush(true);
             } else if (LogService.class.equals(item.getType())) {
                 /* LogService */
                 final String name = item.getName();
@@ -158,7 +158,18 @@ class DefaultNodeModule implements NodeModule {
         private CellOutput output;
 
         /* true if the modules handles pushes itself, false otherwise */
-        private boolean manualPush = false;
+        private final boolean manualPush;
+
+        /**
+         * Constructor.
+         *
+         * @param manualPush
+         *            if <code>true</code>, signals that the module handles
+         *            pushing rows.
+         */
+        public NodeModuleOutputChangedListener(final boolean manualPush) {
+            this.manualPush = manualPush;
+        }
 
         @Override
         public void notifyListener() {
@@ -212,17 +223,6 @@ class DefaultNodeModule implements NodeModule {
             if (!manualPush) {
                 notifyListener();
             }
-        }
-
-        /**
-         * Enable/Disable manual push.
-         *
-         * @param b
-         *            if <code>true</code>, signals that the module handles
-         *            pushing rows.
-         */
-        public void enableManualPush(final boolean b) {
-            manualPush = b;
         }
     }
 }
