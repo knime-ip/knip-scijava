@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
+import org.knime.core.node.NodeLogger;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.scijava.module.ModuleInfo;
 import org.scijava.module.ModuleItem;
@@ -50,12 +51,18 @@ public interface NodeModuleService extends SciJavaService {
      * module info for KNIME.
      *
      * @param info
+     *            the module info to create a NodeModule for.
      * @param models
+     *            settings models for {@link ModuleItem}s in info
      * @param spec
-     * @return
+     *            Input data table spec
+     * @param knimeLogger
+     *            KNIME {@link NodeLogger} to delegate output to.
+     * @return the {@link NodeModule}
      */
     NodeModule createNodeModule(final ModuleInfo info,
-            final Map<String, SettingsModel> models, final DataTableSpec spec);
+            final Map<String, SettingsModel> models, final DataTableSpec spec,
+            NodeLogger knimeLogger);
 
     /**
      * @param info

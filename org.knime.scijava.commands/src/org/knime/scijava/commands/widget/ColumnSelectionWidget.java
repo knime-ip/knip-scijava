@@ -70,7 +70,6 @@ public class ColumnSelectionWidget extends SwingInputWidget<String> {
             try {
                 colBox.update(getSpecFromModel(), null);
             } catch (final NotConfigurableException e) {
-                // TODO Logging
                 throw new IllegalStateException(e);
             }
         }
@@ -109,7 +108,6 @@ public class ColumnSelectionWidget extends SwingInputWidget<String> {
                 colBox.repaint();
             }
         } catch (final NotConfigurableException e) {
-            // TODO Logging
             throw new IllegalStateException(e);
         }
     }

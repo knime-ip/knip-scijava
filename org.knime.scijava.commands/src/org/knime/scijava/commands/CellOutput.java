@@ -14,6 +14,7 @@ public interface CellOutput {
      *
      * @param cells
      *            The cells which make the output row
+     * @throws InterruptedException If canceled.
      */
-    void push(final DataCell[] cells);
+    void push(final DataCell[] cells) throws InterruptedException;
 }

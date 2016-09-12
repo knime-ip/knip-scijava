@@ -9,10 +9,13 @@ import org.knime.core.data.DataCell;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataType;
 import org.knime.core.node.ExecutionContext;
+import org.knime.core.node.NodeLogger;
 import org.knime.scijava.commands.CellOutput;
 import org.knime.scijava.commands.MultiOutputListener;
 import org.knime.scijava.commands.converter.KNIMEConverterService;
+import org.knime.scijava.commands.log.KNIMELogService;
 import org.scijava.Context;
+import org.scijava.log.LogService;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleInfo;
 import org.scijava.module.ModuleItem;
@@ -47,6 +50,8 @@ class DefaultNodeModule implements NodeModule {
 
     private final NodeModuleOutputChangedListener outputListener;
 
+    private final LogService logService;
+
     /**
      * Constructor.
      *
@@ -60,17 +65,21 @@ class DefaultNodeModule implements NodeModule {
      *            mapping of input column index to input items of the module
      * @param outputMapping
      *            mapping of output items to types for the cells to for them
+     * @param logger
+     *            NodeLogger to delegate output to.
      */
     public DefaultNodeModule(final Context context, final ModuleInfo info,
             final Map<String, Object> params,
             final Map<Integer, ModuleItem<?>> inputMapping,
-            final Map<ModuleItem<?>, DataType> outputMapping) {
+            final Map<ModuleItem<?>, DataType> outputMapping,
+            final NodeLogger logger) {
         context.inject(this);
 
         this.inputMapping = inputMapping;
         this.outputMapping = outputMapping;
         this.module = ms.createModule(info);
         this.outputListener = new NodeModuleOutputChangedListener();
+        this.logService = new KNIMELogService(logger);
 
         preProcess(params);
     }
@@ -97,11 +106,18 @@ class DefaultNodeModule implements NodeModule {
 
         for (final ModuleItem<?> item : this.module.getInfo().inputs()) {
             if (MultiOutputListener.class.equals(item.getType())) {
+                /* MultiOutputListener */
                 final String name = item.getName();
 
                 module.setInput(name, outputListener);
                 module.resolveInput(name);
                 outputListener.enableManualPush(true);
+            } else if (LogService.class.equals(item.getType())) {
+                /* LogService */
+                final String name = item.getName();
+
+                module.setInput(name, logService);
+                module.resolveInput(name);
             }
         }
     }
@@ -164,8 +180,7 @@ class DefaultNodeModule implements NodeModule {
                     output.push(cells.toArray(new DataCell[cells.size()]));
                 }
             } catch (final Exception e) {
-                // FIXME
-                e.printStackTrace();
+                logService.error("Unable to push output row.", e);
             }
         }
 

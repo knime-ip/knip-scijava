@@ -14,6 +14,7 @@ import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
+import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
@@ -53,6 +54,8 @@ public class SciJavaCommandNodeModel extends NodeModel {
 
     private Context context;
 
+    private final NodeLogger logger;
+
     protected SciJavaCommandNodeModel(final Context ctx, final ModuleInfo info,
             final Map<String, SettingsModel> models, final int numInports,
             final int numOutports) {
@@ -60,6 +63,8 @@ public class SciJavaCommandNodeModel extends NodeModel {
         setContext(ctx);
         this.info = info;
         this.models = models;
+
+        logger = NodeLogger.getLogger(info.getName());
     }
 
     private void setContext(final Context ctx) {
@@ -110,21 +115,16 @@ public class SciJavaCommandNodeModel extends NodeModel {
             final KeyGenerator keyGen = createKeyGenerator(rowInput, rowOutput);
 
             final NodeModule module = nodeService.createNodeModule(info, models,
-                    spec);
+                    spec, logger);
 
             CellOutput output = null;
             if (getNrOutPorts() > 0) {
                 output = new CellOutput() {
 
                     @Override
-                    public void push(final DataCell[] cells) {
-                        try {
-                            rowOutput.push(
-                                    new DefaultRow(keyGen.create(), cells));
-                        } catch (final InterruptedException e) {
-                            // FIXME
-                            e.printStackTrace();
-                        }
+                    public void push(final DataCell[] cells)
+                            throws InterruptedException {
+                        rowOutput.push(new DefaultRow(keyGen.create(), cells));
                     }
                 };
             }
