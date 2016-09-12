@@ -57,7 +57,8 @@ public class DefaultSettingsModelTypeService
     @Override
     public SettingsModelType getSettingsModelTypeFor(final ModuleItem<?> item) {
 
-        // FIXME why do I need this check in case of scripts?
+        // FIXME why do I need this check in case of scripts?... Why should you
+        // not?
         if (item.getWidgetStyle() != null
                 && item.getWidgetStyle().equals(StyleHook.COLUMNSELECTION)) {
             return new SettingsModelColumnSelectionType();
@@ -88,7 +89,6 @@ public class DefaultSettingsModelTypeService
             if (cs.getMatchingInputValueClass(item.getType()).isPresent()) {
                 return new SettingsModelColumnSelectionType();
             }
-
         }
 
         // nothing found

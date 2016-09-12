@@ -16,6 +16,12 @@ import org.scijava.ui.swing.widget.SwingInputWidget;
 import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
 
+/**
+ * Widget to select a DataType into which or from which to convert into the
+ * module item for which this widget is created.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 @Plugin(type = InputWidget.class)
 public class DataTypeSelectionWidget extends SwingInputWidget<String> {
 
@@ -24,7 +30,7 @@ public class DataTypeSelectionWidget extends SwingInputWidget<String> {
 
     // Internal parameters
 
-    private String selected;
+    private String selectedItem;
 
     private JPanel panel;
 
@@ -43,6 +49,7 @@ public class DataTypeSelectionWidget extends SwingInputWidget<String> {
     public void set(final WidgetModel model) {
         super.set(model);
 
+        /* find converter factories for the module item */
         final Collection<JavaToDataCellConverterFactory<?>> sourceFacs = cs
                 .getMatchingFactories(model.getItem().getType());
 
@@ -57,27 +64,28 @@ public class DataTypeSelectionWidget extends SwingInputWidget<String> {
             classToName.put(cellClass.getName(), cellClass.getSimpleName());
         }
 
+        /* create a ComboBox for the converter factories */
         panel = new JPanel();
         comboBox = new JComboBox<>(
                 nameToClass.keySet().toArray(new String[nameToClass.size()]));
 
-        // set listener
+        // set listener which updates the widget model after an item is selected
         comboBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                selected = (String) comboBox.getSelectedItem();
+                selectedItem = (String) comboBox.getSelectedItem();
                 updateModel();
             }
         });
 
         // set initial selection
-        selected = classToName.get(model.getValue());
-        comboBox.setSelectedItem(selected);
+        selectedItem = classToName.get(model.getValue());
+        comboBox.setSelectedItem(selectedItem);
         panel.add(comboBox);
     }
 
     @Override
     public String getValue() {
-        return nameToClass.get(selected);
+        return nameToClass.get(selectedItem);
     }
 
     @Override

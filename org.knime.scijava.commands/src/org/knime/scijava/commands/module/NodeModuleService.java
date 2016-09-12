@@ -9,22 +9,77 @@ import org.scijava.module.ModuleInfo;
 import org.scijava.module.ModuleItem;
 import org.scijava.service.SciJavaService;
 
+/**
+ * Interface for services which are able to create {@link DataTableSpec}s from
+ * ModuleInfos and is able to create NodeModules.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 public interface NodeModuleService extends SciJavaService {
 
+    /**
+     * Create a output {@link DataTableSpec} from a {@link ModuleInfo}.
+     *
+     * @param info
+     *            module info to create {@link DataTableSpec} from.
+     * @param models
+     *            {@link SettingsModel}s for given info.
+     * @param inSpec
+     *            Input {@link DataTableSpec}.
+     * @return the created spec.
+     */
     DataTableSpec createOutSpec(final ModuleInfo info,
             final Map<String, SettingsModel> models,
             final DataTableSpec inSpec);
 
-    Map<ModuleItem<?>, DataType> getOutputMapping(ModuleInfo info,
-            Map<String, SettingsModel> models);
+    /**
+     * Get the current output {@link ModuleItem} to {@link DataType} mapping.
+     *
+     * @param info
+     *            The module info to get the output mapping for.
+     * @param models
+     *            {@link SettingsModel}s for given info.
+     * @return A Map of the module items and the respective {@link DataType} of
+     *         the output column to which they should be mapped.
+     */
+    Map<ModuleItem<?>, DataType> getOutputMapping(final ModuleInfo info,
+            final Map<String, SettingsModel> models);
 
-    NodeModule createNodeModule(ModuleInfo info,
-            Map<String, SettingsModel> models, DataTableSpec spec);
+    /**
+     * Create a NodeModule from the module info, a executable wrapper around the
+     * module info for KNIME.
+     *
+     * @param info
+     * @param models
+     * @param spec
+     * @return
+     */
+    NodeModule createNodeModule(final ModuleInfo info,
+            final Map<String, SettingsModel> models, final DataTableSpec spec);
 
+    /**
+     * @param info
+     *            the module info
+     * @return Whether the given Module info has a MultiOutputListener
+     */
     boolean hasMultiOutputListener(final ModuleInfo info);
 
+    /**
+     * Get an id for the {@link ModuleInfo}.
+     *
+     * @param info
+     *            the module info
+     * @return the id
+     */
     String getModuleInfoId(final ModuleInfo info);
 
-    ModuleInfo getModuleInfoFromId(String id);
+    /**
+     * Get the module info for the given id.
+     *
+     * @param id
+     *            the id
+     * @return the module info or <code>null</code> if the id was invalid
+     */
+    ModuleInfo getModuleInfoFromId(final String id);
 
 }

@@ -13,36 +13,36 @@ import org.scijava.plugin.Plugin;
  */
 @Plugin(type = SettingsModelType.class)
 public class SettingsModelColorType
-		implements SettingsModelType<SettingsModelColor, Color> {
+        implements SettingsModelType<SettingsModelColor, Color> {
 
-	@Override
-	public SettingsModelColor create(final String name,
-			final Color defaultValue) {
-		if (defaultValue == null) {
-			return new SettingsModelColor(name, Color.RED);
-		}
-		return new SettingsModelColor(name, defaultValue);
-	}
+    @Override
+    public SettingsModelColor create(final String name,
+            final Color defaultValue) {
+        if (defaultValue == null) {
+            return new SettingsModelColor(name, Color.RED);
+        }
+        return new SettingsModelColor(name, defaultValue);
+    }
 
-	@Override
-	public void setValue(final SettingsModelColor settingsModel,
-			final Color value) {
-		settingsModel.setColorValue(value);
-	}
+    @Override
+    public void setValue(final SettingsModelColor settingsModel,
+            final Color value) {
+        settingsModel.setColorValue(value);
+    }
 
-	@Override
-	public Color getValue(final SettingsModelColor settingsModel) {
-		return settingsModel.getColorValue();
-	}
+    @Override
+    public Color getValue(final SettingsModelColor settingsModel) {
+        return settingsModel.getColorValue();
+    }
 
-	@Override
-	public Class<SettingsModelColor> getSettingsModelClass() {
-		return SettingsModelColor.class;
-	}
+    @Override
+    public Class<SettingsModelColor> getSettingsModelClass() {
+        return SettingsModelColor.class;
+    }
 
-	@Override
-	public Class<Color> getValueClass() {
-		return Color.class;
-	}
+    @Override
+    public Class<Color> getValueClass() {
+        return Color.class;
+    }
 
 }

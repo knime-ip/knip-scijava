@@ -26,7 +26,6 @@ import org.scijava.service.AbstractService;
  * Caches the converters used in a Node.
  *
  * @author Gabriel Einsdorf (University of Konstanz)
- *
  */
 @Plugin(type = ConverterCacheService.class)
 public class DefaultConverterCacheService extends AbstractService
@@ -63,6 +62,9 @@ public class DefaultConverterCacheService extends AbstractService
         return converter.convert(in);
     }
 
+    /*
+     * Create new converter from given java type to output knime DataType.
+     */
     private <I> JavaToDataCellConverter<?> createNewOutputConverter(
             final Class<I> type, final DataType knimeType,
             final ExecutionContext ctx) {
@@ -86,7 +88,7 @@ public class DefaultConverterCacheService extends AbstractService
     }
 
     /**
-     * Adds the converter to the cache.
+     * Add the converter to the cache.
      *
      * @param inputType
      * @param outputType
@@ -108,6 +110,9 @@ public class DefaultConverterCacheService extends AbstractService
         return conv;
     }
 
+    /*
+     * Create a string key for the (knime type, java type) pair
+     */
     private static String createInputKey(final DataType dataType,
             final Class<?> outputType) {
         return dataType.getName() + ":" + outputType.getName();
@@ -178,6 +183,11 @@ public class DefaultConverterCacheService extends AbstractService
         return validFactories;
     }
 
+    /*
+     * Check whether the given class is on the classpath.
+     *
+     * @return true if the class is in given loader
+     */
     private boolean isOnClassPath(final Class<?> type,
             final ClassLoader loader) {
         try {

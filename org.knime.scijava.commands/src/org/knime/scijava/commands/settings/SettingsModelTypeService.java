@@ -33,8 +33,21 @@ public interface SettingsModelTypeService
     SettingsModelType getSettingsModelTypeFor(
             final SettingsModel settingsModel);
 
+    /**
+     * Get the {@link SettingsModelType} matching the given {@link ModuleItem}.
+     *
+     * @param item
+     *            The item to get the settings model type for
+     * @return the matching settings model type
+     */
     SettingsModelType getSettingsModelTypeFor(final ModuleItem<?> item);
 
-    Object getValueFrom(SettingsModel model);
-
+    /**
+     * Dynamically get the value of a {@link SettingsModel}.
+     *
+     * @param model
+     *            The settings model
+     * @return value contained in the {@link SettingsModel}
+     */
+    Object getValueFrom(final SettingsModel model);
 }

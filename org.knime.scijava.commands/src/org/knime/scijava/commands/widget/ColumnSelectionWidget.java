@@ -18,6 +18,11 @@ import org.scijava.ui.swing.widget.SwingInputWidget;
 import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
 
+/**
+ * Widget for selecting a column to fill a certain module item.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 @Plugin(type = InputWidget.class)
 public class ColumnSelectionWidget extends SwingInputWidget<String> {
 
@@ -97,7 +102,6 @@ public class ColumnSelectionWidget extends SwingInputWidget<String> {
     @Override
     protected void doRefresh() {
         try {
-
             final DataTableSpec spec = getSpecFromModel();
             if (spec != null) {
                 colBox.update(getSpecFromModel(), (String) get().getValue());

@@ -9,7 +9,7 @@ import org.scijava.ui.swing.widget.SwingInputWidget;
 /**
  * A small DialogComponent wrapper around a {@link SwingInputWidget}.
  *
- * @author Jonathan Hale
+ * @author Jonathan Hale, University of Konstanz
  */
 public class WidgetDialogComponent extends DialogComponent {
 

@@ -21,6 +21,11 @@ import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
 import org.scijava.widget.WidgetService;
 
+/**
+ * Default implementation of {@link DialogService}.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 @Plugin(type = DialogService.class)
 public class DefaultDialogService extends AbstractService
         implements DialogService {

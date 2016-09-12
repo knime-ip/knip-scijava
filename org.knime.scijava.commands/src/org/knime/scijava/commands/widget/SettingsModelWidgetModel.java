@@ -11,6 +11,11 @@ import org.scijava.plugin.Parameter;
 import org.scijava.widget.DefaultWidgetModel;
 import org.scijava.widget.InputPanel;
 
+/**
+ * Widget model which stores its data in a settings model.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 public class SettingsModelWidgetModel extends DefaultWidgetModel {
 
     @Parameter
@@ -51,8 +56,9 @@ public class SettingsModelWidgetModel extends DefaultWidgetModel {
 
     @Override
     public void setValue(final Object value) {
-        if (settingsModel != null)
+        if (settingsModel != null) {
             settingsService.setValue(settingsModel, value);
+        }
     }
 
     public SettingsModel getSettingsModel() {

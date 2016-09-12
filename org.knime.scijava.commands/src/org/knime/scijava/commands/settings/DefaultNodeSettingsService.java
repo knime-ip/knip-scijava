@@ -8,6 +8,11 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 
+/**
+ * Default implementation of {@link NodeSettingsService}
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 @Plugin(type = NodeSettingsService.class)
 public class DefaultNodeSettingsService extends AbstractService
         implements NodeSettingsService {
@@ -26,14 +31,12 @@ public class DefaultNodeSettingsService extends AbstractService
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public SettingsModel createSettingsModel(final ModuleItem<?> item) {
-
         SettingsModel sm = null;
 
         if (item.isInput()) {
             final SettingsModelType t = typeService
                     .getSettingsModelTypeFor(item);
             if (t != null) {
-
                 // get default value
                 final Object value = item.getDefaultValue();
                 if (value != null) {
@@ -49,7 +52,7 @@ public class DefaultNodeSettingsService extends AbstractService
                     cs.getMatchingFactories(item.getType()).iterator().next()
                             .getDestinationType().getCellClass().getName());
         }
-        // }
+
         return sm;
     }
 

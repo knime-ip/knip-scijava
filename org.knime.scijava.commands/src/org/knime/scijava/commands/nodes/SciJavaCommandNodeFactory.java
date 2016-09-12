@@ -18,6 +18,11 @@ import org.knime.scijava.commands.settings.models.SettingsModelColumnSelection;
 import org.scijava.module.ModuleInfo;
 import org.scijava.plugin.Parameter;
 
+/**
+ * NodeModel of Scijava Command Nodes.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 // FIXME Make abstract in the long run?
 public class SciJavaCommandNodeFactory
         extends DynamicNodeFactory<SciJavaCommandNodeModel> {

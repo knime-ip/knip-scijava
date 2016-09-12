@@ -43,6 +43,11 @@ import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
 import org.scijava.widget.WidgetService;
 
+/**
+ * Widget service which creates {@link SettingsModelWidgetModel}s.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 @Plugin(type = WidgetService.class, priority = Priority.HIGH_PRIORITY)
 public class KNIMEWidgetService
         extends AbstractWrapperService<WidgetModel, InputWidget<?, ?>>

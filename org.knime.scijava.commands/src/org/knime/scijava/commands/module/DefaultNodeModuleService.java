@@ -28,6 +28,11 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
 
+/**
+ * Default implementation of {@link NodeModuleService}.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 @Plugin(type = NodeModuleService.class)
 public class DefaultNodeModuleService extends AbstractService
         implements NodeModuleService {
@@ -95,7 +100,7 @@ public class DefaultNodeModuleService extends AbstractService
             nameGen = new UniqueNameGenerator(new HashSet<>());
         }
 
-        // TODO (What?)
+        // TODO (What?)... What?
         final List<DataColumnSpec> tableSpecs = new ArrayList<>();
 
         // FIXME (result)

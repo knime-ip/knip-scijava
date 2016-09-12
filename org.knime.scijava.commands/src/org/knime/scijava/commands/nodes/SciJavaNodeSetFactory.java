@@ -21,6 +21,11 @@ import org.scijava.module.ModuleInfo;
 import org.scijava.plugin.Parameter;
 import org.scijava.script.ScriptService;
 
+/**
+ * NodeSetFactory which creates Nodes for Scijava commands.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 // FIXME Temporarily. Serves as an example. Maybe abstract in the future
 public class SciJavaNodeSetFactory implements NodeSetFactory {
 
@@ -45,6 +50,9 @@ public class SciJavaNodeSetFactory implements NodeSetFactory {
 
     private final HashMap<String, String> categories = new HashMap<String, String>();
 
+    /*
+     * Scan script directory for scripts and add test command
+     */
     private List<ModuleInfo> discoverModules() {
         final List<ModuleInfo> infos = new ArrayList<>();
 
@@ -82,10 +90,9 @@ public class SciJavaNodeSetFactory implements NodeSetFactory {
                 }
             }
             categories.put(id, SCIJAVA_TEST_PATH + path);
-
         }
 
-         return moduleIds;
+        return moduleIds;
     }
 
     @Override

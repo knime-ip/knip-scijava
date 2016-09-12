@@ -6,9 +6,14 @@ import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
+/**
+ *
+ * Example Command to be wrapped as KNIME Node.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 @Plugin(type = Command.class, headless = true, label = "Test Command")
 public class SciJavaTestCommand implements Command {
-
     @Parameter
     private MultiOutputListener rowOutput;
 
@@ -28,6 +33,4 @@ public class SciJavaTestCommand implements Command {
             rowOutput.notifyListener();
         }
     }
-
-
 }

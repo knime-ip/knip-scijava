@@ -6,8 +6,13 @@ import org.scijava.Identifiable;
 import org.scijava.module.ModuleInfo;
 import org.w3c.dom.Element;
 
-//FIXME ;-)
-//FIXME maybe abstract?
+/**
+ * Dynamic NodeDescription for SciJavaNodeSetFactory nodes.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
+// FIXME ;-)
+// FIXME maybe abstract?
 public class SciJavaNodeDescription extends NodeDescription {
 
     private final ModuleInfo info;

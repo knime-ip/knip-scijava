@@ -24,7 +24,9 @@ import org.scijava.ui.UIService;
 import org.scijava.widget.WidgetService;
 
 /**
- * Gateway to the SciJava world
+ * Gateway to the SciJava world.
+ *
+ * @author Christian Dietz, University of Konstanz
  */
 public class SciJavaGateway {
 
@@ -110,5 +112,4 @@ public class SciJavaGateway {
     public ResourceAwareClassLoader getClassLoader() {
         return m_classLoader;
     }
-
 }

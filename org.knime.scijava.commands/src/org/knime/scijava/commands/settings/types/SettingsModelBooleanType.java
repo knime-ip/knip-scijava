@@ -11,36 +11,36 @@ import org.scijava.plugin.Plugin;
  */
 @Plugin(type = SettingsModelType.class)
 public class SettingsModelBooleanType
-		implements SettingsModelType<SettingsModelBoolean, Boolean> {
+        implements SettingsModelType<SettingsModelBoolean, Boolean> {
 
-	@Override
-	public SettingsModelBoolean create(final String name,
-			final Boolean defaultValue) {
-		if (defaultValue == null) {
-			return new SettingsModelBoolean(name, false);
-		}
-		return new SettingsModelBoolean(name, defaultValue);
-	}
+    @Override
+    public SettingsModelBoolean create(final String name,
+            final Boolean defaultValue) {
+        if (defaultValue == null) {
+            return new SettingsModelBoolean(name, false);
+        }
+        return new SettingsModelBoolean(name, defaultValue);
+    }
 
-	@Override
-	public void setValue(final SettingsModelBoolean settingsModel,
-			final Boolean value) {
-		settingsModel.setBooleanValue(value);
-	}
+    @Override
+    public void setValue(final SettingsModelBoolean settingsModel,
+            final Boolean value) {
+        settingsModel.setBooleanValue(value);
+    }
 
-	@Override
-	public Boolean getValue(final SettingsModelBoolean settingsModel) {
-		return settingsModel.getBooleanValue();
-	}
+    @Override
+    public Boolean getValue(final SettingsModelBoolean settingsModel) {
+        return settingsModel.getBooleanValue();
+    }
 
-	@Override
-	public Class<SettingsModelBoolean> getSettingsModelClass() {
-		return SettingsModelBoolean.class;
-	}
+    @Override
+    public Class<SettingsModelBoolean> getSettingsModelClass() {
+        return SettingsModelBoolean.class;
+    }
 
-	@Override
-	public Class<Boolean> getValueClass() {
-		return Boolean.class;
-	}
+    @Override
+    public Class<Boolean> getValueClass() {
+        return Boolean.class;
+    }
 
 }

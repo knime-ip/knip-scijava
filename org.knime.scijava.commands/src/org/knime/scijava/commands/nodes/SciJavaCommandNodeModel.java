@@ -36,6 +36,12 @@ import org.scijava.Context;
 import org.scijava.module.ModuleInfo;
 import org.scijava.plugin.Parameter;
 
+/**
+ * NodeModel of ScijavaCommandNodes.
+ *
+ * @author Christian Dietz, University of Konstanz
+ * @see SciJavaNodeSetFactory
+ */
 public class SciJavaCommandNodeModel extends NodeModel {
 
     @Parameter
@@ -150,10 +156,11 @@ public class SciJavaCommandNodeModel extends NodeModel {
 
                 @Override
                 public RowKey create() {
-                    if (curr == null)
+                    if (curr == null) {
                         return RowKey.createRowKey(ctr++);
-                    else
+                    } else {
                         return new RowKey(curr.getString() + "#" + ctr++);
+                    }
                 }
 
                 @Override
@@ -168,10 +175,11 @@ public class SciJavaCommandNodeModel extends NodeModel {
 
                 @Override
                 public RowKey create() {
-                    if (curr == null)
+                    if (curr == null) {
                         return RowKey.createRowKey(ctr++);
-                    else
+                    } else {
                         return new RowKey(curr.getString());
+                    }
                 }
 
                 @Override
@@ -228,13 +236,13 @@ public class SciJavaCommandNodeModel extends NodeModel {
     @Override
     public StreamableOperator createStreamableOperator(
             final PartitionInfo partitionInfo, final PortObjectSpec[] inSpecs)
-                    throws InvalidSettingsException {
+            throws InvalidSettingsException {
         return new StreamableOperator() {
 
             @Override
             public void runFinal(final PortInput[] inputs,
                     final PortOutput[] outputs, final ExecutionContext exec)
-                            throws Exception {
+                    throws Exception {
                 // FIXME avoid recreation of module in each run
                 run((DataTableSpec) inSpecs[0],
                         getNrInPorts() == 0 ? null : (RowInput) inputs[0],
@@ -252,14 +260,14 @@ public class SciJavaCommandNodeModel extends NodeModel {
     @Override
     protected void loadInternals(final File nodeInternDir,
             final ExecutionMonitor exec)
-                    throws IOException, CanceledExecutionException {
+            throws IOException, CanceledExecutionException {
         /* nothing to do */
     }
 
     @Override
     protected void saveInternals(final File nodeInternDir,
             final ExecutionMonitor exec)
-                    throws IOException, CanceledExecutionException {
+            throws IOException, CanceledExecutionException {
         /* nothing to do */
     }
 

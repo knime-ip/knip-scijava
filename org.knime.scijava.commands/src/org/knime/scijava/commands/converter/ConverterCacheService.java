@@ -11,6 +11,14 @@ import org.knime.core.data.convert.java.DataCellToJavaConverterFactory;
 import org.knime.core.node.ExecutionContext;
 import org.scijava.service.Service;
 
+/**
+ * KNIME Converter Cache Service.
+ *
+ * Interface for services which are able to convert KNIME data cells into java
+ * types vice versa.
+ *
+ * @author Gabriel Einsdorf (University of Konstanz)
+ */
 // FIXME NAMING (KNIPConverterCache?!)
 // FIXME CACHING (isn't implemented everywhere, yet)
 // FIXME can we always delegate to Jonathans implementations?
@@ -78,19 +86,20 @@ public interface ConverterCacheService extends Service {
     Optional<Class<?>> getMatchingJavaType(DataType dataType);
 
     /**
-     * @FIXME
+     * Get all converter factories which are able to convert given
+     * {@link DataType} to a java type.
      *
-     * @return
+     * @return Collection of converter factories
      */
     Collection<DataCellToJavaConverterFactory<?, ?>> getMatchingJavaTypes(
             ClassLoader loader, DataType dataType);
 
     /**
-     * FIXME
+     * Get all converter factories which are able to convert given java type to
+     * a {@link DataType}.
      *
-     * @return
+     * @return Collection of converter factories
      */
     Collection<JavaToDataCellConverterFactory<?>> getMatchingFactories(
             Class<?> javaType);
-
 }

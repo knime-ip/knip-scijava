@@ -4,6 +4,11 @@ import org.knime.scijava.commands.settings.SettingsModelType;
 import org.knime.scijava.commands.settings.models.SettingsModelColumnSelection;
 import org.scijava.plugin.Plugin;
 
+/**
+ * SettingsModelType implementation for SettingsModelColumnSelection.
+ *
+ * @author Christian Dietz, University of Konstanz
+ */
 @Plugin(type = SettingsModelType.class)
 public class SettingsModelColumnSelectionType
         implements SettingsModelType<SettingsModelColumnSelection, String> {
