@@ -5,12 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.ArrayList;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,22 +20,17 @@ import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
-import org.knime.scijava.commands.converter.KNIMEConverterService;
-import org.knime.scijava.commands.io.DefaultInputDataRowService;
-import org.knime.scijava.commands.io.DefaultOutputDataRowService;
-import org.knime.scijava.commands.io.InputDataRowService;
-import org.knime.scijava.commands.io.OutputDataRowService;
-import org.knime.scijava.commands.process.DefaultKnimePostprocessor;
-import org.knime.scijava.core.ResourceAwareClassLoader;
+import org.knime.core.node.NodeLogger;
+import org.knime.scijava.commands.CellOutput;
+import org.knime.scijava.commands.SciJavaGateway;
+import org.knime.scijava.commands.module.NodeModule;
+import org.knime.scijava.commands.module.NodeModuleService;
 import org.scijava.Context;
 import org.scijava.ItemIO;
 import org.scijava.command.Command;
-import org.scijava.command.CommandModule;
+import org.scijava.command.CommandInfo;
 import org.scijava.command.CommandService;
-import org.scijava.plugin.DefaultPluginFinder;
 import org.scijava.plugin.Parameter;
-import org.scijava.plugin.PluginIndex;
-import org.scijava.service.Service;
 
 /**
  * Test for {@link ColumnInputMappingKnimePreprocessor} and
@@ -47,20 +38,15 @@ import org.scijava.service.Service;
  *
  * @author Jonathan Hale (University of Konstanz)
  */
-public class KnimeProcessorTest {
+public class NodeModuleTest {
 
 	private static Context context;
 
 	@Parameter
 	CommandService m_commandService;
-	@Parameter
-	InputDataRowService m_inputRowService;
-	@Parameter
-	OutputDataRowService m_outputCellsService;
 
-	protected static List<Class<? extends Service>> requiredServices = Arrays.<Class<? extends Service>> asList(
-			DefaultInputDataRowService.class, DefaultOutputDataRowService.class, CommandService.class,
-			KNIMEConverterService.class);
+	@Parameter
+	NodeModuleService m_nodeModuleService;
 
 	// Create the test table
 	private static final DataRow m_testRow = new DefaultRow(new RowKey("TestRow001"), BooleanCell.TRUE, new IntCell(42),
@@ -72,14 +58,7 @@ public class KnimeProcessorTest {
 
 	@BeforeClass
 	public static void setUpOnce() {
-		ResourceAwareClassLoader cl = new ResourceAwareClassLoader(Thread.currentThread().getContextClassLoader(), KnimeProcessorTest.class);
-
-		context = new Context(requiredServices, new PluginIndex(new DefaultPluginFinder(cl)));
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		context.dispose();
+		context = SciJavaGateway.get().getGlobalContext();
 	}
 
 	@Before
@@ -88,30 +67,42 @@ public class KnimeProcessorTest {
 	}
 
 	@Test
-	public void testModuleProcessing() throws InterruptedException, ExecutionException {
-		assertNotNull(m_inputRowService);
-		assertNotNull(m_outputCellsService);
+	public void testModuleExecution() throws Exception {
 		assertNotNull(m_commandService);
-		m_inputRowService.setInputDataRow(m_testRow);
-		m_inputRowService.setDataTableSpec(m_spec);
 
-		Future<CommandModule> command = m_commandService.run(MyCommand.class, true);
-		assertNotNull(command);
-		CommandModule commandModule = command.get();
+		NodeModule commandModule = m_nodeModuleService.createNodeModule(new CommandInfo(MyCommand.class), null, m_spec,
+				NodeLogger.getLogger(NodeModuleTest.class));
 		assertNotNull(commandModule);
-		assertFalse("Command was cancelled: " + commandModule.getCancelReason(), commandModule.isCanceled());
 
-		DataCell[] cells = m_outputCellsService.getOutputDataCells();
-		assertNotNull(cells);
-		assertEquals(7, cells.length);
+		// assertFalse("Command was cancelled: " +
+		// commandModule.getCancelReason(), commandModule.isCanceled());
 
-		assertTrue("Boolean output was not extracted correctly!", ((BooleanCell) cells[0]).getBooleanValue());
-		assertEquals("Byte output was not extracted correctly!", 42, ((IntCell) cells[1]).getIntValue());
-		assertEquals("Short output was not extracted correctly!", 420, ((IntCell) cells[2]).getIntValue());
-		assertEquals("Integer output was not extracted correctly!", 42000, ((IntCell) cells[3]).getIntValue());
-		assertEquals("Long output was not extracted correctly!", 4200000, ((LongCell) cells[4]).getLongValue());
-		assertEquals("String output was not extracted correctly!", "KNIME", ((StringCell) cells[5]).getStringValue());
-		assertEquals("Character output was not extracted correctly!", " ", ((StringCell) cells[6]).getStringValue());
+		ArrayList<DataCell[]> cells = new ArrayList<>();
+		CellOutput cellOutput = new CellOutput() {
+
+			ArrayList<DataCell[]> m_cells = cells;
+
+			@Override
+			public void push(DataCell[] cells) throws InterruptedException {
+				assertNotNull(cells);
+				assertEquals(cells.length, 7);
+
+				assertTrue("Boolean output was not extracted correctly!", ((BooleanCell) cells[0]).getBooleanValue());
+				assertEquals("Byte output was not extracted correctly!", 42, ((IntCell) cells[1]).getIntValue());
+				assertEquals("Short output was not extracted correctly!", 420, ((IntCell) cells[2]).getIntValue());
+				assertEquals("Integer output was not extracted correctly!", 42000, ((IntCell) cells[3]).getIntValue());
+				assertEquals("Long output was not extracted correctly!", 4200000, ((LongCell) cells[4]).getLongValue());
+				assertEquals("String output was not extracted correctly!", "KNIME",
+						((StringCell) cells[5]).getStringValue());
+				assertEquals("Character output was not extracted correctly!", " ",
+						((StringCell) cells[6]).getStringValue());
+
+				m_cells.add(cells);
+			}
+		};
+		commandModule.run(m_testRow, cellOutput, null);
+
+		assertFalse("No cells were pushed", cells.isEmpty());
 	}
 
 	/**
