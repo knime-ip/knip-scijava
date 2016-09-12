@@ -12,13 +12,21 @@ public class SettingsModelColumnSelection extends SettingsModelString {
 
     private DataTableSpec spec;
 
+    /**
+     * Constructor.
+     *
+     * @param configName
+     *            Name of the setting
+     * @param defaultValue
+     *            Default value
+     */
     public SettingsModelColumnSelection(final String configName,
             final String defaultValue) {
         super(configName, defaultValue);
     }
 
     /**
-     * Set data table spec
+     * Set data table spec.
      *
      * @param spec
      *            the spec to set
@@ -28,9 +36,9 @@ public class SettingsModelColumnSelection extends SettingsModelString {
     }
 
     /**
-     * Get the contained DataTableSpec
+     * Get the contained DataTableSpec.
      *
-     * @return the spce
+     * @return the spec
      */
     public DataTableSpec getSpec() {
         return spec;
