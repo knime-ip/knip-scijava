@@ -74,7 +74,7 @@ class DefaultNodeModule implements NodeModule {
         // Setting parameters
         for (final Entry<String, Object> entry : params.entrySet()) {
             module.setInput(entry.getKey(), entry.getValue());
-            module.setResolved(entry.getKey(), true);
+            module.resolveInput(entry.getKey());
         }
 
         // FIXME: do we need them all?
