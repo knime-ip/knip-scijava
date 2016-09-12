@@ -11,7 +11,7 @@ import org.knime.core.data.DataType;
 import org.knime.core.node.ExecutionContext;
 import org.knime.scijava.commands.CellOutput;
 import org.knime.scijava.commands.MultiOutputListener;
-import org.knime.scijava.commands.converter.ConverterCacheService;
+import org.knime.scijava.commands.converter.KNIMEConverterService;
 import org.scijava.Context;
 import org.scijava.module.Module;
 import org.scijava.module.ModuleInfo;
@@ -33,7 +33,7 @@ class DefaultNodeModule implements NodeModule {
     private PluginService ps;
 
     @Parameter
-    private ConverterCacheService cs;
+    private KNIMEConverterService cs;
 
     @Parameter
     private ModuleService ms;

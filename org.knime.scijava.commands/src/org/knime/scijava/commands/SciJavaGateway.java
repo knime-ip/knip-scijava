@@ -3,7 +3,7 @@ package org.knime.scijava.commands;
 import java.util.Arrays;
 import java.util.List;
 
-import org.knime.scijava.commands.converter.ConverterCacheService;
+import org.knime.scijava.commands.converter.KNIMEConverterService;
 import org.knime.scijava.commands.module.NodeModuleService;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.knime.scijava.commands.settings.SettingsModelTypeService;
@@ -51,7 +51,7 @@ public class SciJavaGateway {
     protected static List<Class<? extends Service>> requiredServices = Arrays
             .<Class<? extends Service>> asList(PrefService.class,
                     ObjectService.class, WidgetService.class, UIService.class,
-                    ConverterCacheService.class, CommandService.class,
+                    KNIMEConverterService.class, CommandService.class,
                     NodeModuleService.class, SettingsModelTypeService.class,
                     NodeSettingsService.class, ScriptService.class);
 

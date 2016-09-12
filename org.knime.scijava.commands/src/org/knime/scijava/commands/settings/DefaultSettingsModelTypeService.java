@@ -6,7 +6,7 @@ import java.util.Map;
 import org.knime.core.data.convert.util.ClassUtil;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.scijava.commands.StyleHook;
-import org.knime.scijava.commands.converter.ConverterCacheService;
+import org.knime.scijava.commands.converter.KNIMEConverterService;
 import org.knime.scijava.commands.settings.types.SettingsModelColumnSelectionType;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.AbstractSingletonService;
@@ -29,7 +29,7 @@ public class DefaultSettingsModelTypeService
         implements SettingsModelTypeService {
 
     @Parameter
-    private ConverterCacheService cs;
+    private KNIMEConverterService cs;
 
     private final Map<Class<? extends SettingsModel>, SettingsModelType> m_pluginsByModel = new HashMap<>();
     private final Map<Class<?>, SettingsModelType> m_pluginsByValue = new HashMap<>();

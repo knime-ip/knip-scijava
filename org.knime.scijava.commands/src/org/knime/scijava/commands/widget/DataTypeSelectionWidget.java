@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.convert.datacell.JavaToDataCellConverterFactory;
-import org.knime.scijava.commands.converter.ConverterCacheService;
+import org.knime.scijava.commands.converter.KNIMEConverterService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.swing.widget.SwingInputWidget;
@@ -26,7 +26,7 @@ import org.scijava.widget.WidgetModel;
 public class DataTypeSelectionWidget extends SwingInputWidget<String> {
 
     @Parameter
-    private ConverterCacheService cs;
+    private KNIMEConverterService cs;
 
     // Internal parameters
 

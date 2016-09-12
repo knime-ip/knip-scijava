@@ -19,10 +19,7 @@ import org.scijava.service.Service;
  *
  * @author Gabriel Einsdorf (University of Konstanz)
  */
-// FIXME NAMING (KNIPConverterCache?!)
-// FIXME CACHING (isn't implemented everywhere, yet)
-// FIXME can we always delegate to Jonathans implementations?
-public interface ConverterCacheService extends Service {
+public interface KNIMEConverterService extends Service {
 
     /**
      * Convert a KNIME cell to the fitting java type.

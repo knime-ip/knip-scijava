@@ -15,7 +15,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.util.UniqueNameGenerator;
 import org.knime.scijava.commands.MultiOutputListener;
-import org.knime.scijava.commands.converter.ConverterCacheService;
+import org.knime.scijava.commands.converter.KNIMEConverterService;
 import org.knime.scijava.commands.settings.SettingsModelType;
 import org.knime.scijava.commands.settings.SettingsModelTypeService;
 import org.knime.scijava.commands.settings.models.SettingsModelColumnSelection;
@@ -41,7 +41,7 @@ public class DefaultNodeModuleService extends AbstractService
     private SettingsModelTypeService ts;
 
     @Parameter
-    private ConverterCacheService cs;
+    private KNIMEConverterService cs;
 
     @Parameter
     private ModuleService ms;

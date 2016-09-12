@@ -24,7 +24,7 @@ import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.def.StringCell;
-import org.knime.scijava.commands.converter.ConverterCacheService;
+import org.knime.scijava.commands.converter.KNIMEConverterService;
 import org.knime.scijava.commands.io.DefaultInputDataRowService;
 import org.knime.scijava.commands.io.DefaultOutputDataRowService;
 import org.knime.scijava.commands.io.InputDataRowService;
@@ -60,7 +60,7 @@ public class KnimeProcessorTest {
 
 	protected static List<Class<? extends Service>> requiredServices = Arrays.<Class<? extends Service>> asList(
 			DefaultInputDataRowService.class, DefaultOutputDataRowService.class, CommandService.class,
-			ConverterCacheService.class);
+			KNIMEConverterService.class);
 
 	// Create the test table
 	private static final DataRow m_testRow = new DefaultRow(new RowKey("TestRow001"), BooleanCell.TRUE, new IntCell(42),

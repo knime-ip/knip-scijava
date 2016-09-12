@@ -27,9 +27,9 @@ import org.scijava.service.AbstractService;
  *
  * @author Gabriel Einsdorf (University of Konstanz)
  */
-@Plugin(type = ConverterCacheService.class)
-public class DefaultConverterCacheService extends AbstractService
-        implements ConverterCacheService {
+@Plugin(type = KNIMEConverterService.class)
+public class DefaultKNIMEConverterService extends AbstractService
+        implements KNIMEConverterService {
 
     private final DataCellToJavaConverterRegistry m_inRegister = DataCellToJavaConverterRegistry
             .getInstance();
@@ -52,11 +52,11 @@ public class DefaultConverterCacheService extends AbstractService
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
     public DataCell convertToKnime(final Object in, final Class<?> inType,
             final DataType type, final ExecutionContext ctx) throws Exception {
 
-        final JavaToDataCellConverter converter = createNewOutputConverter(
+        final JavaToDataCellConverter<Object> converter = (JavaToDataCellConverter<Object>) createNewOutputConverter(
                 inType, type, ctx);
 
         return converter.convert(in);
@@ -72,15 +72,12 @@ public class DefaultConverterCacheService extends AbstractService
         final Class<? extends Object> outputType = ClassUtil
                 .ensureObjectType(type);
 
-        // TODO Will this use the "Best" dataType?
-        final Iterator<JavaToDataCellConverterFactory<?>> factoriesIt = m_outRegistry
-                .getFactoriesForSourceType(outputType).iterator();
+        final Optional<?> converter = m_outRegistry
+                .getPreferredConverterFactory(outputType, knimeType);
 
-        while (factoriesIt.hasNext()) {
-            final JavaToDataCellConverterFactory<?> fac = factoriesIt.next();
-            if (fac.getDestinationType() == knimeType) {
-                return fac.create(ctx);
-            }
+        if (converter.isPresent()) {
+            return ((JavaToDataCellConverterFactory<?>) converter.get())
+                    .create(ctx);
         }
 
         throw new IllegalArgumentException("Can't convert from: "
@@ -156,9 +153,6 @@ public class DefaultConverterCacheService extends AbstractService
 
     @Override
     public Optional<Class<?>> getMatchingJavaType(final DataType dataType) {
-
-        // FIXME Will this always work with the MissingValue <-> Object
-        // Converter?
         final Optional<DataCellToJavaConverterFactory<?, ?>> o = m_inRegister
                 .getFactoriesForSourceType(dataType).stream().findFirst();
         if (o.isPresent()) {

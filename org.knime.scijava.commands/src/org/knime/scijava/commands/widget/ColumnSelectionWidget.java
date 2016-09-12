@@ -10,7 +10,7 @@ import org.knime.core.data.DataValue;
 import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.util.ColumnSelectionPanel;
 import org.knime.core.node.util.DataValueColumnFilter;
-import org.knime.scijava.commands.converter.ConverterCacheService;
+import org.knime.scijava.commands.converter.KNIMEConverterService;
 import org.knime.scijava.commands.settings.models.SettingsModelColumnSelection;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -27,7 +27,7 @@ import org.scijava.widget.WidgetModel;
 public class ColumnSelectionWidget extends SwingInputWidget<String> {
 
     @Parameter
-    private ConverterCacheService convCache;
+    private KNIMEConverterService convCache;
 
     // Internal parameters
 

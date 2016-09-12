@@ -2,7 +2,7 @@ package org.knime.scijava.commands.settings;
 
 import org.knime.core.node.defaultnodesettings.SettingsModel;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
-import org.knime.scijava.commands.converter.ConverterCacheService;
+import org.knime.scijava.commands.converter.KNIMEConverterService;
 import org.scijava.module.ModuleItem;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -18,7 +18,7 @@ public class DefaultNodeSettingsService extends AbstractService
         implements NodeSettingsService {
 
     @Parameter
-    private ConverterCacheService cs;
+    private KNIMEConverterService cs;
 
     @Parameter
     private SettingsModelTypeService typeService;
