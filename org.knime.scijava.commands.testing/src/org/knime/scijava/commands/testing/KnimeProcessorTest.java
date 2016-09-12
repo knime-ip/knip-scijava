@@ -72,7 +72,7 @@ public class KnimeProcessorTest {
 
 	@BeforeClass
 	public static void setUpOnce() {
-		ResourceAwareClassLoader cl = new ResourceAwareClassLoader(Thread.currentThread().getContextClassLoader());
+		ResourceAwareClassLoader cl = new ResourceAwareClassLoader(Thread.currentThread().getContextClassLoader(), KnimeProcessorTest.class);
 
 		context = new Context(requiredServices, new PluginIndex(new DefaultPluginFinder(cl)));
 	}
