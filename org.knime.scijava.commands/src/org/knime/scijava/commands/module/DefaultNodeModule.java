@@ -83,10 +83,8 @@ class DefaultNodeModule implements NodeModule {
         final List<PreprocessorPlugin> pre = ps
                 .createInstancesOfType(PreprocessorPlugin.class);
 
-        if (pre != null) {
-            for (final ModulePreprocessor p : pre) {
-                p.process(module);
-            }
+        for (final ModulePreprocessor p : pre) {
+            p.process(module);
         }
 
         outputListener = new NodeModuleOutputChangedListener();
