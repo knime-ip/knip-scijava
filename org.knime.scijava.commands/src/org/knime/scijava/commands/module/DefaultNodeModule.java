@@ -96,7 +96,7 @@ class DefaultNodeModule implements NodeModule {
         }
 
         for (final ModuleItem<?> item : this.module.getInfo().inputs()) {
-            if (MultiOutputListener.class.isAssignableFrom(item.getType())) {
+            if (MultiOutputListener.class.equals(item.getType())) {
                 final String name = item.getName();
 
                 module.setInput(name, outputListener);
