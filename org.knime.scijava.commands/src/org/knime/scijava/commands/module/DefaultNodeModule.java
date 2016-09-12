@@ -70,7 +70,17 @@ class DefaultNodeModule implements NodeModule {
         this.inputMapping = inputMapping;
         this.outputMapping = outputMapping;
         this.module = ms.createModule(info);
+        this.outputListener = new NodeModuleOutputChangedListener();
 
+        preProcess(params);
+    }
+
+    /*
+     * "Once per node execution" pre-processing. Called in constructor.
+     *
+     * @param params key-value pairs of pre resolved module inputs.
+     */
+    private void preProcess(final Map<String, Object> params) {
         // Setting parameters
         for (final Entry<String, Object> entry : params.entrySet()) {
             module.setInput(entry.getKey(), entry.getValue());
@@ -78,8 +88,6 @@ class DefaultNodeModule implements NodeModule {
         }
 
         // FIXME: do we need them all?
-        // FIXME add our own preprocessors, i.e. to call preprocess?
-        // FIXME or move this to "preprocess"
         final List<PreprocessorPlugin> pre = ps
                 .createInstancesOfType(PreprocessorPlugin.class);
 
@@ -87,8 +95,7 @@ class DefaultNodeModule implements NodeModule {
             p.process(module);
         }
 
-        outputListener = new NodeModuleOutputChangedListener();
-        for (final ModuleItem<?> item : info.inputs()) {
+        for (final ModuleItem<?> item : this.module.getInfo().inputs()) {
             if (MultiOutputListener.class.isAssignableFrom(item.getType())) {
                 final String name = item.getName();
 
