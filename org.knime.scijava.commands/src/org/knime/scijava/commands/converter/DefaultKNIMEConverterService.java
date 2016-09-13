@@ -200,4 +200,10 @@ public class DefaultKNIMEConverterService extends AbstractService
                 ClassUtil.ensureObjectType(javaType));
     }
 
+    @Override
+    public Optional<DataType> getPreferredDataType(final Class<?> type) {
+        return m_outRegistry.getFactoriesForSourceType(type).stream()
+                .findFirst().map(fac -> fac.getDestinationType());
+    }
+
 }

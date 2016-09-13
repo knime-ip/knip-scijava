@@ -99,4 +99,13 @@ public interface KNIMEConverterService extends Service {
      */
     Collection<JavaToDataCellConverterFactory<?>> getMatchingFactories(
             Class<?> javaType);
+
+    /**
+     * Get the preferred {@link DataType} to convert a certain Java type into.
+     *
+     * @param type
+     *            the Java type
+     * @return an optional DataType which the java type can be converted into.
+     */
+    Optional<DataType> getPreferredDataType(final Class<?> type);
 }
