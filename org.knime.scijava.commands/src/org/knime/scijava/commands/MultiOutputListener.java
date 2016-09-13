@@ -10,6 +10,7 @@ public interface MultiOutputListener {
 
     /**
      * Notify this listener that a new output row has been pushed.
+     * @throws Exception
      */
-    public void notifyListener();
+    public void notifyListener() throws Exception;
 }

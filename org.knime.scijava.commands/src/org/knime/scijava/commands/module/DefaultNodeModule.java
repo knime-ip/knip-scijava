@@ -172,26 +172,21 @@ class DefaultNodeModule implements NodeModule {
         }
 
         @Override
-        public void notifyListener() {
-            try {
-                // output can be null if sink node
-                if (output != null) {
-                    final List<DataCell> cells = new ArrayList<DataCell>();
-
-                    final ModuleItem<?> result = module.getInfo()
-                            .getOutput("result");
-                    if (result != null) {
-                        // FIXME hack because e.g. python script contains
-                        // result log
+        public void notifyListener() throws Exception {
+            // output can be null if sink node
+            if (output != null) {
+                final List<DataCell> cells = new ArrayList<DataCell>();
+                for (final ModuleItem<?> entry : module.getInfo().outputs()) {
+                    // FIXME hack because e.g. python script contains
+                    // result log
+                    if (!entry.getName().equals("result")) {
                         cells.add(cs.convertToKnime(
-                                module.getOutput(result.getName()),
-                                result.getType(), outputMapping.get(result),
+                                module.getOutput(entry.getName()),
+                                entry.getType(), outputMapping.get(entry),
                                 ctx));
                     }
-                    output.push(cells.toArray(new DataCell[cells.size()]));
                 }
-            } catch (final Exception e) {
-                logService.error("Unable to push output row.", e);
+                output.push(cells.toArray(new DataCell[cells.size()]));
             }
         }
 
@@ -218,8 +213,9 @@ class DefaultNodeModule implements NodeModule {
         /**
          * Final flush. Will push a row in case module does not handle pushing
          * output rows.
+         * @throws Exception
          */
-        public void flush() {
+        public void flush() throws Exception {
             if (!manualPush) {
                 notifyListener();
             }

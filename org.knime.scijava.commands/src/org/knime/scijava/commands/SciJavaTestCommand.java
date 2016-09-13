@@ -28,9 +28,13 @@ public class SciJavaTestCommand implements Command {
 
     @Override
     public void run() {
-        for (int i = 0; i < fromInt; i++) {
-            outInt = i;
-            rowOutput.notifyListener();
+        try {
+            for (int i = 0; i < fromInt; i++) {
+                outInt = i;
+                rowOutput.notifyListener();
+            }
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
