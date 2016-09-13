@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
@@ -123,16 +124,12 @@ public class DefaultNodeModuleService extends AbstractService
         final HashMap<ModuleItem<?>, DataType> outputMapping = new HashMap<>();
 
         for (final ModuleItem<?> item : info.outputs()) {
-            final Collection<JavaToDataCellConverterFactory<?>> sourceFacs = cs
-                    .getMatchingFactories(item.getType());
-            for (final JavaToDataCellConverterFactory<?> fac : sourceFacs) {
-                final String type = ((SettingsModelString) models
-                        .get(item.getName())).getStringValue();
-                if (fac.getDestinationType().getCellClass().getName()
-                        .equals(type)) {
-                    outputMapping.put(item, fac.getDestinationType());
-                    break;
-                }
+            final Optional<DataType> type = cs
+                    .getPreferredDataType(item.getType());
+
+            if (type.isPresent()) {
+                final DataType theType = type.get();
+                outputMapping.put(item, theType);
             }
         }
 
