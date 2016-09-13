@@ -1,7 +1,6 @@
 package org.knime.scijava.commands.module;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,10 +10,8 @@ import java.util.Optional;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
-import org.knime.core.data.convert.datacell.JavaToDataCellConverterFactory;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.util.UniqueNameGenerator;
 import org.knime.scijava.commands.MultiOutputListener;
 import org.knime.scijava.commands.converter.KNIMEConverterService;
@@ -50,7 +47,8 @@ public class DefaultNodeModuleService extends AbstractService
 
     @Override
     public NodeModule createNodeModule(final ModuleInfo info,
-            final Map<String, SettingsModel> models, final DataTableSpec spec, final NodeLogger knimeLogger) {
+            final Map<String, SettingsModel> models, final DataTableSpec spec,
+            final NodeLogger knimeLogger) {
 
         final Map<Integer, ModuleItem<?>> inputMapping = new HashMap<>();
         final Map<String, Object> params = new HashMap<String, Object>();
