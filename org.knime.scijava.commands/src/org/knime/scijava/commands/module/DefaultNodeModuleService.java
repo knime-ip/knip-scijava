@@ -25,6 +25,7 @@ import org.scijava.module.ModuleItem;
 import org.scijava.module.ModuleService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.script.ScriptInfo;
 import org.scijava.service.AbstractService;
 
 /**
@@ -100,12 +101,12 @@ public class DefaultNodeModuleService extends AbstractService
             nameGen = new UniqueNameGenerator(new HashSet<>());
         }
 
-        // TODO (What?)... What?
         final List<DataColumnSpec> tableSpecs = new ArrayList<>();
 
-        // FIXME (result)
+        final boolean hasSyntheticResult = info instanceof ScriptInfo &&
+                ((ScriptInfo) info).isReturnValueAppended();
         for (final ModuleItem<?> item : info.outputs()) {
-            if (item.getName().equals("result")) {
+            if (!hasSyntheticResult && item.getName().equals("result")) {
                 continue;
             }
             tableSpecs.add(

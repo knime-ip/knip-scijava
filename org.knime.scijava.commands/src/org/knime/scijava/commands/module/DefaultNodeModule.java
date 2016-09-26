@@ -24,6 +24,7 @@ import org.scijava.module.process.ModulePreprocessor;
 import org.scijava.module.process.PreprocessorPlugin;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.PluginService;
+import org.scijava.script.ScriptInfo;
 
 /**
  * Default implementation of {@link NodeModule}.
@@ -175,11 +176,14 @@ class DefaultNodeModule implements NodeModule {
         public void notifyListener() throws Exception {
             // output can be null if sink node
             if (output != null) {
+                final boolean hasSyntheticResult = module.getInfo() instanceof ScriptInfo &&
+                        ((ScriptInfo) module.getInfo()).isReturnValueAppended();
+
                 final List<DataCell> cells = new ArrayList<DataCell>();
                 for (final ModuleItem<?> entry : module.getInfo().outputs()) {
                     // FIXME hack because e.g. python script contains
                     // result log
-                    if (!entry.getName().equals("result")) {
+                    if (!hasSyntheticResult || !entry.getName().equals("result")) {
                         cells.add(cs.convertToKnime(
                                 module.getOutput(entry.getName()),
                                 entry.getType(), outputMapping.get(entry),
