@@ -99,13 +99,13 @@ public class DefaultConverterCacheService extends AbstractService
     private <O> DataCellToJavaConverter<?, ?> addNewInputConverter(
             final DataType inputType, final Class<O> outputType) {
 
-        final Optional<DataCellToJavaConverterFactory<DataValue, O>> factory = m_inRegister.getPreferredConverterFactory(inputType, outputType);
+        final Optional<DataCellToJavaConverterFactory<? extends DataValue, O>> factory = m_inRegister.getConverterFactories(inputType, outputType).stream().findFirst();
 
         if (!factory.isPresent()) {
             throw new IllegalArgumentException("Can't convert from: "
                     + inputType.getName() + " to :" + outputType.getName());
         }
-        final DataCellToJavaConverter<DataValue, O> conv = factory.get().create();
+        final DataCellToJavaConverter<? extends DataValue, O> conv = factory.get().create();
         m_inConverters.put(createInputKey(inputType, outputType), conv);
         return conv;
     }
