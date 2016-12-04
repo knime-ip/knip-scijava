@@ -212,6 +212,10 @@ public class ResourceAwareClassLoader extends ClassLoader {
 		} catch (IOException e) {
 			// ignore
 		}
+		
+		if(urlToAdd.toString().contains("knip.io")){
+			System.out.println("A");
+		}
 
 		// no duplicate found, we can safely add this url.
 		urls.add(urlToAdd);

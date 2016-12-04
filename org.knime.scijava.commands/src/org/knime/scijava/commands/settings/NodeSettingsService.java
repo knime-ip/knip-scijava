@@ -1,125 +1,72 @@
 package org.knime.scijava.commands.settings;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-import org.knime.core.node.InvalidSettingsException;
-import org.knime.core.node.NodeDialog;
-import org.knime.core.node.NodeModel;
-import org.knime.core.node.NodeSettingsRO;
-import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModel;
-import org.scijava.module.Module;
+import org.knime.scijava.commands.MultiOutputListener;
+import org.scijava.module.ModuleInfo;
 import org.scijava.module.ModuleItem;
-import org.scijava.plugin.Plugin;
 import org.scijava.service.Service;
 
 /**
- * Interface for Services that provide functionality to create and modify
- * {@link SettingsModel}s. It holds a {@link Map} of {@link SettingsModel}s with
- * a {@link WeakReference} to manage the SettingsModels for a {@link NodeModel}
- * or {@link NodeDialog}, but not prevent the {@link SettingsModel}s to be
- * garbage collected when the NodeModel or NodeDialog are destroyed.
+ * Interface for services which handle SettingsModels.
  *
- * <p>
- * NodeSettingsService plugins discoverable at runtime must implement this
- * interface and be annotated with @{@link Plugin} with attribute
- * {@link Plugin#type()} = {@link NodeSettingsService}.class.
- * </p>
- *
- * @author Jonathan Hale (University of Konstanz)
- *
+ * @author Christian Dietz, University of Konstanz
  */
 public interface NodeSettingsService extends Service {
 
-	/**
-	 * Set the value of the SettingsModel for a ModuleItem. Prints a warning if
-	 * no SettingsModel exists for the passed <code>moduleItem</code>.
-	 *
-	 * @param moduleItem
-	 *            name of the SettingsModel
-	 * @param value
-	 *            value to set the SettingsModels value to.
-	 */
-	void setValue(ModuleItem<?> moduleItem, Object value);
+    /**
+     * Get all settings models for a given module.
+     *
+     * @param module
+     *            the module to get {@link SettingsModels} for.
+     * @return Map of settings models with module item names as keys.
+     */
+    default Map<String, SettingsModel> getSettingsModels(
+            final ModuleInfo module) {
+        final Map<String, SettingsModel> models = new HashMap<>();
 
-	/**
-	 * Get the value of the SettingsModel of the given ModuleItem.
-	 *
-	 * @param moduleItem
-	 * @return the value of the found SettingsModel.
-	 */
-	Object getValue(ModuleItem<?> moduleItem);
+        for (final ModuleItem<?> item : module.inputs()) {
+            // FIXME make extensible?
+            if (MultiOutputListener.class.isAssignableFrom(item.getType())) {
+                continue;
+            }
+            models.put(item.getName(), createSettingsModel(item));
+        }
 
-	/**
-	 * Create a new {@link SettingsModel} for a {@link ModuleItem} and add it to
-	 * the {@link Map} of {@link SettingsModel}s set via
-	 * {@link #setSettingsModels(Map)}.
-	 *
-	 * @param moduleItem
-	 *            ModuleItem to create a SettingsModel for.
-	 * @param module
-	 *            the module, the moduleItem is from.
-	 * @return the created SettignsModel or null if no SettingsModel could be
-	 *         created for moduleItem.
-	 * @see #createSettingsModel(ModuleItem)
-	 * @see #createSettingsModels(Iterable)
-	 */
-	SettingsModel createAndAddSettingsModel(ModuleItem<?> moduleItem,
-			Module module, boolean forceColumnSelection);
+        for (final ModuleItem<?> item : module.outputs()) {
+            models.put(item.getName(), createSettingsModel(item));
+        }
 
-	/**
-	 * Create new {@link SettingsModel}s for ModuleItems and add them to the
-	 * {@link Map} set via {@link #setSettingsModels(Map)}.
-	 *
-	 * @param moduleItems
-	 * @return the created SettingsModels
-	 */
-	List<SettingsModel> createAndAddSettingsModels(
-			Iterable<ModuleItem<?>> moduleItems, Module module);
+        return models;
+    }
 
-	/**
-	 * Validate all settingsModels in this service.
-	 *
-	 * @param settings
-	 * @return <code>true</code> on success
-	 * @throws InvalidSettingsException
-	 */
-	boolean validateSettings(NodeSettingsRO settings)
-			throws InvalidSettingsException;
+    /**
+     * Create settings model for a given module item.
+     *
+     * @param moduleItem
+     *            the module item to create a settings model for.
+     * @return The created {@link SettingsModel}
+     */
+    SettingsModel createSettingsModel(final ModuleItem<?> moduleItem);
 
-	/**
-	 * Load settings in this service from <code>settings</code>.
-	 *
-	 * @param settings
-	 *            Settings to load from
-	 * @param tolerant
-	 *            Whether to tolerate missing values
-	 * @return <code>true</code> on success
-	 * @throws InvalidSettingsException
-	 */
-	boolean loadSettingsFrom(NodeSettingsRO settings, boolean tolerant)
-			throws InvalidSettingsException;
+    /**
+     * Dynamically get the value of a {@link SettingsModel}.
+     *
+     * @param model
+     *            the model to get the value of.
+     * @return the value
+     */
+    Object getValue(final SettingsModel model);
 
-	/**
-	 * Save settings in this service to <code>settings</code>.
-	 *
-	 * @param settings
-	 * @return <code>true</code> on success
-	 */
-	boolean saveSettingsTo(NodeSettingsWO settings);
-
-	/**
-	 * Removes all settings from the Service.
-	 */
-	void clear();
-
-	/**
-	 * Removes the settingsModel associated with the given module item (input).
-	 *
-	 * @param item
-	 *            the item which settings model will be removed.
-	 */
-	void removeSettingsModel(ModuleItem<?> item);
+    /**
+     * Dynamically set the value of a {@link SettingsModel}.
+     *
+     * @param settingsModel
+     *            model to set the value of.
+     * @param value
+     *            Value to set to
+     */
+    void setValue(final SettingsModel settingsModel, final Object value);
 }

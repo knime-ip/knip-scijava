@@ -3,14 +3,10 @@ package org.knime.scijava.commands;
 import java.util.Arrays;
 import java.util.List;
 
-import org.knime.scijava.commands.converter.ConverterCacheService;
-import org.knime.scijava.commands.io.InputDataRowService;
-import org.knime.scijava.commands.io.OutputDataRowService;
-import org.knime.scijava.commands.settings.NodeModelSettingsService;
+import org.knime.scijava.commands.converter.KNIMEConverterService;
+import org.knime.scijava.commands.module.NodeModuleService;
 import org.knime.scijava.commands.settings.NodeSettingsService;
 import org.knime.scijava.commands.settings.SettingsModelTypeService;
-import org.knime.scijava.commands.simplemapping.SimpleColumnMappingService;
-import org.knime.scijava.commands.widget.KNIMEWidgetService;
 import org.knime.scijava.core.ResourceAwareClassLoader;
 import org.knime.scijava.core.SubContext;
 import org.knime.scijava.core.pluginindex.ReusablePluginIndex;
@@ -22,12 +18,15 @@ import org.scijava.plugin.DefaultPluginFinder;
 import org.scijava.plugin.PluginIndex;
 import org.scijava.plugin.PluginService;
 import org.scijava.prefs.PrefService;
+import org.scijava.script.ScriptService;
 import org.scijava.service.Service;
 import org.scijava.ui.UIService;
 import org.scijava.widget.WidgetService;
 
 /**
- * Gateway to the SciJava world
+ * Gateway to the SciJava world.
+ *
+ * @author Christian Dietz, University of Konstanz
  */
 public class SciJavaGateway {
 
@@ -50,15 +49,11 @@ public class SciJavaGateway {
 
     /** a list of services which need to be present in newly created contexts */
     protected static List<Class<? extends Service>> requiredServices = Arrays
-            .<Class<? extends Service>> asList(InputDataRowService.class,
-                    OutputDataRowService.class, PrefService.class,
-                    KNIMEExecutionService.class, NodeSettingsService.class,
-                    ObjectService.class, WidgetService.class,
-                    KNIMEWidgetService.class, UIService.class,
-                    ConverterCacheService.class, CommandService.class,
-                    NodeModelSettingsService.class,
-                    SettingsModelTypeService.class,
-                    SimpleColumnMappingService.class);
+            .<Class<? extends Service>> asList(PrefService.class,
+                    ObjectService.class, WidgetService.class, UIService.class,
+                    KNIMEConverterService.class, CommandService.class,
+                    NodeModuleService.class, SettingsModelTypeService.class,
+                    NodeSettingsService.class, ScriptService.class);
 
     /**
      * Constructor. Only to be called from {@link #get()}.
@@ -101,7 +96,7 @@ public class SciJavaGateway {
         return context;
     }
 
-    private Context getGlobalContext() {
+    public Context getGlobalContext() {
         if (m_globalContext == null) {
             m_globalContext = new Context(m_pluginIndex);
 
@@ -117,5 +112,4 @@ public class SciJavaGateway {
     public ResourceAwareClassLoader getClassLoader() {
         return m_classLoader;
     }
-
 }

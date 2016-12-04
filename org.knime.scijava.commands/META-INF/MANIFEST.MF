@@ -16,10 +16,16 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  scijava-plugins-text-plain;bundle-version="0.1.2",
  scijava-ui-awt;bundle-version="0.1.4",
  scijava-ui-swing;bundle-version="0.8.0",
- org.knime.scijava.core;bundle-version="0.2.1"
+ org.knime.scijava.core;bundle-version="0.2.1",
+ com.google.guava;bundle-version="19.0.0",
+ scripting-jython;bundle-version="0.3.0",
+ jython-shaded;bundle-version="2.5.3",
+ scripting-java;bundle-version="0.4.0",
+ scripting-clojure;bundle-version="0.1.4"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: scijava_commands.jar
+Bundle-ClassPath: scijava_commands.jar,
+ lib/tools.jar
 Export-Package: org.knime.scijava.commands,
  org.knime.scijava.commands.adapter,
  org.knime.scijava.commands.adapter.basic,

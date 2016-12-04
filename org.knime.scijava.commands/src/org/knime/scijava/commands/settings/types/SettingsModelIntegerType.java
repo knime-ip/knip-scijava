@@ -1,7 +1,7 @@
 package org.knime.scijava.commands.settings.types;
 
 import org.knime.core.node.defaultnodesettings.SettingsModelInteger;
-import org.knime.scijava.commands.settings.SettingsModelTypePlugin;
+import org.knime.scijava.commands.settings.SettingsModelType;
 import org.scijava.plugin.Plugin;
 
 /**
@@ -9,38 +9,38 @@ import org.scijava.plugin.Plugin;
  *
  * @author Jonathan Hale (University of Konstanz)
  */
-@Plugin(type = SettingsModelTypePlugin.class)
+@Plugin(type = SettingsModelType.class)
 public class SettingsModelIntegerType
-		implements SettingsModelTypePlugin<SettingsModelInteger, Integer> {
+        implements SettingsModelType<SettingsModelInteger, Integer> {
 
-	@Override
-	public SettingsModelInteger create(final String name,
-			final Integer defaultValue) {
-		if (defaultValue == null) {
-			return new SettingsModelInteger(name, 0);
-		}
-		return new SettingsModelInteger(name, defaultValue);
-	}
+    @Override
+    public SettingsModelInteger create(final String name,
+            final Integer defaultValue) {
+        if (defaultValue == null) {
+            return new SettingsModelInteger(name, 0);
+        }
+        return new SettingsModelInteger(name, defaultValue);
+    }
 
-	@Override
-	public void setValue(final SettingsModelInteger settingsModel,
-			final Integer value) throws ClassCastException {
-		settingsModel.setIntValue(value);
-	}
+    @Override
+    public void setValue(final SettingsModelInteger settingsModel,
+            final Integer value) throws ClassCastException {
+        settingsModel.setIntValue(value);
+    }
 
-	@Override
-	public Integer getValue(final SettingsModelInteger settingsModel) {
-		return settingsModel.getIntValue();
-	}
+    @Override
+    public Integer getValue(final SettingsModelInteger settingsModel) {
+        return settingsModel.getIntValue();
+    }
 
-	@Override
-	public Class<SettingsModelInteger> getSettingsModelClass() {
-		return SettingsModelInteger.class;
-	}
+    @Override
+    public Class<SettingsModelInteger> getSettingsModelClass() {
+        return SettingsModelInteger.class;
+    }
 
-	@Override
-	public Class<Integer> getValueClass() {
-		return Integer.class;
-	}
+    @Override
+    public Class<Integer> getValueClass() {
+        return Integer.class;
+    }
 
 }
