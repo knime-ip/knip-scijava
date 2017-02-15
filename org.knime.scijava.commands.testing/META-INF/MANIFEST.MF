@@ -8,7 +8,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Eclipse-BuddyPolicy: registered
 Require-Bundle: org.knime.testing;bundle-version="3.0.0",
  org.knime.core;bundle-version="3.0.0",
- slf4j-log4j12;bundle-version="1.7.10",
  org.junit;bundle-version="4.12.0",
  scijava-common,
  org.knime.scijava.commands,
