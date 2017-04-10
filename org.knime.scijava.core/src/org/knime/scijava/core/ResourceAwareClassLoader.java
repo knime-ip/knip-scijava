@@ -144,7 +144,13 @@ public class ResourceAwareClassLoader extends ClassLoader {
 							// we want to avoid transitive resolving of
 							// dependencies
 							final String host = resource.getHost();
-							if (bundle.getBundleId() == Long.valueOf(host.substring(0, host.indexOf(".")))) {
+							final int dotIndex = host.indexOf('.');
+							// when the resource is not in the osgi modules(e.g., nashorn.jar of jre),
+							// the url doesn't contain '.'. 
+							if (dotIndex <= 0) {
+								continue;
+							}
+							if (bundle.getBundleId() == Long.valueOf(host.substring(0, dotIndex))) {
 								safeAdd(urls.get(res), resource);
 							}
 						}
