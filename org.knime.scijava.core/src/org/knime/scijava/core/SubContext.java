@@ -38,7 +38,7 @@ import org.scijava.plugin.PluginIndex;
 import org.scijava.service.Service;
 import org.scijava.service.ServiceHelper;
 import org.scijava.service.ServiceIndex;
-import org.scijava.util.ClassUtils;
+import org.scijava.util2.ClassUtils;
 
 /**
  * SubContex is a context which allows a selection of services to be scoped

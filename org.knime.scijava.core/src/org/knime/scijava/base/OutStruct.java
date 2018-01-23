@@ -1,6 +1,6 @@
 package org.knime.scijava.base;
 
-import org.scijava.param.Parameter;
+import org.scijava.param2.Parameter;
 
 public class OutStruct {
 

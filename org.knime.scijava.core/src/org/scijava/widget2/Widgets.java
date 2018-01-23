@@ -3,9 +3,9 @@ package org.scijava.widget2;
 
 import java.util.Arrays;
 
-import org.scijava.param.ParameterMember;
-import org.scijava.struct.Member;
-import org.scijava.struct.MemberInstance;
+import org.scijava.param2.ParameterMember;
+import org.scijava.struct2.Member;
+import org.scijava.struct2.MemberInstance;
 
 /** Utility class for working with {@link Widget}s. */
 public final class Widgets {

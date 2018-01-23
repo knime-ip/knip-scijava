@@ -24,10 +24,13 @@ import org.knime.core.node.streamable.PortOutput;
 import org.knime.core.node.streamable.RowInput;
 import org.knime.core.node.streamable.RowOutput;
 import org.knime.core.node.streamable.StreamableOperator;
-import org.scijava.ops.FunctionOp;
-import org.scijava.struct.StructInstance;
+import org.scijava.ops2.FunctionOp;
+import org.scijava.struct2.Struct;
+import org.scijava.struct2.StructInstance;
 
 public class FunctionOpNodeModel<I, O> extends NodeModel {
+
+	private NodeStructInstance<?> m_structInstance;
 
 	private StructInstance<FunctionOp<I, O>> m_func;
 
@@ -35,8 +38,9 @@ public class FunctionOpNodeModel<I, O> extends NodeModel {
 
 	private ObjectToDataCells<O> m_objectToCells;
 
-	protected FunctionOpNodeModel(StructInstance<FunctionOp<I, O>> func) {
+	protected FunctionOpNodeModel(Struct struct, StructInstance<FunctionOp<I, O>> func) {
 		super(1, 1);
+		m_structInstance = new NodeStructInstance<>(struct);
 		m_func = func;
 	}
 
@@ -72,8 +76,11 @@ public class FunctionOpNodeModel<I, O> extends NodeModel {
 
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {
-		// load settings into func (w/o special params)
-		// load mapping of special params
+		try {
+			m_structInstance.saveSettingsTo(settings);
+		} catch (InvalidSettingsException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -82,6 +89,11 @@ public class FunctionOpNodeModel<I, O> extends NodeModel {
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
+		m_structInstance.loadSettingsFrom(settings);
+
+		// load settings into func (w/o special params)
+		// load mapping of special params
+
 		// Read mappings
 		// ConfigBase conversionInfos =
 		// settings.getConfigBase("input-conversion-infos");
@@ -105,13 +117,13 @@ public class FunctionOpNodeModel<I, O> extends NodeModel {
 		// }
 
 		// same for output infos
-//		try {
-//			m_rowToObject = new DataRowToObject(m_func.members(), null);
-//			m_objectToCells = new ObjectToDataCells<O>(m_outType, null);
-//		} catch (ValidityException | InstantiationException | IllegalAccessException e) {
-//			throw new InvalidSettingsException("Problem parsing struct.", e);
-//		}
-
+		// try {
+		// m_rowToObject = new DataRowToObject(m_func.members(), null);
+		// m_objectToCells = new ObjectToDataCells<O>(m_outType, null);
+		// } catch (ValidityException | InstantiationException |
+		// IllegalAccessException e) {
+		// throw new InvalidSettingsException("Problem parsing struct.", e);
+		// }
 	}
 
 	@Override
@@ -137,5 +149,4 @@ public class FunctionOpNodeModel<I, O> extends NodeModel {
 	@Override
 	protected void reset() {
 	}
-
 }

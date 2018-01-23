@@ -35,13 +35,13 @@ package org.scijava.widget2;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
-import org.scijava.param.Parameter;
+import org.scijava.param2.Parameter;
 import org.scijava.plugin.AbstractSingletonService;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.PluginService;
 import org.scijava.service.Service;
-import org.scijava.struct.MemberInstance;
-import org.scijava.struct.StructInstance;
+import org.scijava.struct2.MemberInstance;
+import org.scijava.struct2.StructInstance;
 import org.scijava.widget2.WidgetService;
 
 @Plugin(type = Service.class)

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.StructInstance;
+import org.scijava.struct2.StructInstance;
 import org.scijava.widget.UIComponent;
 import org.scijava.widget2.AbstractWidgetPanel;
 import org.scijava.widget2.WidgetPanel;

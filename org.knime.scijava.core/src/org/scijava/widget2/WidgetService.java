@@ -34,11 +34,11 @@ package org.scijava.widget2;
 
 import java.util.function.Predicate;
 
-import org.scijava.param.ParameterMember;
+import org.scijava.param2.ParameterMember;
 import org.scijava.plugin.SingletonService;
 import org.scijava.service.SciJavaService;
-import org.scijava.struct.MemberInstance;
-import org.scijava.struct.StructInstance;
+import org.scijava.struct2.MemberInstance;
+import org.scijava.struct2.StructInstance;
 
 public interface WidgetService extends SingletonService<WidgetFactory<?>>,
 	SciJavaService

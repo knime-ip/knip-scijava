@@ -4,39 +4,33 @@ import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
 import org.knime.scijava.base.InStruct;
-import org.knime.scijava.base.MyFunctionOp;
-import org.scijava.param.ParameterStructs;
-import org.scijava.param.ValidityException;
-import org.scijava.struct.Struct;
-import org.scijava.struct.StructInstance;
+import org.knime.scijava.base.MyFunction;
+import org.knime.scijava.base.OutStruct;
+import org.scijava.param2.ParameterStructs;
+import org.scijava.param2.ValidityException;
+import org.scijava.struct2.Struct;
+import org.scijava.struct2.StructInstance;
 
 public class FunctionOpNodeFactory extends NodeFactory<FunctionOpNodeModel> {
 
-	private MyFunctionOp m_function;
-	
+	private StructInstance<MyFunction> m_functionStruct;
+
 	private Struct m_inStruct;
 
 	public FunctionOpNodeFactory() {
 		// FIXME will be served from outside later.
-		m_function = new MyFunctionOp();
 		try {
+			m_functionStruct = ParameterStructs.create(new MyFunction());
+			Struct lala = ParameterStructs.structOf(MyFunction.class);
 			m_inStruct = ParameterStructs.structOf(InStruct.class);
 		} catch (ValidityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException();
 		}
 	}
 
 	@Override
 	public FunctionOpNodeModel createNodeModel() {
-		StructInstance<MyFunctionOp> struct = null;
-		try {
-			struct = ParameterStructs.create(m_function);
-		} catch (ValidityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return new FunctionOpNodeModel(struct);
+		return new FunctionOpNodeModel(m_inStruct, m_functionStruct);
 	}
 
 	@Override
@@ -56,14 +50,6 @@ public class FunctionOpNodeFactory extends NodeFactory<FunctionOpNodeModel> {
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		FunctionOpNodeDialog diag = null;
-		try {
-			diag = new FunctionOpNodeDialog(m_inStruct, m_function);
-		} catch (ValidityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return diag;
+		return new FunctionOpNodeDialog(m_inStruct, m_functionStruct);
 	}
-
 }

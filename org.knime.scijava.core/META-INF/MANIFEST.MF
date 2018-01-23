@@ -7,11 +7,14 @@ Bundle-Vendor: University of Konstanz
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  org.knime.core;bundle-version="[3.3.0,4.0.0)",
  org.knime.base;bundle-version="[3.3.0,4.0.0)",
- org.knime.workbench.repository;bundle-version="[3.3.0,4.0.0)"
+ org.knime.workbench.repository;bundle-version="[3.3.0,4.0.0)",
+ org.apache.commons.lang3
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
+ libs/scijava-common-2.69.1-SNAPSHOT.jar,
+ libs/eventbus-1.4.jar,
  libs/miglayout-3.7.4.jar,
- libs/scijava-common-2.69.1-SNAPSHOT.jar
+ libs/gentyref-1.2.0.jar
 Export-Package: org.knime.scijava.core,
  org.knime.scijava.core.pluginindex

@@ -1,7 +1,7 @@
 
 package org.scijava.widget2;
 
-import org.scijava.struct.StructInstance;
+import org.scijava.struct2.StructInstance;
 
 public class AbstractWidgetPanel<C> implements WidgetPanel<C> {
 

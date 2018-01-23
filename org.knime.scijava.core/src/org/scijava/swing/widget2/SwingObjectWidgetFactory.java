@@ -7,12 +7,12 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import org.scijava.object.ObjectService;
-import org.scijava.param.Parameter;
-import org.scijava.param.ParameterStructs;
-import org.scijava.param.ValidityException;
+import org.scijava.plugin.Parameter;
+import org.scijava.param2.ParameterStructs;
+import org.scijava.param2.ValidityException;
 import org.scijava.plugin.Plugin;
-import org.scijava.struct.MemberInstance;
-import org.scijava.struct.StructInstance;
+import org.scijava.struct2.MemberInstance;
+import org.scijava.struct2.StructInstance;
 import org.scijava.widget2.ObjectWidget;
 import org.scijava.widget2.WidgetService;
 import org.scijava.widget2.AbstractWidget;
@@ -38,24 +38,23 @@ public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 
 	@Override
 	public SwingWidget create(final MemberInstance<?> memberInstance,
-		final WidgetPanelFactory<? extends SwingWidget> panelFactory)
-	{
+			final WidgetPanelFactory<? extends SwingWidget> panelFactory) {
 		return new Widget<>(memberInstance, panelFactory);
 	}
 
 	// -- Helper methods --
 
 	private <T> List<T> choices(MemberInstance<T> model) {
-		// FIXME: probably want a more dynamic way for a member instance to specify
-		// its multiple choice options. Maybe add API to MemberInstance for that?
+		// FIXME: probably want a more dynamic way for a member instance to
+		// specify
+		// its multiple choice options. Maybe add API to MemberInstance for
+		// that?
 		return objectService.getObjects(model.member().getRawType());
 	}
 
 	// -- Helper classes --
 
-	private class Widget<C> extends AbstractWidget implements SwingWidget,
-		ObjectWidget
-	{
+	private class Widget<C> extends AbstractWidget implements SwingWidget, ObjectWidget {
 
 		private JPanel panel;
 		private List<JPanel> subPanels;
@@ -63,9 +62,7 @@ public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 
 		private WidgetPanelFactory<? extends SwingWidget> panelFactory;
 
-		public Widget(final MemberInstance<C> model,
-			WidgetPanelFactory<? extends SwingWidget> panelFactory)
-		{
+		public Widget(final MemberInstance<C> model, WidgetPanelFactory<? extends SwingWidget> panelFactory) {
 			super(model);
 			this.typedModel = model;
 			this.panelFactory = panelFactory;
@@ -73,7 +70,8 @@ public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 
 		@Override
 		public JPanel getComponent() {
-			if (panel != null) return panel;
+			if (panel != null)
+				return panel;
 
 			panel = new JPanel();
 			panel.setLayout(new MigLayout("fillx,wrap 1", "[fill,grow]"));
@@ -87,15 +85,14 @@ public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 				comboBox.addItem(choice);
 				try {
 					final StructInstance<?> structInstance = //
-						ParameterStructs.create(choice);
-					 subPanels.add(createPanel(structInstance));
-				}
-				catch (final ValidityException exc) {
+							ParameterStructs.create(choice);
+					subPanels.add(createPanel(structInstance));
+				} catch (final ValidityException exc) {
 					// FIXME: Handle this.
 				}
 			}
 			refreshSubPanel(comboBox);
-			
+
 			comboBox.addItemListener(e -> {
 				panel.remove(1);
 				refreshSubPanel(comboBox);
@@ -106,19 +103,24 @@ public class SwingObjectWidgetFactory implements SwingWidgetFactory {
 			return panel;
 		}
 
+		// -- Model change event listener --
+
+		@Override
+		protected void modelChanged(MemberInstance<?> source, Object oldValue) {
+			throw new UnsupportedOperationException("not yet implemented");
+		}
+
 		private void refreshSubPanel(final JComboBox<?> comboBox) {
 			final int index = comboBox.getSelectedIndex();
 			panel.add(subPanels.get(index));
-			
+
 		}
 
 		private <S> JPanel createPanel(final StructInstance<S> structInstance) {
-			final WidgetPanel<S> widgetPanel = widgetService.createPanel(
-				structInstance, panelFactory);
+			final WidgetPanel<S> widgetPanel = widgetService.createPanel(structInstance, panelFactory);
 			if (!(widgetPanel instanceof SwingWidgetPanelFactory.WidgetPanel))
 				throw new IllegalStateException("OMGWTF");
-			final SwingWidgetPanelFactory.WidgetPanel<S> swingWidgetPanel =
-				(SwingWidgetPanelFactory.WidgetPanel<S>) widgetPanel;
+			final SwingWidgetPanelFactory.WidgetPanel<S> swingWidgetPanel = (SwingWidgetPanelFactory.WidgetPanel<S>) widgetPanel;
 			return swingWidgetPanel.getComponent();
 		}
 	}
