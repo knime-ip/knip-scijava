@@ -24,7 +24,6 @@ import org.knime.core.node.streamable.PortOutput;
 import org.knime.core.node.streamable.RowInput;
 import org.knime.core.node.streamable.RowOutput;
 import org.knime.core.node.streamable.StreamableOperator;
-import org.scijava.ValidityException;
 import org.scijava.ops.FunctionOp;
 import org.scijava.struct.StructInstance;
 
@@ -106,12 +105,12 @@ public class FunctionOpNodeModel<I, O> extends NodeModel {
 		// }
 
 		// same for output infos
-		try {
-			m_rowToObject = new DataRowToObject<>(m_func.members(), null);
-			m_objectToCells = new ObjectToDataCells<O>(m_outType, null);
-		} catch (ValidityException | InstantiationException | IllegalAccessException e) {
-			throw new InvalidSettingsException("Problem parsing struct.", e);
-		}
+//		try {
+//			m_rowToObject = new DataRowToObject(m_func.members(), null);
+//			m_objectToCells = new ObjectToDataCells<O>(m_outType, null);
+//		} catch (ValidityException | InstantiationException | IllegalAccessException e) {
+//			throw new InvalidSettingsException("Problem parsing struct.", e);
+//		}
 
 	}
 

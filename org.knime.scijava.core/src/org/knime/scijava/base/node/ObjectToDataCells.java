@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.knime.core.data.DataCell;
-import org.scijava.ValidityException;
+import org.scijava.param.ValidityException;
 import org.scijava.param.ParameterStructs;
 import org.scijava.struct.Struct;
 import org.scijava.struct.StructInstance;

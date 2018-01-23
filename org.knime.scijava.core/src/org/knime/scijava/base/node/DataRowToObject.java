@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.knime.core.data.DataRow;
-import org.scijava.ValidityException;
 import org.scijava.param.ParameterStructs;
+import org.scijava.param.ValidityException;
 import org.scijava.struct.StructInstance;
 
 public class DataRowToObject<I> implements Function<DataRow, I> {

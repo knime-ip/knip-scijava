@@ -2,10 +2,7 @@ package org.knime.scijava.base;
 
 import org.scijava.ops.FunctionOp;
 import org.scijava.param.Parameter;
-import org.scijava.plugin.Plugin;
 
-// SuperDuperFunction
-@Plugin(label = "Some Java Function", type = FunctionOp.class)
 public class MyFunctionOp implements FunctionOp<InStruct, OutStruct> {
 
 	@Parameter(label = "Select the best prefix ever")
