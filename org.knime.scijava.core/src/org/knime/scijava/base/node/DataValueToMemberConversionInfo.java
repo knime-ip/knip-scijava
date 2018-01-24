@@ -11,5 +11,4 @@ public interface DataValueToMemberConversionInfo<O> {
 	int getColumnIndex();
 
 	Function<DataValue, O> getConverter();
-
 }

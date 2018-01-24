@@ -10,17 +10,17 @@ import org.scijava.struct2.StructInstance;
 
 public class DataRowToObject<I> implements Function<DataRow, I> {
 
-	private List<DataValueToMemberConversionInfo<?>> m_infos;
-	private StructInstance<I> m_instance;
+	private final List<DataValueToMemberConversionInfo<?>> m_infos;
+	private final StructInstance<I> m_instance;
 
-	public DataRowToObject(Class<I> in, List<DataValueToMemberConversionInfo<?>> infos)
+	public DataRowToObject(final Class<I> in, final List<DataValueToMemberConversionInfo<?>> infos)
 			throws ValidityException, InstantiationException, IllegalAccessException {
 		m_infos = infos;
 		m_instance = ParameterStructs.create(in.newInstance());
 	}
 
 	@Override
-	public I apply(DataRow values) {
+	public I apply(final DataRow values) {
 		for (final DataValueToMemberConversionInfo<?> t : m_infos) {
 			// FIXME this can be optimized in terms of runtime (saving info per
 			// column and then access the info by index).

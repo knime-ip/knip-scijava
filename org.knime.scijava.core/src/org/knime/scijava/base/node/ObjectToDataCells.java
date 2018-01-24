@@ -11,17 +11,18 @@ import org.scijava.struct2.StructInstance;
 
 public class ObjectToDataCells<I> implements Function<I, DataCell[]> {
 
-	private List<MemberToDataCellConversionInfo<?>> m_infos;
-	private Struct m_struct;
+	private final List<MemberToDataCellConversionInfo<?>> m_infos;
+	private final Struct m_struct;
 
-	public ObjectToDataCells(Class<I> type, List<MemberToDataCellConversionInfo<?>> infos) throws ValidityException {
+	public ObjectToDataCells(final Class<I> type, final List<MemberToDataCellConversionInfo<?>> infos)
+			throws ValidityException {
 		m_infos = infos;
 		m_struct = ParameterStructs.structOf(type);
 	}
 
 	@Override
-	public DataCell[] apply(I in) {
-		DataCell[] cells = new DataCell[m_infos.size()];
+	public DataCell[] apply(final I in) {
+		final DataCell[] cells = new DataCell[m_infos.size()];
 
 		// FIXME make a StructInstance updateable to avoid object creation?
 		int i = 0;
@@ -34,9 +35,9 @@ public class ObjectToDataCells<I> implements Function<I, DataCell[]> {
 	/**
 	 * @param info
 	 */
-	private <T> DataCell applyCasted(StructInstance<?> inst, MemberToDataCellConversionInfo<T> info) {
+	private <T> DataCell applyCasted(final StructInstance<?> inst, final MemberToDataCellConversionInfo<T> info) {
 		@SuppressWarnings("unchecked")
-		T object = (T) inst.member(info.getSourceMemberName()).get();
+		final T object = (T) inst.member(info.getSourceMemberName()).get();
 		return info.getConverter().apply(object);
 	}
 }

@@ -6,11 +6,12 @@ import org.knime.core.data.DataValue;
 
 public class DefaultDataValueToStructConversionInfo<O> implements DataValueToMemberConversionInfo<O> {
 
-	private Function<DataValue, O> m_conv;
-	private String m_memberName;
-	private int m_valueIndex;
+	private final Function<DataValue, O> m_conv;
+	private final String m_memberName;
+	private final int m_valueIndex;
 
-	public DefaultDataValueToStructConversionInfo(int valueIndex, String memberName, Function<DataValue, O> conv) {
+	public DefaultDataValueToStructConversionInfo(final int valueIndex, final String memberName,
+			final Function<DataValue, O> conv) {
 		m_valueIndex = valueIndex;
 		m_memberName = memberName;
 		m_conv = conv;

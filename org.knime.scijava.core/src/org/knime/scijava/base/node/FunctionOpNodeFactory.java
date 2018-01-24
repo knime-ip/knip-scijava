@@ -1,36 +1,28 @@
 package org.knime.scijava.base.node;
 
+import java.util.function.Function;
+
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
-import org.knime.scijava.base.InStruct;
-import org.knime.scijava.base.MyFunction;
-import org.knime.scijava.base.OutStruct;
-import org.scijava.param2.ParameterStructs;
+import org.knime.scijava.base.MultiplicationFunction;
 import org.scijava.param2.ValidityException;
-import org.scijava.struct2.Struct;
-import org.scijava.struct2.StructInstance;
 
-public class FunctionOpNodeFactory extends NodeFactory<FunctionOpNodeModel> {
+public class FunctionOpNodeFactory extends NodeFactory<FunctionNodeModel<?, ?>> {
 
-	private StructInstance<MyFunction> m_functionStruct;
-
-	private Struct m_inStruct;
+	private final Function<?, ?> m_function = new MultiplicationFunction();
 
 	public FunctionOpNodeFactory() {
-		// FIXME will be served from outside later.
-		try {
-			m_functionStruct = ParameterStructs.create(new MyFunction());
-			Struct lala = ParameterStructs.structOf(MyFunction.class);
-			m_inStruct = ParameterStructs.structOf(InStruct.class);
-		} catch (ValidityException e) {
-			throw new RuntimeException();
-		}
+		// function will be served from the outside, later
 	}
 
 	@Override
-	public FunctionOpNodeModel createNodeModel() {
-		return new FunctionOpNodeModel(m_inStruct, m_functionStruct);
+	public FunctionNodeModel<?, ?> createNodeModel() {
+		try {
+			return new FunctionNodeModel<>(m_function);
+		} catch (final ValidityException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -39,7 +31,8 @@ public class FunctionOpNodeFactory extends NodeFactory<FunctionOpNodeModel> {
 	}
 
 	@Override
-	public NodeView<FunctionOpNodeModel> createNodeView(int viewIndex, FunctionOpNodeModel nodeModel) {
+	public NodeView<FunctionNodeModel<?, ?>> createNodeView(final int viewIndex,
+			final FunctionNodeModel<?, ?> nodeModel) {
 		return null;
 	}
 
@@ -50,6 +43,10 @@ public class FunctionOpNodeFactory extends NodeFactory<FunctionOpNodeModel> {
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return new FunctionOpNodeDialog(m_inStruct, m_functionStruct);
+		try {
+			return new FunctionOpNodeDialog<>(m_function);
+		} catch (final ValidityException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
