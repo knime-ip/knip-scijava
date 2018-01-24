@@ -4,11 +4,11 @@ import java.util.function.Function;
 
 import org.knime.core.data.DataValue;
 
-public interface DataValueToMemberConversionInfo<O> {
-
-	String getMemberName();
+public interface DataValueToMemberConversionInfo<I extends DataValue, O> {
 
 	int getColumnIndex();
 
-	Function<DataValue, O> getConverter();
+	String getMemberName();
+
+	Function<I, O> getConverter();
 }

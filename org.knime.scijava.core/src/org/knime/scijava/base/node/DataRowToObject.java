@@ -8,24 +8,25 @@ import org.scijava.param2.ParameterStructs;
 import org.scijava.param2.ValidityException;
 import org.scijava.struct2.StructInstance;
 
-public class DataRowToObject<I> implements Function<DataRow, I> {
+public class DataRowToObject<O> implements Function<DataRow, O> {
 
-	private final List<DataValueToMemberConversionInfo<?>> m_infos;
-	private final StructInstance<I> m_instance;
+	private final List<DataValueToMemberConversionInfo<?, ?>> m_infos;
 
-	public DataRowToObject(final Class<I> in, final List<DataValueToMemberConversionInfo<?>> infos)
+	private final StructInstance<O> m_outInstance;
+
+	public DataRowToObject(final Class<O> out, final List<DataValueToMemberConversionInfo<?, ?>> infos)
 			throws ValidityException, InstantiationException, IllegalAccessException {
 		m_infos = infos;
-		m_instance = ParameterStructs.create(in.newInstance());
+		m_outInstance = ParameterStructs.create(out.newInstance());
 	}
 
 	@Override
-	public I apply(final DataRow values) {
-		for (final DataValueToMemberConversionInfo<?> t : m_infos) {
-			// FIXME this can be optimized in terms of runtime (saving info per
-			// column and then access the info by index).
-			m_instance.member(t.getMemberName()).set(t.getConverter().apply(values.getCell(t.getColumnIndex())));
+	public O apply(final DataRow values) {
+		for (final DataValueToMemberConversionInfo<?, ?> t : m_infos) {
+			// TODO: This can be optimized in terms of runtime (saving info per column and then access the info by
+			// index).
+			m_outInstance.member(t.getMemberName()).set(t.getConverter().apply(values.getCell(t.getColumnIndex())));
 		}
-		return m_instance.object();
+		return m_outInstance.object();
 	}
 }

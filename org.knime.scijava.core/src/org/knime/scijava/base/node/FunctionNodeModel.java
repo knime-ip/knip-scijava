@@ -2,6 +2,7 @@ package org.knime.scijava.base.node;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -12,8 +13,13 @@ import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
+import org.knime.core.data.convert.ConversionKey;
+import org.knime.core.data.convert.datacell.JavaToDataCellConverterFactory;
 import org.knime.core.data.convert.datacell.JavaToDataCellConverterRegistry;
+import org.knime.core.data.convert.java.DataCellToJavaConverter;
+import org.knime.core.data.convert.java.DataCellToJavaConverterRegistry;
 import org.knime.core.data.def.DefaultRow;
+import org.knime.core.data.def.DoubleCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -54,7 +60,7 @@ public class FunctionNodeModel<I, O> extends NodeModel {
 	protected FunctionNodeModel(final Function<I, O> func) throws ValidityException {
 		super(1, 1);
 		m_func = new NodeStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
-		// TODO: move out of user code, handle 'null' raw types
+		// TODO: handle 'null' raw types
 		m_inStruct = ParameterStructs.structOf(m_func.member("input").member().getRawType());
 		m_outStruct = ParameterStructs.structOf(m_func.member("output").member().getRawType());
 	}
@@ -72,35 +78,12 @@ public class FunctionNodeModel<I, O> extends NodeModel {
 	@Override
 	protected DataTableSpec[] configure(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		try {
-			configureConverters(inSpecs[0]);
+			configureInputConverters(inSpecs[0]);
+			configureOutputConverters();
 			return new DataTableSpec[] { createOutputSpec(inSpecs[0]) };
 		} catch (final Exception e) {
 			throw new InvalidSettingsException(e);
 		}
-	}
-
-	private void configureConverters(final DataTableSpec inSpec) {
-
-		// final m_inStruct.
-
-		// --
-
-		final JavaToDataCellConverterRegistry converters = JavaToDataCellConverterRegistry.getInstance();
-		final HashMap<Class<?>, DataType> destinationTypeCache = new HashMap<>();
-		for (final Member<?> member : m_outStruct.members()) {
-			Class<?> sourceType = member.getRawType();
-			if (sourceType.isPrimitive()) {
-				sourceType = ClassUtils.primitiveToWrapper(sourceType);
-			}
-			DataType destinationType = destinationTypeCache.get(sourceType);
-			if (destinationType == null) {
-				destinationType = converters.getFactoriesForSourceType(sourceType).iterator().next()
-						.getDestinationType();
-				destinationTypeCache.put(sourceType, destinationType);
-			}
-
-		}
-
 	}
 
 	@Override
@@ -198,7 +181,76 @@ public class FunctionNodeModel<I, O> extends NodeModel {
 		// no op
 	}
 
-	// TODO: move out of user code
+	private void configureInputConverters(final DataTableSpec inSpec) throws InvalidSettingsException {
+		final List<Member<?>> members = m_inStruct.members();
+		final ArrayList<DataValueToMemberConversionInfo<?, ?>> conversionInfos = new ArrayList<>(members.size());
+		final DataCellToJavaConverterRegistry converters = DataCellToJavaConverterRegistry.getInstance();
+		// maintain a local cache to speed up converter lookup
+		final HashMap<ConversionKey, DataCellToJavaConverter<?, ?>> converterCache = new HashMap<>(members.size());
+		for (int i = 0; i < members.size(); i++) {
+			final Member<?> member = members.get(i);
+			// TODO: hard-coded for now, we'll get the source type and column index via the user-selected column mapping
+			final DataType sourceType = DoubleCell.TYPE;
+			final int sourceColIndex = 0;
+			final Class<?> destinationType = ClassUtils.primitiveToWrapper(member.getRawType());
+			// TODO: handle 'null' cell classes, also see documentation of getCellClass for type-cast stuff we need to
+			// consider
+			final ConversionKey conversionKey = new ConversionKey(sourceType.getCellClass(), destinationType);
+			DataCellToJavaConverter<?, ?> converter = converterCache.get(conversionKey);
+			if (converter == null) {
+				converter = converters.getPreferredConverterFactory(sourceType, destinationType)
+						.orElseThrow(() -> new InvalidSettingsException("No converter found to convert from '"
+								+ sourceType.getName() + "' to '" + destinationType.getSimpleName() + "'."))
+						.create();
+				converterCache.put(conversionKey, converter);
+			}
+			final DataCellToJavaConverter<?, ?> finalConverter = converter;
+			final DataValueToMemberConversionInfo<?, ?> conversionInfo = new DefaultDataValueToMemberConversionInfo<>(
+					sourceColIndex, member.getKey(), t -> {
+						try {
+							return finalConverter.convertUnsafe((DataCell) t);
+						} catch (final Exception e) {
+							throw new ConversionException();
+						}
+					});
+			conversionInfos.add(conversionInfo);
+		}
+		// TODO: handle 'null' raw types
+		// TODO: type-safety
+		final Class<I> inputType = (Class<I>) m_func.member("input").member().getRawType();
+		try {
+			m_rowToObject = new DataRowToObject<>(inputType, conversionInfos);
+		} catch (final ValidityException | InstantiationException | IllegalAccessException ex) {
+			throw new InvalidSettingsException(ex);
+		}
+	}
+
+	private void configureOutputConverters() {
+		final List<Member<?>> members = m_outStruct.members();
+		final ArrayList<MemberToDataCellConversionInfo<?>> conversionInfos = new ArrayList<>(members.size());
+		final JavaToDataCellConverterRegistry converters = JavaToDataCellConverterRegistry.getInstance();
+		// maintain a local cache to speed up converter lookup
+		final HashMap<Class<?>, JavaToDataCellConverterFactory<?>> converterCache = new HashMap<>(members.size());
+		for (int i = 0; i < members.size(); i++) {
+			final Member<?> member = members.get(i);
+			// TODO: handle 'null' raw types
+			final Class<?> sourceType = ClassUtils.primitiveToWrapper(member.getRawType());
+			JavaToDataCellConverterFactory<?> factory = converterCache.get(sourceType);
+			if (factory == null) {
+				factory = converters.getFactoriesForSourceType(sourceType).iterator().next();
+				converterCache.put(sourceType, factory);
+			}
+			final MemberToDataCellConversionInfo<O> conversionInfo = new DefaultMemberToDataCellConversionInfo<>(
+					// FIXME: we can't create a converter here, exec needed
+					member.getKey(), factory.getDestinationType(), conv);
+			conversionInfos.add(conversionInfo);
+		}
+		// TODO: handle 'null' raw types
+		// TODO: type-safety
+		final Class<O> outputType = (Class<O>) m_func.member("output").member().getRawType();
+		m_objectToCells = new ObjectToDataCells<>(outputType, conversionInfos);
+	}
+
 	private DataTableSpec createOutputSpec(final DataTableSpec inSpec) throws Exception {
 		// TODO: array size is only correct if every member of the output struct
 		// represents a column
