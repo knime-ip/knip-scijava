@@ -1,19 +1,17 @@
 package org.knime.scijava.base;
 
-import org.knime.scijava.base.node.StructFunction;
+import org.knime.scijava.base.node.KnimeFunction;
 import org.scijava.param2.Parameter;
 
 public class MultiplicationFunction
-		implements StructFunction<MultiplicationFunction.InStruct, MultiplicationFunction.OutStruct> {
+		implements KnimeFunction<MultiplicationFunction.InStruct, MultiplicationFunction.OutStruct> {
 
-	@Parameter(label = "Multiplier", min = "0", max = "2147483647", stepSize = "1")
-	int multiplier;
+	@Parameter(label = "Multiplier", min = "0", max = "200", stepSize = "1")
+	int Multiplier;
 
 	@Override
 	public OutStruct apply(final InStruct t) {
-		// FIXME: Avoid object creation here if possible. However, must be
-		// supported by API.
-		return new OutStruct(t.m_value * multiplier);
+		return new OutStruct(t.m_value * Multiplier);
 	}
 
 	public static class InStruct {

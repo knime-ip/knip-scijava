@@ -47,9 +47,9 @@ public class FunctionNodeModel<I, O> extends NodeModel {
 
 	private final Struct m_outStruct;
 
-	// private DataRowToObject<I> m_rowToObject;
+	private DataRowToObject<I> m_rowToObject;
 
-	// private ObjectToDataCells<O> m_objectToCells;
+	private ObjectToDataCells<O> m_objectToCells;
 
 	protected FunctionNodeModel(final Function<I, O> func) throws ValidityException {
 		super(1, 1);
@@ -81,8 +81,7 @@ public class FunctionNodeModel<I, O> extends NodeModel {
 
 	private void configureConverters(final DataTableSpec inSpec) {
 
-		final m_inStruct.
-
+		// final m_inStruct.
 
 		// --
 
@@ -95,12 +94,11 @@ public class FunctionNodeModel<I, O> extends NodeModel {
 			}
 			DataType destinationType = destinationTypeCache.get(sourceType);
 			if (destinationType == null) {
-				// TODO: handle 'empty' iterator
 				destinationType = converters.getFactoriesForSourceType(sourceType).iterator().next()
 						.getDestinationType();
 				destinationTypeCache.put(sourceType, destinationType);
 			}
-			// TODO: use label or some user-defined value as column name
+
 		}
 
 	}
@@ -202,14 +200,13 @@ public class FunctionNodeModel<I, O> extends NodeModel {
 
 	// TODO: move out of user code
 	private DataTableSpec createOutputSpec(final DataTableSpec inSpec) throws Exception {
-		final Struct outStruct = ParameterStructs.structOf(m_outType);
 		// TODO: array size is only correct if every member of the output struct
 		// represents a column
-		final List<Member<?>> outStructMembers = outStruct.members();
+		final List<Member<?>> outStructMembers = m_outStruct.members();
 		final JavaToDataCellConverterRegistry converters = JavaToDataCellConverterRegistry.getInstance();
 		final HashMap<Class<?>, DataType> destinationTypeCache = new HashMap<>();
 		final UniqueNameGenerator gen = new UniqueNameGenerator(inSpec);
-		final DataColumnSpec[] outputColumnSpecs = new DataColumnSpec[outStruct.members().size()];
+		final DataColumnSpec[] outputColumnSpecs = new DataColumnSpec[m_outStruct.members().size()];
 		for (int i = 0; i < outStructMembers.size(); i++) {
 			final Member<?> member = outStructMembers.get(i);
 			Class<?> sourceType = member.getRawType();

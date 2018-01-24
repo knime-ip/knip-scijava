@@ -31,6 +31,7 @@ public class NodeStructInstance<C> implements StructInstance<C> {
 		m_object = object;
 		m_memberInstances = new LinkedHashMap<>();
 		for (final Member<?> member : m_struct.members()) {
+			
 			m_memberInstances.put(member.getKey(), new NodeDialogMemberInstance<>(member));
 		}
 	}

@@ -15,19 +15,20 @@ import org.scijava.swing.widget2.SwingWidgetPanelFactory;
 import org.scijava.swing.widget2.SwingWidgetPanelFactory.WidgetPanel;
 import org.scijava.widget2.WidgetService;
 
-public class FunctionOpNodeDialog<I, O> extends NodeDialogPane {
+public class FunctionNodeDialog<I, O> extends NodeDialogPane {
 
 	private final NodeStructInstance<Function<I, O>> m_func;
+
+	private DataTableSpec m_spec;
 
 	private final Context m_ctx = new Context();
 
 	private final WidgetService m_widgets;
 
-	public FunctionOpNodeDialog(final Function<I, O> func) throws ValidityException {
+	public FunctionNodeDialog(final Function<I, O> func) throws ValidityException {
 		m_func = new NodeStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
 		m_widgets = m_ctx.getService(WidgetService.class);
 		final SwingWidgetPanelFactory factory = new SwingWidgetPanelFactory();
-		m_ctx.inject(factory);
 		final WidgetPanel<Function<I, O>> panel = (WidgetPanel<Function<I, O>>) m_widgets.createPanel(m_func, factory);
 		getPanel().add(panel.getComponent());
 		getPanel().repaint();
@@ -41,6 +42,7 @@ public class FunctionOpNodeDialog<I, O> extends NodeDialogPane {
 	@Override
 	protected void loadSettingsFrom(final NodeSettingsRO settings, final DataTableSpec[] specs)
 			throws NotConfigurableException {
+		m_spec = specs[0];
 		try {
 			m_func.loadSettingsFrom(settings);
 		} catch (final InvalidSettingsException e) {
