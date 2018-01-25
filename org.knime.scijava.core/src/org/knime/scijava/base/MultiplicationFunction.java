@@ -7,7 +7,7 @@ public class MultiplicationFunction
 		implements KnimeFunction<MultiplicationFunction.InStruct, MultiplicationFunction.OutStruct> {
 
 	@Parameter(label = "Multiplier", min = "0", max = "200", stepSize = "1")
-	int multiplier;
+	int multiplier = 1;
 
 	@Override
 	public OutStruct apply(final InStruct t) {

@@ -21,7 +21,6 @@ import org.knime.core.data.convert.datacell.JavaToDataCellConverterRegistry;
 import org.knime.core.data.convert.java.DataCellToJavaConverter;
 import org.knime.core.data.convert.java.DataCellToJavaConverterRegistry;
 import org.knime.core.data.def.DefaultRow;
-import org.knime.core.data.def.DoubleCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -42,6 +41,7 @@ import org.knime.core.node.streamable.RowInput;
 import org.knime.core.node.streamable.RowOutput;
 import org.knime.core.node.streamable.StreamableOperator;
 import org.knime.core.util.UniqueNameGenerator;
+import org.knime.scijava.base.node.NodeDialogStructInstance.ColumnSelectionMemberInstance;
 import org.scijava.param2.ParameterStructs;
 import org.scijava.param2.ValidityException;
 import org.scijava.struct2.Member;
@@ -124,7 +124,7 @@ public class RowToRowFunctionNodeModel<I, O> extends NodeModel {
 
 	@Override
 	protected void validateSettings(final NodeSettingsRO settings) throws InvalidSettingsException {
-		// TODO
+		// TODO: no op?
 	}
 
 	@Override
@@ -191,10 +191,11 @@ public class RowToRowFunctionNodeModel<I, O> extends NodeModel {
 		final HashMap<ConversionKey, DataCellToJavaConverter<?, ?>> converterCache = new HashMap<>(members.size());
 		for (int i = 0; i < members.size(); i++) {
 			final Member<?> member = members.get(i);
-			// TODO: hard-coded for now, we'll get the source type and column
-			// index via the user-selected column mapping
-			final DataType sourceType = DoubleCell.TYPE;
-			final int sourceColIndex = 0;
+			// TODO: this is a global column selection for the entire input struct, we need it per member of the input
+			// struct
+			final int sourceColIndex = ((ColumnSelectionMemberInstance<?>) m_funcInstance.member("input"))
+					.getSelectedColumnIndex();
+			final DataType sourceType = inSpec.getColumnSpec(sourceColIndex).getType();
 			final Class<?> destinationType = ClassUtils.primitiveToWrapper(member.getRawType());
 			// TODO: handle 'null' cell classes, also see documentation of
 			// getCellClass for type-cast stuff we need to

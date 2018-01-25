@@ -24,6 +24,7 @@ public class NodeDialogStructInstance<C> extends NodeStructInstance<C> {
 		}
 	}
 
+	// TODO: introduce loadSettingsFromDialog which merges update and loadSettingsFrom?
 	public void update(final DataTableSpec spec) {
 		for (final MemberInstance<?> member : members()) {
 			if (member instanceof ColumnSelectionMemberInstance) {
