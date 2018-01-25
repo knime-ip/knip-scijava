@@ -104,6 +104,11 @@ public abstract class AnnotatedParameterMember<T> implements ParameterMember<T> 
 		if (choices.length == 0) return ParameterMember.super.getChoices();
 		return Arrays.asList((Object[]) choices);
 	}
+	
+	@Override
+	public String getLabel() {
+		return getAnnotation().label();
+	}
 
 	// -- Member methods --
 
