@@ -5,9 +5,11 @@ import java.util.function.Function;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataType;
 
-public interface MemberToDataCellConversionInfo<I> extends Function<I, DataCell> {
+public interface MemberToDataCellConversionInfo<I> {
 
-	String getSourceMemberName();
+	String getMemberName();
+
+	// TODO: Add 'int getColumnIndex()' (see input conversion info)? Might be useful for column rearranging.
 
 	DataType getOutputType();
 

@@ -16,11 +16,11 @@ public class NodeDialogStructInstance<C> extends NodeStructInstance<C> {
 	}
 
 	@Override
-	NodeMemberInstance<?> createMemberInstance(final Member<?> member) {
+	NodeMemberInstance<?> createMemberInstance(final Member<?> member, final Object c) {
 		if (member instanceof FunctionalParameterMember) {
-			return new ColumnSelectionMemberInstance<>(member);
+			return new ColumnSelectionMemberInstance<>(member, c);
 		} else {
-			return new NodeMemberInstance<>(member);
+			return new NodeMemberInstance<>(member, c);
 		}
 	}
 
@@ -38,8 +38,8 @@ public class NodeDialogStructInstance<C> extends NodeStructInstance<C> {
 
 		private int m_selectedColumnIndex;
 
-		ColumnSelectionMemberInstance(final Member<T> member) {
-			super(member);
+		ColumnSelectionMemberInstance(final Member<T> member, final Object c) {
+			super(member, c);
 		}
 
 		public DataTableSpec getSpec() {
@@ -49,7 +49,7 @@ public class NodeDialogStructInstance<C> extends NodeStructInstance<C> {
 		public void setSpec(final DataTableSpec spec) {
 			if (m_spec == null || !m_spec.equals(spec)) {
 				m_spec = spec;
-				fireModelChanged(get());
+				fireModelChanged();
 			}
 		}
 

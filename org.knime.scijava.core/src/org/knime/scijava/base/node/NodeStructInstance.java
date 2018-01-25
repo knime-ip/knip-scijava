@@ -26,7 +26,7 @@ public abstract class NodeStructInstance<C> implements StructInstance<C> {
 		m_object = object;
 		m_memberInstances = new LinkedHashMap<>();
 		for (final Member<?> member : m_struct.members()) {
-			m_memberInstances.put(member.getKey(), createMemberInstance(member));
+			m_memberInstances.put(member.getKey(), createMemberInstance(member, m_object));
 		}
 	}
 
@@ -50,7 +50,7 @@ public abstract class NodeStructInstance<C> implements StructInstance<C> {
 		return m_memberInstances.get(key);
 	}
 
-	abstract NodeMemberInstance<?> createMemberInstance(Member<?> member);
+	abstract NodeMemberInstance<?> createMemberInstance(Member<?> member, Object c);
 
 	public void saveSettingsTo(final NodeSettingsWO settings) throws InvalidSettingsException {
 		for (final Entry<String, NodeMemberInstance<?>> entry : m_memberInstances.entrySet()) {

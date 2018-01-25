@@ -8,7 +8,7 @@ import org.knime.core.node.NodeView;
 import org.knime.scijava.base.MultiplicationFunction;
 import org.scijava.param2.ValidityException;
 
-public class MultiplyNodeFactory extends NodeFactory<FunctionNodeModel<?, ?>> {
+public class MultiplyNodeFactory extends NodeFactory<RowToRowFunctionNodeModel<?, ?>> {
 
 	private final Function<?, ?> m_function = new MultiplicationFunction();
 
@@ -17,9 +17,9 @@ public class MultiplyNodeFactory extends NodeFactory<FunctionNodeModel<?, ?>> {
 	}
 
 	@Override
-	public FunctionNodeModel<?, ?> createNodeModel() {
+	public RowToRowFunctionNodeModel<?, ?> createNodeModel() {
 		try {
-			return new FunctionNodeModel<>(m_function);
+			return new RowToRowFunctionNodeModel<>(m_function);
 		} catch (final ValidityException e) {
 			throw new RuntimeException(e);
 		}
@@ -31,8 +31,8 @@ public class MultiplyNodeFactory extends NodeFactory<FunctionNodeModel<?, ?>> {
 	}
 
 	@Override
-	public NodeView<FunctionNodeModel<?, ?>> createNodeView(final int viewIndex,
-			final FunctionNodeModel<?, ?> nodeModel) {
+	public NodeView<RowToRowFunctionNodeModel<?, ?>> createNodeView(final int viewIndex,
+			final RowToRowFunctionNodeModel<?, ?> nodeModel) {
 		return null;
 	}
 
