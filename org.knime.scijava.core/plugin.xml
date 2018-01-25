@@ -7,5 +7,9 @@
             deprecated="false"
             factory-class="org.knime.scijava.base.node.MultiplyNodeFactory">
       </node>
+      <node
+            deprecated="false"
+            factory-class="org.knime.scijava.playground.DenseLayerNodeFactory">
+      </node>
    </extension>
 </plugin>
