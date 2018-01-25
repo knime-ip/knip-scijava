@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 
@@ -17,6 +16,7 @@ import org.scijava.struct2.Member;
 import org.scijava.struct2.MemberInstance;
 import org.scijava.struct2.Struct;
 import org.scijava.struct2.StructInstance;
+import org.scijava.struct2.ValueAccessible;
 
 public class NodeStructInstance<C> implements StructInstance<C> {
 
@@ -31,8 +31,7 @@ public class NodeStructInstance<C> implements StructInstance<C> {
 		m_object = object;
 		m_memberInstances = new LinkedHashMap<>();
 		for (final Member<?> member : m_struct.members()) {
-			
-			m_memberInstances.put(member.getKey(), new NodeDialogMemberInstance<>(member));
+			m_memberInstances.put(member.getKey(), new NodeDialogMemberInstance<>(member, object));
 		}
 	}
 
@@ -72,18 +71,25 @@ public class NodeStructInstance<C> implements StructInstance<C> {
 		}
 	}
 
+	// TODO: this class partly mirrors ValueAccessibleMemberInstance, inherit?
 	public static class NodeDialogMemberInstance<T> implements MemberInstance<T> {
 
 		private final Member<T> m_member;
 
-		private final boolean m_persist;
+		private final ValueAccessible<T> m_access;
 
-		private T m_obj;
+		private final Object m_object;
+
+		private final boolean m_persist;
 
 		private final CopyOnWriteArrayList<BiConsumer<MemberInstance<T>, T>> m_changeListeners = new CopyOnWriteArrayList<>();
 
-		NodeDialogMemberInstance(final Member<T> member) {
+		NodeDialogMemberInstance(final Member<T> member, final Object object) {
 			m_member = member;
+			// FIXME: m_access and supporting get and set based on it being non-null does not make sense design-wise
+			// TODO: also, type-safety
+			m_access = member instanceof ValueAccessible ? ((ValueAccessible<T>) member) : null;
+			m_object = object;
 			m_persist = member instanceof ParameterMember && ((ParameterMember<?>) member).isPersisted();
 		}
 
@@ -93,24 +99,26 @@ public class NodeStructInstance<C> implements StructInstance<C> {
 		}
 
 		@Override
-		public void set(final Object value) {
-			final T oldValue = m_obj;
-			@SuppressWarnings("unchecked")
-			final T newValue = (T) value;
-			m_obj = newValue;
-			if (!Objects.equals(oldValue, newValue)) {
-				onChanged(oldValue);
+		public T get() {
+			if (m_access == null) {
+				throw new UnsupportedOperationException("implementation to be changed");
 			}
+			return m_access.get(m_object);
 		}
 
 		@Override
-		public T get() {
-			return m_obj;
+		public void set(final Object value) {
+			if (m_access == null) {
+				throw new UnsupportedOperationException("implementation to be changed");
+			}
+			// TODO: type-safety, see ValueAccessibleMemberInstance#set(Object)
+			final T tValue = (T) value;
+			m_access.set(tValue, m_object);
 		}
 
 		public void saveSettingsTo(final NodeSettingsWO settings, final String key) throws InvalidSettingsException {
 			if (m_persist) {
-				final Object value = m_obj;
+				final Object value = get();
 				Class<?> valueType = m_member.getRawType();
 				if (valueType.isPrimitive()) {
 					valueType = ClassUtils.primitiveToWrapper(valueType);

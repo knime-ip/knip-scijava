@@ -22,7 +22,8 @@ public class DataRowToObject<O> implements Function<DataRow, O> {
 
 	@Override
 	public O apply(final DataRow values) {
-		for (final DataValueToMemberConversionInfo<?, ?> t : m_infos) {
+		// TODO: type-safety
+		for (final DataValueToMemberConversionInfo t : m_infos) {
 			// TODO: This can be optimized in terms of runtime (saving info per column and then access the info by
 			// index).
 			m_outInstance.member(t.getMemberName()).set(t.getConverter().apply(values.getCell(t.getColumnIndex())));
