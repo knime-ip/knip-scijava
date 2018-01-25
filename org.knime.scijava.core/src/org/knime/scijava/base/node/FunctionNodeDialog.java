@@ -17,16 +17,14 @@ import org.scijava.widget2.WidgetService;
 
 public class FunctionNodeDialog<I, O> extends NodeDialogPane {
 
-	private final NodeStructInstance<Function<I, O>> m_func;
-
-	private DataTableSpec m_spec;
+	private final NodeDialogStructInstance<Function<I, O>> m_func;
 
 	private final Context m_ctx = new Context();
 
 	private final WidgetService m_widgets;
 
 	public FunctionNodeDialog(final Function<I, O> func) throws ValidityException {
-		m_func = new NodeStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
+		m_func = new NodeDialogStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
 		m_widgets = m_ctx.getService(WidgetService.class);
 		final SwingWidgetPanelFactory factory = new SwingWidgetPanelFactory();
 		final WidgetPanel<Function<I, O>> panel = (WidgetPanel<Function<I, O>>) m_widgets.createPanel(m_func, factory);
@@ -42,9 +40,9 @@ public class FunctionNodeDialog<I, O> extends NodeDialogPane {
 	@Override
 	protected void loadSettingsFrom(final NodeSettingsRO settings, final DataTableSpec[] specs)
 			throws NotConfigurableException {
-		m_spec = specs[0];
 		try {
 			m_func.loadSettingsFrom(settings);
+			m_func.update(specs[0]);
 		} catch (final InvalidSettingsException e) {
 			throw new NotConfigurableException(e.getMessage());
 		}

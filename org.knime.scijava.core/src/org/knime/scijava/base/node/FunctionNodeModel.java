@@ -53,7 +53,7 @@ public class FunctionNodeModel<I, O> extends NodeModel {
 
 	protected FunctionNodeModel(final Function<I, O> func) throws ValidityException {
 		super(1, 1);
-		m_func = new NodeStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
+		m_func = new NodeDialogStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
 		// TODO: move out of user code, handle 'null' raw types
 		m_inStruct = ParameterStructs.structOf(m_func.member("input").member().getRawType());
 		m_outStruct = ParameterStructs.structOf(m_func.member("output").member().getRawType());

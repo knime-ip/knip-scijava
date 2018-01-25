@@ -4,7 +4,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
@@ -17,8 +16,8 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct2.MemberInstance;
 import org.scijava.util2.ClassUtils;
-import org.scijava.widget2.TextWidget;
 import org.scijava.widget2.AbstractWidget;
+import org.scijava.widget2.TextWidget;
 import org.scijava.widget2.WidgetFactory;
 import org.scijava.widget2.WidgetPanelFactory;
 import org.scijava.widget2.Widgets;
@@ -104,8 +103,8 @@ public class SwingTextWidgetFactory implements SwingWidgetFactory {
 		// -- Model change event listener --
 
 		@Override
-		protected void modelChanged(MemberInstance<?> source, Object oldValue) {
-			String newText = modelValue();
+		protected void modelChanged(final MemberInstance<?> source, final Object oldValue) {
+			final String newText = modelValue();
 			if (!textComponent.getText().equals(newText)) {
 				textComponent.setText(newText);
 			}
@@ -130,7 +129,7 @@ public class SwingTextWidgetFactory implements SwingWidgetFactory {
 		}
 
 		private String modelValue() {
-			String value = (String) model().get();
+			final String value = (String) model().get();
 			return value == null ? "" : value;
 		}
 	}
