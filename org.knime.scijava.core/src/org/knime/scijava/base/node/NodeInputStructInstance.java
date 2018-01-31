@@ -4,26 +4,32 @@ import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
+import org.scijava.param2.FunctionalParameterMember;
 import org.scijava.struct2.Member;
 import org.scijava.struct2.MemberInstance;
 import org.scijava.struct2.Struct;
 
-public class NodeDialogStructInstance<C> extends NodeStructInstance<C> {
+public class NodeInputStructInstance<C> extends NodeStructInstance<C> {
 
-	public NodeDialogStructInstance(final Struct struct, final C object) {
+	public NodeInputStructInstance(final Struct struct, final C object) {
 		super(struct, object);
 	}
 
 	@Override
 	NodeMemberInstance<?> createMemberInstance(final Member<?> member, final Object c) {
-		return new ColumnSelectionMemberInstance<>(member, c);
+		if (member instanceof FunctionalParameterMember) {
+			return new ColumnSelectionMemberInstance<>(member, c);
+		} else {
+			return new NodeMemberInstance<>(member, c);
+		}
 	}
 
-	// TODO: introduce loadSettingsFromDialog which merges update and
-	// loadSettingsFrom?
+	// TODO: introduce loadSettingsFromDialog which merges update and loadSettingsFrom?
 	public void update(final DataTableSpec spec) {
 		for (final MemberInstance<?> member : members()) {
-			((ColumnSelectionMemberInstance<?>) member).setSpec(spec);
+			if (member instanceof ColumnSelectionMemberInstance) {
+				((ColumnSelectionMemberInstance<?>) member).setSpec(spec);
+			}
 		}
 	}
 

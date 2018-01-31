@@ -45,7 +45,7 @@ public class MultiplyNodeFactory extends NodeFactory<RowToRowFunctionNodeModel<?
 	protected NodeDialogPane createNodeDialogPane() {
 		try {
 			return new FunctionNodeDialog<>(m_function);
-		} catch (final ValidityException e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

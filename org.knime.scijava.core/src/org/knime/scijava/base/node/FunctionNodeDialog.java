@@ -11,6 +11,7 @@ import org.knime.core.node.NotConfigurableException;
 import org.scijava.Context;
 import org.scijava.param2.ParameterStructs;
 import org.scijava.param2.ValidityException;
+import org.scijava.struct2.Struct;
 import org.scijava.swing.widget2.SwingWidgetPanelFactory;
 import org.scijava.swing.widget2.SwingWidgetPanelFactory.WidgetPanel;
 import org.scijava.widget2.WidgetService;
@@ -23,11 +24,21 @@ public class FunctionNodeDialog<I, O> extends NodeDialogPane {
 
 	private final WidgetService m_widgets;
 
-	public FunctionNodeDialog(final Function<I, O> func) throws ValidityException {
+	private final NodeInputStructInstance<I> m_nodeInput;
+
+	public FunctionNodeDialog(final Function<I, O> func)
+			throws ValidityException, InstantiationException, IllegalAccessException {
 		m_func = new NodeDialogStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
+
+		final Struct inStruct = ParameterStructs.structOf(m_func.member("input").member().getRawType());
+		final Class<I> type = (Class<I>) m_func.member("input").member().getRawType();
+		m_nodeInput = new NodeInputStructInstance<>(inStruct, type.newInstance());
+
 		m_widgets = m_ctx.getService(WidgetService.class);
 		final SwingWidgetPanelFactory factory = new SwingWidgetPanelFactory();
-		final WidgetPanel<Function<I, O>> panel = (WidgetPanel<Function<I, O>>) m_widgets.createPanel(m_func, factory);
+		WidgetPanel<Function<I, O>> panel = (WidgetPanel<Function<I, O>>) m_widgets.createPanel(m_func, factory);
+		getPanel().add(panel.getComponent());
+		panel = (WidgetPanel<Function<I, O>>) m_widgets.createPanel(m_nodeInput, factory);
 		getPanel().add(panel.getComponent());
 		getPanel().repaint();
 	}
@@ -35,6 +46,7 @@ public class FunctionNodeDialog<I, O> extends NodeDialogPane {
 	@Override
 	protected void saveSettingsTo(final NodeSettingsWO settings) throws InvalidSettingsException {
 		m_func.saveSettingsTo(settings);
+		m_nodeInput.saveSettingsTo(settings);
 	}
 
 	@Override
@@ -43,6 +55,8 @@ public class FunctionNodeDialog<I, O> extends NodeDialogPane {
 		try {
 			m_func.loadSettingsFrom(settings);
 			m_func.update(specs[0]);
+			m_nodeInput.loadSettingsFrom(settings);
+			m_nodeInput.update(specs[0]);
 		} catch (final InvalidSettingsException e) {
 			throw new NotConfigurableException(e.getMessage());
 		}

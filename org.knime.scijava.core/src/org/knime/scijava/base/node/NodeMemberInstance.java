@@ -50,6 +50,7 @@ public class NodeMemberInstance<T> implements MemberInstance<T> {
 
 	@Override
 	public void set(final Object value) {
+		// FIXME call changed if value changes
 		if (m_access == null) {
 			throw new UnsupportedOperationException("implementation to be changed");
 		}
