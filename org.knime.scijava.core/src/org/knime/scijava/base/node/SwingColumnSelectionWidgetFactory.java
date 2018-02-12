@@ -6,10 +6,19 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
+import org.apache.commons.lang3.ClassUtils;
+import org.knime.core.data.BooleanValue;
+import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DataValue;
 import org.knime.core.data.DoubleValue;
+import org.knime.core.data.IntValue;
+import org.knime.core.data.LongValue;
+import org.knime.core.data.StringValue;
 import org.knime.core.node.NotConfigurableException;
+import org.knime.core.node.util.ColumnFilter;
 import org.knime.core.node.util.ColumnSelectionPanel;
 import org.knime.scijava.base.node.NodeInputStructInstance.ColumnSelectionMemberInstance;
 import org.scijava.plugin.Plugin;
@@ -48,10 +57,32 @@ public class SwingColumnSelectionWidgetFactory implements SwingWidgetFactory {
 
 		private ColumnSelectionPanel m_colSelection;
 
+		private Class<? extends DataValue> m_modelDataValueClass;
+
 		private final ColumnSelectionMemberInstance<?> m_castedModelInstance = (ColumnSelectionMemberInstance<?>) model();
 
 		public Widget(final MemberInstance<?> model) {
 			super(model);
+			inferModelDataValue();
+		}
+
+		// TODO probably should use converter framework
+		private void inferModelDataValue() {
+			Class<?> valueType = model().member().getRawType();
+			if (valueType.isPrimitive()) {
+				valueType = ClassUtils.primitiveToWrapper(valueType);
+			}
+			if (Boolean.class.equals(valueType)) {
+				m_modelDataValueClass = BooleanValue.class;
+			} else if (Double.class.equals(valueType) || Number.class.equals(valueType)) {
+				m_modelDataValueClass = DoubleValue.class;
+			} else if (Integer.class.equals(valueType)) {
+				m_modelDataValueClass = IntValue.class;
+			} else if (Long.class.equals(valueType)) {
+				m_modelDataValueClass = LongValue.class;
+			} else if (String.class.equals(valueType)) {
+				m_modelDataValueClass = StringValue.class;
+			}
 		}
 
 		@Override
@@ -68,8 +99,18 @@ public class SwingColumnSelectionWidgetFactory implements SwingWidgetFactory {
 			gbc.weightx = 1;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 
-			// TODO infer allowed types from type of FunctionalParameterMember
-			m_colSelection = new ColumnSelectionPanel(DoubleValue.class);
+			m_colSelection = new ColumnSelectionPanel((Border) null, new ColumnFilter() {
+
+				@Override
+				public boolean includeColumn(final DataColumnSpec colSpec) {
+					return colSpec.getType().isCompatible(m_modelDataValueClass);
+				}
+
+				@Override
+				public String allFilteredMsg() {
+					return "No input columns match ";
+				}
+			});
 			m_panel.add(m_colSelection, gbc);
 
 			m_colSelection.addItemListener(new ItemListener() {

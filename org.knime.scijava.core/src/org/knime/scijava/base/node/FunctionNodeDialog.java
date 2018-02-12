@@ -40,9 +40,9 @@ public class FunctionNodeDialog<I, O> extends NodeDialogPane {
 
 		m_widgets = m_ctx.getService(WidgetService.class);
 		final SwingWidgetPanelFactory factory = new SwingWidgetPanelFactory();
-		WidgetPanel<Function<I, O>> panel = (WidgetPanel<Function<I, O>>) m_widgets.createPanel(m_nodeInput, factory);
+		WidgetPanel<?> panel = (WidgetPanel<?>) m_widgets.createPanel(m_nodeInput, factory);
 		nodeDialogPanel.add(panel.getComponent(), "growx, wrap");
-		panel = (WidgetPanel<Function<I, O>>) m_widgets.createPanel(m_func, factory);
+		panel = (WidgetPanel<?>) m_widgets.createPanel(m_func, factory);
 		nodeDialogPanel.add(panel.getComponent(), "growx");
 
 		getPanel().add(nodeDialogPanel);

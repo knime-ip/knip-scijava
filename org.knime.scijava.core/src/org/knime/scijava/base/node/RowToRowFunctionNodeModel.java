@@ -166,9 +166,6 @@ public class RowToRowFunctionNodeModel<I, O> extends NodeModel {
 		final HashMap<ConversionKey, DataCellToJavaConverter<?, ?>> converterCache = new HashMap<>(members.size());
 		for (int i = 0; i < members.size(); i++) {
 			final Member<?> member = members.get(i);
-			// TODO: this is a global column selection for the entire input
-			// struct, we need it per member of the input
-			// struct
 			final int sourceColIndex = ((ColumnSelectionMemberInstance<?>) m_nodeInput.member(member.getKey()))
 					.getSelectedColumnIndex();
 			final DataType sourceType = inSpec.getColumnSpec(sourceColIndex).getType();

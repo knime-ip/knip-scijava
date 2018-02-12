@@ -11,13 +11,16 @@ public class MultiplicationFunction
 
 	@Override
 	public OutStruct apply(final InStruct t) {
-		return new OutStruct(t.m_value * multiplier);
+		return new OutStruct((t.m_value * multiplier) + t.m_otherValue);
 	}
 
 	public static class InStruct {
 
 		@Parameter(label = "Some Number")
 		double m_value;
+
+		@Parameter(label = "Add some other Number")
+		double m_otherValue;
 	}
 
 	public static class OutStruct {
