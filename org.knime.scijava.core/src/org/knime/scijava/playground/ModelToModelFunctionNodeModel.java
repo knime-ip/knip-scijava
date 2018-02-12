@@ -11,7 +11,7 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.port.PortType;
-import org.knime.scijava.base.node.NodeDialogStructInstance;
+import org.knime.scijava.base.node.DefaultNodeStructInstance;
 import org.knime.scijava.base.node.NodeStructInstance;
 import org.scijava.param2.ParameterStructs;
 import org.scijava.param2.ValidityException;
@@ -23,7 +23,7 @@ public class ModelToModelFunctionNodeModel<I, O> extends NodeModel {
 	protected ModelToModelFunctionNodeModel(final ModelToModelFunction<I, O> func, final PortType inPortType,
 			final PortType outPortType) throws ValidityException {
 		super(new PortType[] { inPortType }, new PortType[] { outPortType });
-		m_funcInstance = new NodeDialogStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
+		m_funcInstance = new DefaultNodeStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
 	}
 
 	@Override

@@ -41,7 +41,7 @@ import org.knime.core.node.streamable.RowInput;
 import org.knime.core.node.streamable.RowOutput;
 import org.knime.core.node.streamable.StreamableOperator;
 import org.knime.core.util.UniqueNameGenerator;
-import org.knime.scijava.base.node.NodeDialogStructInstance.ColumnSelectionMemberInstance;
+import org.knime.scijava.base.node.NodeInputStructInstance.ColumnSelectionMemberInstance;
 import org.scijava.param2.ParameterStructs;
 import org.scijava.param2.ValidityException;
 import org.scijava.struct2.Member;
@@ -57,11 +57,18 @@ public class RowToRowFunctionNodeModel<I, O> extends NodeModel {
 
 	private DataRowToObject<I> m_inputConversion;
 
+	private final NodeInputStructInstance<I> m_nodeInput;
+
 	private List<MemberToDataCellConversionInfoHelper<?>> m_outputConversionInfoHelpers;
 
-	protected RowToRowFunctionNodeModel(final Function<I, O> func) throws ValidityException {
+	protected RowToRowFunctionNodeModel(final Function<I, O> func)
+			throws ValidityException, InstantiationException, IllegalAccessException {
 		super(1, 1);
-		m_funcInstance = new NodeDialogStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
+		m_funcInstance = new DefaultNodeStructInstance<>(ParameterStructs.structOf(func.getClass()), func);
+
+		final Class<I> type = (Class<I>) m_funcInstance.member("input").member().getRawType();
+		m_nodeInput = new NodeInputStructInstance<>(ParameterStructs.structOf(type), type.newInstance());
+
 		// TODO: handle 'null' raw types
 		m_inStruct = ParameterStructs.structOf(m_funcInstance.member("input").member().getRawType());
 		m_outStruct = ParameterStructs.structOf(m_funcInstance.member("output").member().getRawType());
@@ -117,6 +124,7 @@ public class RowToRowFunctionNodeModel<I, O> extends NodeModel {
 	protected void saveSettingsTo(final NodeSettingsWO settings) {
 		try {
 			m_funcInstance.saveSettingsTo(settings);
+			m_nodeInput.saveSettingsTo(settings);
 		} catch (final InvalidSettingsException e) {
 			throw new RuntimeException(e);
 		}
@@ -130,40 +138,7 @@ public class RowToRowFunctionNodeModel<I, O> extends NodeModel {
 	@Override
 	protected void loadValidatedSettingsFrom(final NodeSettingsRO settings) throws InvalidSettingsException {
 		m_funcInstance.loadSettingsFrom(settings);
-
-		// load settings into func (w/o special params)
-		// load mapping of special params
-
-		// Read mappings
-		// ConfigBase conversionInfos =
-		// settings.getConfigBase("input-conversion-infos");
-		// int numMappings = conversionInfos.getInt("number-of-infos");
-		// m_valueToStruct = new ArrayList<>();
-		// for (int i = 0; i < numMappings; i++) {
-		// ConfigBase converterEntry = conversionInfos.getConfigBase("info-" +
-		// i);
-		// int index = converterEntry.getInt("column-index");
-		// String memberName = converterEntry.getString("member-name");
-		// try {
-		// @SuppressWarnings("unchecked")
-		// Function<DataValue, ?> conv = ((Function<DataValue, ?>) Class
-		// .forName(converterEntry.getString("converter")).newInstance());
-		// m_valueToStruct.add(new
-		// DefaultDataValueToStructConversionInfo<>(index, memberName, conv));
-		// } catch (Exception e) {
-		// // FIXME
-		// e.printStackTrace();
-		// }
-		// }
-
-		// same for output infos
-		// try {
-		// m_rowToObject = new DataRowToObject(m_func.members(), null);
-		// m_objectToCells = new ObjectToDataCells<O>(m_outType, null);
-		// } catch (ValidityException | InstantiationException |
-		// IllegalAccessException e) {
-		// throw new InvalidSettingsException("Problem parsing struct.", e);
-		// }
+		m_nodeInput.loadSettingsFrom(settings);
 	}
 
 	@Override
@@ -191,9 +166,10 @@ public class RowToRowFunctionNodeModel<I, O> extends NodeModel {
 		final HashMap<ConversionKey, DataCellToJavaConverter<?, ?>> converterCache = new HashMap<>(members.size());
 		for (int i = 0; i < members.size(); i++) {
 			final Member<?> member = members.get(i);
-			// TODO: this is a global column selection for the entire input struct, we need it per member of the input
+			// TODO: this is a global column selection for the entire input
+			// struct, we need it per member of the input
 			// struct
-			final int sourceColIndex = ((ColumnSelectionMemberInstance<?>) m_funcInstance.member("input"))
+			final int sourceColIndex = ((ColumnSelectionMemberInstance<?>) m_nodeInput.member(member.getKey()))
 					.getSelectedColumnIndex();
 			final DataType sourceType = inSpec.getColumnSpec(sourceColIndex).getType();
 			final Class<?> destinationType = ClassUtils.primitiveToWrapper(member.getRawType());

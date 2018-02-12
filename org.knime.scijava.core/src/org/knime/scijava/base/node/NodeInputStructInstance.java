@@ -4,7 +4,6 @@ import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.scijava.param2.FunctionalParameterMember;
 import org.scijava.struct2.Member;
 import org.scijava.struct2.MemberInstance;
 import org.scijava.struct2.Struct;
@@ -17,20 +16,21 @@ public class NodeInputStructInstance<C> extends NodeStructInstance<C> {
 
 	@Override
 	NodeMemberInstance<?> createMemberInstance(final Member<?> member, final Object c) {
-		if (member instanceof FunctionalParameterMember) {
-			return new ColumnSelectionMemberInstance<>(member, c);
-		} else {
-			return new NodeMemberInstance<>(member, c);
-		}
+		return new ColumnSelectionMemberInstance<>(member, c);
 	}
 
-	// TODO: introduce loadSettingsFromDialog which merges update and loadSettingsFrom?
-	public void update(final DataTableSpec spec) {
+	private void update(final DataTableSpec spec) {
 		for (final MemberInstance<?> member : members()) {
 			if (member instanceof ColumnSelectionMemberInstance) {
 				((ColumnSelectionMemberInstance<?>) member).setSpec(spec);
 			}
 		}
+	}
+
+	public void loadSettingsFromDialog(final NodeSettingsRO settings, final DataTableSpec spec)
+			throws InvalidSettingsException {
+		super.loadSettingsFrom(settings);
+		update(spec);
 	}
 
 	public static class ColumnSelectionMemberInstance<T> extends NodeMemberInstance<T> {
@@ -62,15 +62,20 @@ public class NodeInputStructInstance<C> extends NodeStructInstance<C> {
 			m_selectedColumnIndex = index;
 		}
 
+		// We are in the struct instance of the node model which takes care of
+		// the column selection. Hence, we do
+		// no actually want?/need to save the value of the backing object but
+		// rather the configuration data
+		// (column index in this case)
 		@Override
 		public void loadSettingsFrom(final NodeSettingsRO settings, final String key) throws InvalidSettingsException {
-			super.loadSettingsFrom(settings, key);
+			// super.loadSettingsFrom(settings, key);
 			m_selectedColumnIndex = settings.getInt(key);
 		}
 
 		@Override
 		public void saveSettingsTo(final NodeSettingsWO settings, final String key) throws InvalidSettingsException {
-			super.saveSettingsTo(settings, key);
+			// super.saveSettingsTo(settings, key);
 			settings.addInt(key, m_selectedColumnIndex);
 		}
 	}

@@ -20,7 +20,7 @@ public class MultiplyNodeFactory extends NodeFactory<RowToRowFunctionNodeModel<?
 	public RowToRowFunctionNodeModel<?, ?> createNodeModel() {
 		try {
 			return new RowToRowFunctionNodeModel<>(m_function);
-		} catch (final ValidityException e) {
+		} catch (final ValidityException | InstantiationException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}

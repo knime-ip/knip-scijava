@@ -11,7 +11,7 @@ import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DoubleValue;
 import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.util.ColumnSelectionPanel;
-import org.knime.scijava.base.node.NodeDialogStructInstance.ColumnSelectionMemberInstance;
+import org.knime.scijava.base.node.NodeInputStructInstance.ColumnSelectionMemberInstance;
 import org.scijava.plugin.Plugin;
 import org.scijava.struct2.ItemIO;
 import org.scijava.struct2.MemberInstance;
