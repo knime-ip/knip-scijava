@@ -2,7 +2,7 @@
 <feature
       id="org.knime.scijava.feature"
       label="KNIME SciJava Integration"
-      version="0.6.1.qualifier"
+      version="0.6.2.qualifier"
       provider-name="University of Konstanz">
 
    <description>
