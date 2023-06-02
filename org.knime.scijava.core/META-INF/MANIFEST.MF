@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.0",
  org.knime.base;bundle-version="[3.3.0,6.0.0)",
  org.knime.workbench.repository;bundle-version="[3.3.0,6.0.0)",
  scijava-common;bundle-version="2.74.2"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: org.knime.scijava.core,
