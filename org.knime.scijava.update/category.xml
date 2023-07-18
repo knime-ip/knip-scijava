@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+    <feature id="org.knime.scijava.feature" version="0.0.0">
+        <category name="scijava" />
+    </feature>
+    <bundle id="scijava-common"/>
+    <bundle id="scijava-plugins-text-plain"/>
+    <bundle id="scijava-plugins-commands"/>
+    <bundle id="scijava-plugins-text-markdown"/>
+    <bundle id="scijava-ui-awt"/>
+    <bundle id="scijava-ui-swing"/>
+    <bundle id="miglayout"/>
+    <bundle id="jython-shaded"/>
+
+
+    <category-def name="scijava" label="Build artifacts from scijava">
+        <description>Build artifacts from scijava</description>
+    </category-def>
+</site>
