@@ -23,7 +23,6 @@
 	<modules>
 		<module>org.knime.scijava.commands</module>
 		<module>org.knime.scijava.commands.testing</module>
-		<module>org.knime.scijava.commands.testing.feature</module>
 		<module>org.knime.scijava.core</module>
 		<module>org.knime.scijava.feature</module>
 		<module>org.knime.scijava.update</module>
